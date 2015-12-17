@@ -1,0 +1,15 @@
+<h1> Index of Rules Pages </h1>
+
+<%= link_to 'New rules page', new_rules_page_path %>
+
+<table>
+  <tr>
+    <th>Title</th>
+  </tr>
+
+  <% @rules_pages.each do |rules_page| %>
+    <tr>
+      <td><%= rules_page.title %></td>
+    </tr>
+  <% end %>
+</table>
