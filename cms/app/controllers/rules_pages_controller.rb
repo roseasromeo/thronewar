@@ -1,0 +1,2 @@
+class RulesPagesController < ApplicationController
+end
