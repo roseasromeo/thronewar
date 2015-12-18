@@ -7,6 +7,11 @@ class RulesPagesController < ApplicationController
   end
 
   def new
+    @rules_page = RulesPage.new
+  end
+
+  def edit
+    @rules_page = Article.find(params[:id])
   end
 
   def create
