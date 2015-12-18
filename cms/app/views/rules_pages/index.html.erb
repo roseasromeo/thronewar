@@ -9,7 +9,8 @@
 
   <% @rules_pages.each do |rules_page| %>
     <tr>
-      <td><%= rules_page.title %></td>
+      <td><%= link_to rules_page.title, rules_page_path(rules_page) %></td>
+      <td><%= link_to 'Edit', edit_rules_page_path(rules_page) %></td>
     </tr>
   <% end %>
 </table>
