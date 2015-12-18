@@ -1,7 +1,8 @@
 <div class='nested-fields'>
   <% @subpage_index = @subpage_index + 1 %>
   <%= f.inputs do %>
-    <%= f.input :subtitle %>
+    <%= f.input :subtitle, :label => "Subtitle (Anchor)" %>
+    <%= f.input :order_number, :label => "Position on page" %>
     <table>
       <tr>
         <th class='sidebar'>Sidebar</th>

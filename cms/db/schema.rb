@@ -14,6 +14,7 @@
 ActiveRecord::Schema.define(version: 20151218012813) do
 
   create_table "rules_pages", force: :cascade do |t|
+    t.string   "name"
     t.string   "title"
     t.text     "text"
     t.datetime "created_at", null: false
@@ -24,6 +25,7 @@ ActiveRecord::Schema.define(version: 20151218012813) do
     t.string   "subtitle"
     t.text     "sidebar"
     t.text     "body"
+    t.integer  "order_number"
     t.integer  "rules_page_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false

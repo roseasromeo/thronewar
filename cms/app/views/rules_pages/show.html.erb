@@ -3,10 +3,10 @@
 </p>
 
 <p>
-  <%= raw(@rules_page.text) %>
+  <%= @rules_page.text.html_safe %>
 </p>
 <div id='subpages'>
-  <% @rules_page.subpages.each do |subpage| %>
+  <% @rules_page.subpages.order(:order_number).each do |subpage| %>
     <%= render 'subpage_display', :f => subpage %>
   <% end %>
 </div>
