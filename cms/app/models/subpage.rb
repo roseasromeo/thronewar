@@ -1,5 +1,5 @@
 class Subpage < ActiveRecord::Base
+  has_paper_trail
+
   belongs_to :rules_page
-  has_one :sidebar
-  has_one :body
 end

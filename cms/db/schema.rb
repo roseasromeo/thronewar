@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151218005722) do
+ActiveRecord::Schema.define(version: 20151218012813) do
 
   create_table "rules_pages", force: :cascade do |t|
     t.string   "title"
@@ -19,6 +19,17 @@ ActiveRecord::Schema.define(version: 20151218005722) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "subpages", force: :cascade do |t|
+    t.string   "subtitle"
+    t.text     "sidebar"
+    t.text     "body"
+    t.integer  "rules_page_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "subpages", ["rules_page_id"], name: "index_subpages_on_rules_page_id"
 
   create_table "versions", force: :cascade do |t|
     t.string   "item_type",                     null: false

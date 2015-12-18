@@ -44,6 +44,6 @@ class RulesPagesController < ApplicationController
 
   private
     def rules_page_params
-      params.require(:rules_page).permit(:title, :text)
+      params.require(:rules_page).permit(:title, :text, subpages_attributes: [:id, :subtitle, :sidebar, :body, :_destroy])
     end
 end
