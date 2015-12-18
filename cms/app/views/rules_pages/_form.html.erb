@@ -1,4 +1,4 @@
-<%= semantic_form_for @rules_page do |f| %>
+<%= semantic_form_for(@rules_page, :html=>{:onsubmit=>"tinyMCE.triggerSave();"}) do |f| %>
   <%= f.inputs do %>
     <%= f.input :title %>
     <%= f.input :text, :input_html => { :class => 'tiny_mce', :rows => 20, :cols => 120 } %>
@@ -11,7 +11,7 @@
       </div>
     </div>
     <%= f.actions do %>
-      <%= f.action :submit, :as => :button, :label => "Save" %>
+      <%= f.action :submit, :as => :button, :label => "Save", :button_html => { :onclick => "tinyMCE.triggerSave();" } %>
     <% end %>
   <% end %>
 <% end %>
@@ -19,9 +19,9 @@
 <script type="text/javascript">
   tinyMCE.init({
     plugins: 'link',
-    selector: 'textarea',
+    selector: 'textarea.tiny_mce',
     toolbar: 'undo redo | bold italic underline | fontsizeselect | link',
     menubar: false,
-    statusbar: false
-  });
+    statusbar: false,
+    });
 </script>

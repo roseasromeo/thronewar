@@ -1,17 +1,26 @@
 <div class='nested-fields'>
   <%= f.inputs do %>
     <%= f.input :subtitle %>
-    <%= f.input :sidebar, :input_html => { :class => 'tiny_mce', :rows => 20, :cols => 120 }%>
-    <%= f.input :body, :input_html => { :class => 'tiny_mce', :rows => 20, :cols => 120 } %>
-    <%= link_to_remove_association "remove subpage", f %>
+    <table>
+      <tr>
+        <th class='sidebar'>Sidebar</th>
+        <th class='body'>Body Text</th>
+      <tr>
+        <td class='sidebar'><%= f.input :sidebar, :input_html => { :class => 'tiny_mce_sub', :rows => 20, :cols => 120 }%></td>
+        <td class='body'><%= f.input :body, :input_html => { :class => 'tiny_mce_sub', :rows => 20, :cols => 120 } %></td>
+      </tr>
+      <tr>
+        <td class='links'><%= link_to_remove_association "remove subpage", f %></td>
+      </tr>
+    </table>
   <% end %>
   <script type="text/javascript">
     tinyMCE.init({
       plugins: 'link',
-      selector: 'textarea',
+      selector: 'textarea.tiny_mce_sub',
       toolbar: 'undo redo | bold italic underline | fontsizeselect | link',
       menubar: false,
-      statusbar: false
-    });
+      statusbar: false,
+      });
   </script>
 </div>

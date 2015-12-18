@@ -1,0 +1,10 @@
+td.sidebar, th.sidebar {
+  width: 30%;
+}
+td.body, th.body {
+  width: 70%;
+}
+
+div.links {
+  
+}
