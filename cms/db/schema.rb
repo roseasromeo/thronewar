@@ -15,10 +15,11 @@ ActiveRecord::Schema.define(version: 20151218012813) do
 
   create_table "rules_pages", force: :cascade do |t|
     t.string   "name"
+    t.string   "slug",       default: "1"
     t.string   "title"
     t.text     "text"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   create_table "subpages", force: :cascade do |t|

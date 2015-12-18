@@ -4,7 +4,7 @@ class RulesPagesController < ApplicationController
   end
 
   def show
-    @rules_page = RulesPage.find(params[:id])
+    @rules_page = RulesPage.find_by_slug(params[:id])
   end
 
   def new
@@ -12,7 +12,7 @@ class RulesPagesController < ApplicationController
   end
 
   def edit
-    @rules_page = RulesPage.find(params[:id])
+    @rules_page = RulesPage.find_by_slug(params[:id])
   end
 
   def create
@@ -26,7 +26,7 @@ class RulesPagesController < ApplicationController
   end
 
   def update
-    @rules_page = RulesPage.find(params[:id])
+    @rules_page = RulesPage.find_by_slug(params[:id])
 
     if @rules_page.update(rules_page_params)
       redirect_to @rules_page
@@ -36,7 +36,7 @@ class RulesPagesController < ApplicationController
   end
 
   def destroy
-    @rules_page = RulesPage.find(params[:id])
+    @rules_page = RulesPage.find_by_slug(params[:id])
     @rules_page.destroy
 
     redirect_to rules_pages_path
@@ -44,6 +44,6 @@ class RulesPagesController < ApplicationController
 
   private
     def rules_page_params
-      params.require(:rules_page).permit(:name, :title, :text, subpages_attributes: [:id, :subtitle, :order_number, :sidebar, :body, :_destroy])
+      params.require(:rules_page).permit(:slug, :name, :title, :text, subpages_attributes: [:id, :subtitle, :order_number, :sidebar, :body, :_destroy])
     end
 end
