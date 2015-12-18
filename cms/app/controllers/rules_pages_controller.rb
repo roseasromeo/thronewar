@@ -2,7 +2,7 @@ class RulesPagesController < ApplicationController
   def index
     @rules_pages = RulesPage.all
   end
-  
+
   def show
     @rules_page = RulesPage.find(params[:id])
   end
@@ -33,6 +33,13 @@ class RulesPagesController < ApplicationController
     else
       render 'edit'
     end
+  end
+
+  def destroy
+    @rules_page = RulesPage.find(params[:id])
+    @rules_page.destroy
+
+    redirect_to rules_pages_path
   end
 
   private
