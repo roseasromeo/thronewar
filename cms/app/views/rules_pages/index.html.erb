@@ -11,6 +11,7 @@
     <tr>
       <td><%= link_to rules_page.title, rules_page_path(rules_page) %></td>
       <td><%= link_to 'Edit', edit_rules_page_path(rules_page) %></td>
+      <td><%= link_to 'Delete', rules_page_path(rules_page), method: :delete, data: { confirm: 'Are you sure?' } %></td>
     </tr>
   <% end %>
 </table>
