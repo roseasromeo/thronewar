@@ -12,10 +12,12 @@
 <%= semantic_form_for(@rules_page, :html=>{:onsubmit=>"tinyMCE.triggerSave();"}) do |f| %>
   <% @subpage_index = 0 %>
   <%= f.inputs do %>
+    <%= f.input :name, :label => "Page name for links"%>
     <%= f.input :title %>
     <%= f.input :text, :input_html => { :class => 'tiny_mce', :rows => 20, :cols => 120 } %>
     <div id='subpages'>
-      <%= f.semantic_fields_for :subpages do |subpage| %>
+      <% @subpages = @rules_page.subpages.sort_by(&:order_number) %>
+      <%= f.semantic_fields_for :subpages, @subpages do |subpage| %>
         <%= render 'subpage_fields', :f => subpage, :subpage_index => @subpage_index %>
       <% end %>
       <div class='links'>
