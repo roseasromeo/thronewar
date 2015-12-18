@@ -3,11 +3,8 @@ Rails.application.routes.draw do
   get 'welcome/index'
 
   # Shallowly nest the routes
-  resources :rules_pages, shallow: true do
-    resources :subpages do
-      resources :sidebar
-      resources :body
-    end
+  resources :rules_pages do
+    resources :subpages
   end
 
   # The priority is based upon order of creation: first created -> highest priority.

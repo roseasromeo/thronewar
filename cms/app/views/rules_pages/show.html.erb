@@ -1,12 +1,11 @@
 <p>
-  <strong>Title:</strong>
   <%= @rules_page.title %>
 </p>
 
 <p>
-  <strong>Text:</strong>
-  <%= @rules_page.text %>
+  <%= raw(@rules_page.text) %>
 </p>
 
 <%= link_to 'Edit', edit_rules_page_path(@rules_page) %>
 <%= link_to 'Back', rules_pages_path %>
+<%= link_to 'Delete', rules_page_path, method: :delete, data: { confirm: 'Are you sure?' } %></td>

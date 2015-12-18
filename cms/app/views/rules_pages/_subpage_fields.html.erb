@@ -1,0 +1,17 @@
+<div class='nested-fields'>
+  <%= f.inputs do %>
+    <%= f.input :subtitle %>
+    <%= f.input :sidebar, :input_html => { :class => 'tiny_mce', :rows => 20, :cols => 120 }%>
+    <%= f.input :body, :input_html => { :class => 'tiny_mce', :rows => 20, :cols => 120 } %>
+    <%= link_to_remove_association "remove subpage", f %>
+  <% end %>
+  <script type="text/javascript">
+    tinyMCE.init({
+      plugins: 'link',
+      selector: 'textarea',
+      toolbar: 'undo redo | bold italic underline | fontsizeselect | link',
+      menubar: false,
+      statusbar: false
+    });
+  </script>
+</div>

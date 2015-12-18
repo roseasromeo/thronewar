@@ -1,29 +1,27 @@
-<%= form_for @rules_page do |f| %>
-
-  <% if @rules_page.errors.any? %>
-    <div id="error_explanation">
-      <h2>
-        <%= pluralize(@rules_page.errors.count, "error") %> prohibited this rules page from being saved:
-      </h2>
-      <ul>
-        <% @rules_page.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
-      </ul>
+<%= semantic_form_for @rules_page do |f| %>
+  <%= f.inputs do %>
+    <%= f.input :title %>
+    <%= f.input :text, :input_html => { :class => 'tiny_mce', :rows => 20, :cols => 120 } %>
+    <div id='subpages'>
+      <%= f.semantic_fields_for :subpages do |subpage| %>
+        <%= render 'subpage_fields', :f => subpage %>
+      <% end %>
+      <div class='links'>
+        <%= link_to_add_association 'add subpage', f, :subpages %>
+      </div>
     </div>
+    <%= f.actions do %>
+      <%= f.action :submit, :as => :button, :label => "Save" %>
+    <% end %>
   <% end %>
-
-  <p>
-    <%= f.label :title %><br>
-    <%= f.text_field :title %>
-  </p>
-
-  <p>
-    <%= f.label :text %><br>
-    <%= f.text_area :text %>
-  </p>
-
-  <p>
-    <%= f.submit %>
-  </p>
 <% end %>
+
+<script type="text/javascript">
+  tinyMCE.init({
+    plugins: 'link',
+    selector: 'textarea',
+    toolbar: 'undo redo | bold italic underline | fontsizeselect | link',
+    menubar: false,
+    statusbar: false
+  });
+</script>
