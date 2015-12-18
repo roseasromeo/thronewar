@@ -2,7 +2,7 @@ Rails.application.routes.draw do
 
   get 'welcome/index'
 
-  # Shallowly nest the routes
+  # Nest the routes
   resources :rules_pages do
     resources :subpages
   end
