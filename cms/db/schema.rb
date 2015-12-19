@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151218012813) do
+ActiveRecord::Schema.define(version: 20151219053828) do
 
   create_table "rules_pages", force: :cascade do |t|
     t.string   "name"
@@ -33,6 +33,15 @@ ActiveRecord::Schema.define(version: 20151218012813) do
   end
 
   add_index "subpages", ["rules_page_id"], name: "index_subpages_on_rules_page_id"
+
+  create_table "users", force: :cascade do |t|
+    t.string   "email",                       null: false
+    t.string   "name",                        null: false
+    t.string   "password_digest",             null: false
+    t.integer  "user_type",       default: 2, null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+  end
 
   create_table "versions", force: :cascade do |t|
     t.string   "item_type",                     null: false
