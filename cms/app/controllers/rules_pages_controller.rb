@@ -18,7 +18,7 @@ class RulesPagesController < ApplicationController
   def new
     if logged_in?
       @user = current_user
-      if @user.user_type == 0
+      if admin_user?
         @rules_page = RulesPage.new
       else
         redirect_to root
@@ -31,7 +31,7 @@ class RulesPagesController < ApplicationController
   def edit
     if logged_in?
       @user = current_user
-      if @user.user_type == 0
+      if admin_user?
         @rules_page = RulesPage.find_by_slug(params[:id])
       else
         redirect_to root
@@ -44,7 +44,7 @@ class RulesPagesController < ApplicationController
   def create
     if logged_in?
       @user = current_user
-      if @user.user_type == 0
+      if admin_user?
         @rules_page = RulesPage.new(rules_page_params)
 
         if @rules_page.save
@@ -63,7 +63,7 @@ class RulesPagesController < ApplicationController
   def update
     if logged_in?
       @user = current_user
-      if @user.user_type == 0
+      if admin_user?
         @rules_page = RulesPage.find_by_slug(params[:id])
 
         if @rules_page.update(rules_page_params)
@@ -82,7 +82,7 @@ class RulesPagesController < ApplicationController
   def destroy
     if logged_in?
       @user = current_user
-      if @user.user_type == 0
+      if admin_user?
         @rules_page = RulesPage.find_by_slug(params[:id])
         @rules_page.destroy
 

@@ -10,19 +10,19 @@
     });
 </script>
 <%= semantic_form_for(@rules_page, :html=>{:onsubmit=>"tinyMCE.triggerSave();"}) do |f| %>
-<% if @rules_page.errors.any? %>
-  <div id="error_explanation">
-    <h2>
-      <%= pluralize(@rules_page.errors.count, "error") %> prohibited
-      this rules page from being saved:
-    </h2>
-    <ul>
-      <% @rules_page.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
+  <% if @rules_page.errors.any? %>
+    <div id="error_explanation">
+      <h2>
+        <%= pluralize(@rules_page.errors.count, "error") %> prohibited
+        this rules page from being saved:
+      </h2>
+      <ul>
+        <% @rules_page.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
   <% @subpage_index = 0 %>
   <%= f.inputs do %>
     <%= f.input :slug, :as => :hidden, :value => @rules_page.slug %>

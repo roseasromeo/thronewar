@@ -2,16 +2,27 @@ Rails.application.routes.draw do
 
   get 'welcome/index'
 
-  # Nest the routes
+  # You can have the root of your site routed with "root"
+  root 'welcome#index'
+
+  # Auth routes
+  get '/login' => 'auth#new'
+  post '/login' => 'auth#login'
+  get '/logout' => 'auth#logout'
+
+  # Nest the routes for subpages within rules pages
   resources :rules_pages do
     resources :subpages
   end
 
+  resources :users, except: :index
+
+
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
-  # You can have the root of your site routed with "root"
-  root 'welcome#index'
+
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

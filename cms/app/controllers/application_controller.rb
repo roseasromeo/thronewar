@@ -12,5 +12,9 @@ class ApplicationController < ActionController::Base
     current_user != nil
   end
 
-  helper_method :current_user
+  def admin_user?
+    current_user.user_type == 0
+  end
+
+  helper_method :current_user, :admin_user?, :logged_in?
 end
