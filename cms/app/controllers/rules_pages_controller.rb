@@ -1,45 +1,98 @@
 class RulesPagesController < ApplicationController
   def index
-    @rules_pages = RulesPage.all
+    if logged_in?
+      @rules_pages = RulesPage.all
+    else
+      redirect_to login_path
+    end
   end
 
   def show
-    @rules_page = RulesPage.find_by_slug(params[:id])
+    if logged_in?
+      @rules_page = RulesPage.find_by_slug(params[:id])
+    else
+      redirect_to login_path
+    end
   end
 
   def new
-    @rules_page = RulesPage.new
+    if logged_in?
+      @user = current_user
+      if @user.user_type == 0
+        @rules_page = RulesPage.new
+      else
+        redirect_to root
+      end
+    else
+      redirect_to login_path
+    end
   end
 
   def edit
-    @rules_page = RulesPage.find_by_slug(params[:id])
+    if logged_in?
+      @user = current_user
+      if @user.user_type == 0
+        @rules_page = RulesPage.find_by_slug(params[:id])
+      else
+        redirect_to root
+      end
+    else
+      redirect_to login_path
+    end
   end
 
   def create
-    @rules_page = RulesPage.new(rules_page_params)
+    if logged_in?
+      @user = current_user
+      if @user.user_type == 0
+        @rules_page = RulesPage.new(rules_page_params)
 
-    if @rules_page.save
-      redirect_to @rules_page
+        if @rules_page.save
+          redirect_to @rules_page
+        else
+          render 'new'
+        end
+      else
+        redirect_to root
+      end
     else
-      render 'new'
+      redirect_to login_path
     end
   end
 
   def update
-    @rules_page = RulesPage.find_by_slug(params[:id])
+    if logged_in?
+      @user = current_user
+      if @user.user_type == 0
+        @rules_page = RulesPage.find_by_slug(params[:id])
 
-    if @rules_page.update(rules_page_params)
-      redirect_to @rules_page
+        if @rules_page.update(rules_page_params)
+          redirect_to @rules_page
+        else
+          render 'edit'
+        end
+      else
+        redirect_to root
+      end
     else
-      render 'edit'
+      redirect_to login_path
     end
   end
 
   def destroy
-    @rules_page = RulesPage.find_by_slug(params[:id])
-    @rules_page.destroy
+    if logged_in?
+      @user = current_user
+      if @user.user_type == 0
+        @rules_page = RulesPage.find_by_slug(params[:id])
+        @rules_page.destroy
 
-    redirect_to rules_pages_path
+        redirect_to rules_pages_path
+      else
+        redirect_to root
+      end
+    else
+      redirect_to login_path
+    end
   end
 
   private
