@@ -1,6 +1,6 @@
 class CharactersController < ApplicationController
   def index
-    if admin_user?
+    if gm_user?
       @characters = Character.all
     else
       redirect_to '/'
