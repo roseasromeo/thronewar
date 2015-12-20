@@ -21,12 +21,12 @@ Rails.application.routes.draw do
   end
 
   # Auction System Routes
-  resources :games, only: [:show, :index, :create] do
+  resources :games, only: [:show, :index, :new, :create] do
     resources :characters, only: [:show, :index, :new, :create, :destroy]
     resources :pledges, only: [:create, :destroy]
   end
 
-  
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
