@@ -1,6 +1,6 @@
 <div class="login">
   <section class="intro_blurb">
-
+    <p>Welcome to the Throne War: The Fae Realms website! Please log in with your email and password. Forgotten password reset is not currently implemented.</p>
   </section>
 
   <% if flash[:alert] %>
@@ -17,5 +17,5 @@
     <% end %>
   <% end %>
 
-  <%= link_to "Create Account", new_user_path, :class => "button" %>
+  <%= link_to "Create Account", new_user_path %>
 </div>

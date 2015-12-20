@@ -21,7 +21,7 @@ class RulesPagesController < ApplicationController
       if admin_user?
         @rules_page = RulesPage.new
       else
-        redirect_to root
+        redirect_to '/'
       end
     else
       redirect_to login_path
@@ -34,7 +34,7 @@ class RulesPagesController < ApplicationController
       if admin_user?
         @rules_page = RulesPage.find_by_slug(params[:id])
       else
-        redirect_to root
+        redirect_to '/'
       end
     else
       redirect_to login_path
