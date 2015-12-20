@@ -16,5 +16,9 @@ class ApplicationController < ActionController::Base
     current_user.admin?
   end
 
+  def gm_user?
+    current_user.admin? || current_user.gm?
+  end
+
   helper_method :current_user, :admin_user?, :logged_in?
 end

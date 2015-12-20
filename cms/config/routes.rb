@@ -10,13 +10,21 @@ Rails.application.routes.draw do
   post '/login' => 'auth#login'
   get '/logout' => 'auth#logout'
 
-  # Nest the routes for subpages within rules pages
+  # Only create and new routes for users implemented
+  resources :users, only: [:create, :new]
+
+  # Rules Routes
+  # Nest the routes for subpages and comments within rules pages
   resources :rules_pages do
     resources :subpages
     resources :comments
   end
 
-  resources :users, except: :index
+  # Auction System Routes
+  resources :games, only: [:show, :index, :create] do
+    resources :characters, only: [:show, :index, :new, :create, :destroy]
+    resources :pledges, only: [:create, :destroy]
+  end
 
 
 
