@@ -15,6 +15,22 @@
   <% if admin_user? %>
     <%= link_to 'Edit', edit_rules_page_path(@rules_page) %>
     <%= link_to 'Delete', rules_page_path, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    <div id='comments'>
+      <% @rules_page.comments.each do |comment| %>
+        <%= render 'comment_display', :f => comment %>
+      <% end %>
+    </div>
+    <%= semantic_form_for([@rules_page, @rules_page.comments.build]) do |f| %>
+      <p>
+        <%= f.inputs do %>
+          <%= f.input :user, :as => :hidden, :value => current_user %>
+          <%= f.input :body %>
+          <%= f.actions do %>
+            <%= f.action :submit, :as => :button, :label => "Add comment" %>
+          <% end %>
+        <% end %>
+      </p>
+    <% end %>
   <% end %>
 <% end %>
 

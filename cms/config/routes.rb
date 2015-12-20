@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   # Nest the routes for subpages within rules pages
   resources :rules_pages do
     resources :subpages
+    resources :comments
   end
 
   resources :users, except: :index

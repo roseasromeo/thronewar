@@ -4,6 +4,7 @@ class RulesPage < ActiveRecord::Base
   before_update :create_slug
 
   has_many :subpages, -> { order(:order_number) }
+  has_many :comments
   accepts_nested_attributes_for :subpages, reject_if: :all_blank, allow_destroy: true
   validates :title, presence: true, length: { minimum: 5 }, uniqueness: true
   validates_presence_of :name, :slug
