@@ -1,7 +1,7 @@
 <div class='nested-fields'>
   <% @subpage_index = @subpage_index + 1 %>
   <%= f.inputs do %>
-    <%= f.input :subtitle, :label => "Subtitle (Anchor)" %>
+    <h2 class='subpage_title'><%= f.input :subtitle, :label => "Subtitle (Anchor)" %></h2>
     <%= f.input :order_number, :label => "Position on page" %>
     <table>
       <tr>
@@ -24,7 +24,9 @@
       link_title: false,
       target_list: false,
       selector: "<%= @class_ta %>",
-      toolbar: 'undo redo | bold italic underline | fontsizeselect | link',
+      toolbar1: 'bold italic underline | link',
+      toolbar2: 'fontsizeselect | fontselect',
+      font_formats: 'Garamond=garamond,verdana;' + 'Courier New=courier new,courier;' + 'Helvetica=helvetica;'+ 'Impact=impact,chicago;',
       menubar: false,
       statusbar: false,
       });

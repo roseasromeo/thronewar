@@ -4,7 +4,8 @@
     link_title: false,
     target_list: false,
     selector: 'textarea.tiny_mce',
-    toolbar: 'undo redo | bold italic underline | fontsizeselect | link',
+    toolbar: 'bold italic underline | fontsizeselect  fontselect | link',
+    font_formats: 'Garamond=garamond,verdana;' + 'Courier New=courier new,courier;' + 'Helvetica=helvetica;'+ 'Impact=impact,chicago;',
     menubar: false,
     statusbar: false,
     });
@@ -27,8 +28,14 @@
   <%= f.inputs do %>
     <%= f.input :slug, :as => :hidden, :value => @rules_page.slug %>
     <%= f.input :name, :label => "Page name for links"%>
-    <%= f.input :title %>
-    <%= f.input :text, :input_html => { :class => 'tiny_mce', :rows => 20, :cols => 120 } %>
+    <h1 class="page_title"><%= f.input :title %></h1>
+    <table class="page_intro">
+      <tr>
+        <td class="page_intro">
+          <%= f.input :text, :input_html => { :class => 'tiny_mce', :rows => 10 } %>
+        </td>
+      </tr>
+    </table>
     <div id='subpages'>
       <% @subpages = @rules_page.subpages.sort_by(&:order_number) %>
       <%= f.semantic_fields_for :subpages, @subpages do |subpage| %>

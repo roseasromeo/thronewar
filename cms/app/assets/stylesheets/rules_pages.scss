@@ -1,3 +1,100 @@
 // Place all the styles related to the rules_pages controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+// Headings
+h1.page_title {
+  font-size: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 25px;
+  padding: 10px;
+  background-color: #81bab9;
+}
+
+h2.subpage_title {
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 25px;
+  padding: 10px;
+  border-radius: 25px;
+  padding: 10px;
+  background-color: #81bab9;
+}
+
+//Intro
+table.page_intro {
+  width: 100%;
+}
+
+td.page_intro {
+  background-color: #bddbd3;
+  font-weight: bold;
+  border-radius: 25px;
+  padding: 10px;
+  width: 100%;
+}
+
+//Subpage
+td.sidebar, th.sidebar {
+  width: 30%;
+  background-color: #C1E1A6;
+  border-radius: 25px;
+  padding: 10px;
+}
+
+td.body, th.body {
+  width: 70%;
+  background-color: #ADD8E6;
+  border-radius: 25px;
+  padding: 10px;
+}
+
+table.subpage {
+  width: 100%;
+}
+
+//Comments
+div.comments {
+  background-color: #b4d7b9;
+  border-radius: 25px;
+  padding: 10px;
+  width: 80%;
+  margin: auto;
+}
+
+table.comment {
+  border-collapse: collapse;
+}
+
+td.user, th.user {
+  width: 20%;
+  border-bottom: 1px solid;
+}
+
+td.comment_body, th.comment_body {
+  width: 70%;
+  border-bottom: 1px solid;
+}
+
+td.comment_link, th.comment_link {
+  width: 10%;
+  border-bottom: 1px solid;
+}
+
+textarea.comment  {
+  width: 50%;
+  height: 4em;
+  resize: none;
+  overflow: auto;
+  padding: 10px;
+}
+
+// Don't display empty elements
+div:empty, table:empty, tbody:empty, tr:empty, td:empty {
+  display: none;
+  visibility: hidden;
+  empty-cells: hide;
+  margin: 0px;
+  padding: 0px;
+}

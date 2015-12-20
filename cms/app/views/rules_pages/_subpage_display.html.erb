@@ -1,6 +1,6 @@
 <% @subpage_id = f.subtitle.gsub(/\s+/, "") %>
 <div class='nested-subpages' id=<%= @subpage_id %>>
-    <%= f.subtitle %>
+    <h2 class='subpage_title'><%= f.subtitle %></h2>
     <table class='subpage'>
         <td class='sidebar'><%= f.sidebar.html_safe %></td>
         <td class='body'><%= f.body.html_safe %></td>
