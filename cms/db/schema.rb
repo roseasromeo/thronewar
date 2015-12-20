@@ -11,7 +11,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151219232819) do
+ActiveRecord::Schema.define(version: 20151220211752) do
+
+  create_table "auctions", force: :cascade do |t|
+    t.integer  "game_id"
+    t.integer  "phase",      default: 0,     null: false
+    t.boolean  "closed",     default: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  add_index "auctions", ["game_id"], name: "index_auctions_on_game_id"
+
+  create_table "characters", force: :cascade do |t|
+    t.string   "pseudonym",                null: false
+    t.integer  "user_id"
+    t.integer  "game_id"
+    t.integer  "points_spent", default: 0, null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "characters", ["game_id"], name: "index_characters_on_game_id"
+  add_index "characters", ["user_id"], name: "index_characters_on_user_id"
 
   create_table "comments", force: :cascade do |t|
     t.integer  "user_id"
@@ -23,6 +45,47 @@ ActiveRecord::Schema.define(version: 20151219232819) do
 
   add_index "comments", ["rules_page_id"], name: "index_comments_on_rules_page_id"
   add_index "comments", ["user_id"], name: "index_comments_on_user_id"
+
+  create_table "games", force: :cascade do |t|
+    t.string   "title",                  null: false
+    t.integer  "status",     default: 0, null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  create_table "items", force: :cascade do |t|
+    t.boolean  "closed",      default: false
+    t.integer  "num_strikes", default: 0
+    t.integer  "name",        default: 0,     null: false
+    t.integer  "auction_id",                  null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+  end
+
+  add_index "items", ["auction_id"], name: "index_items_on_auction_id"
+
+  create_table "pledges", force: :cascade do |t|
+    t.integer  "rank",         default: 0, null: false
+    t.integer  "character_id",             null: false
+    t.integer  "round_id",                 null: false
+    t.integer  "item_id",                  null: false
+    t.integer  "value",                    null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "pledges", ["character_id"], name: "index_pledges_on_character_id"
+  add_index "pledges", ["item_id"], name: "index_pledges_on_item_id"
+  add_index "pledges", ["round_id"], name: "index_pledges_on_round_id"
+
+  create_table "rounds", force: :cascade do |t|
+    t.integer  "auction_id"
+    t.integer  "number",     default: 1
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "rounds", ["auction_id"], name: "index_rounds_on_auction_id"
 
   create_table "rules_pages", force: :cascade do |t|
     t.string   "name"
