@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   end
 
   def admin_user?
-    current_user.user_type == 0
+    current_user.admin?
   end
 
   helper_method :current_user, :admin_user?, :logged_in?
