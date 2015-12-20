@@ -50,8 +50,19 @@
     <% end %>
   <% end %>
 <% end %>
-<div id='comments'>
-  <% @rules_page.comments.each do |comment| %>
-    <%= render 'comment_display', :f => comment %>
+<div class='comments'>
+  <% if @rules_page.comments.exists? %>
+    <table class="comment">
+      <tr class="comment_header">
+        <th class='user'>User</th>
+        <th class="comment_body">Comment</th>
+        <% if admin_user? %>
+          <th class="comment_link"></th>
+        <% end %>
+      </tr>
+      <% @rules_page.comments.each do |comment| %>
+        <%= render 'comment_display', :f => comment %>
+      <% end %>
+    </table>
   <% end %>
 </div>
