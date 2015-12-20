@@ -9,6 +9,7 @@ class RulesPage < ActiveRecord::Base
   validates :title, presence: true, length: { minimum: 5 }, uniqueness: true
   validates_presence_of :name, :slug
   validates :slug, uniqueness: true
+  validates :name, uniqueness: true
 
   def to_param
     slug
