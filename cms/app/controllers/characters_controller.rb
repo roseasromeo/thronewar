@@ -48,7 +48,8 @@ class CharactersController < ApplicationController
 
   def create
     if logged_in?
-      @character = Character.new(character_params)
+      @user = current_user
+      @character = Character.new(user: @user, game: character_params[:game], pseudonym: character_params[:pseudonym], points_spent: 0)
 
       if @character.save
         redirect_to @character
@@ -70,8 +71,9 @@ class CharactersController < ApplicationController
       my_character = false
     end
     if gm_user? || my_character
-      if @rules_page.update(rules_page_params)
-        redirect_to @rules_page
+    # THIS WON'T WORK OUT OF THE BOX
+      if @character.update(character_page_params, user: )
+        redirect_to @character
       else
         render 'edit'
       end
@@ -98,7 +100,7 @@ class CharactersController < ApplicationController
 
   private
     def character_params
-      params.require(:character).permit(:user, :game, :pseudonym, :points_spent)
+      params.require(:character).permit(:game, :pseudonym, :points_spent)
     end
 
 end
