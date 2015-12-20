@@ -17,7 +17,6 @@ class RulesPagesController < ApplicationController
 
   def new
     if logged_in?
-      @user = current_user
       if admin_user?
         @rules_page = RulesPage.new
       else
@@ -43,7 +42,6 @@ class RulesPagesController < ApplicationController
 
   def create
     if logged_in?
-      @user = current_user
       if admin_user?
         @rules_page = RulesPage.new(rules_page_params)
 
@@ -81,14 +79,13 @@ class RulesPagesController < ApplicationController
 
   def destroy
     if logged_in?
-      @user = current_user
       if admin_user?
         @rules_page = RulesPage.find_by_slug(params[:id])
         @rules_page.destroy
 
         redirect_to rules_pages_path
       else
-        redirect_to root
+        redirect_to '/'
       end
     else
       redirect_to login_path
