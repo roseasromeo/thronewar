@@ -13,12 +13,20 @@ class ApplicationController < ActionController::Base
   end
 
   def admin_user?
-    current_user.admin?
+    if logged_in?
+      current_user.admin?
+    else
+      false
+    end
   end
 
   def gm_user?
-    current_user.admin? || current_user.gm?
+    if logged_in?
+      current_user.admin? || current_user.gm?
+    else
+      false
+    end
   end
 
-  helper_method :current_user, :admin_user?, :logged_in?
+  helper_method :current_user, :admin_user?, :gm_user?, :logged_in?
 end

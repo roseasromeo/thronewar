@@ -8,7 +8,7 @@ class AuthController < ApplicationController
     @user = User.find_by_email(params[:user][:email])
     if @user && @user.authenticate(params[:user][:password])
       session[:user_id] = @user.id
-      redirect_to rules_pages_path
+      redirect_to '/'
     end
   end
 
@@ -16,7 +16,7 @@ class AuthController < ApplicationController
     @user = User.find_by_email(params[:user][:email])
     if @user && @user.authenticate(params[:user][:password])
       session[:user_id] = @user.id
-      redirect_to rules_pages_path
+      redirect_to '/'
     else
       flash[:alert] = "You entered in the wrong email or password"
     end

@@ -1,0 +1,17 @@
+<% if gm_user? %>
+  <%= link_to 'Back to Character Index', game_characters_path(@game) %>
+<% end %>
+<%= link_to 'Back to Home', '/' %>
+
+<h1 class="character_pseudonym">
+  <%= @character.pseudonym %>
+</h1>
+<p class="character_player">
+  <%= @character.user.name %>
+</p>
+<p class="character_game">
+  <%= @character.game.title %>
+</p>
+<p class="character_points">
+  <%= @character.points_spent %>
+</p>
