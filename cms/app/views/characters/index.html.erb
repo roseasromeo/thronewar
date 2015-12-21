@@ -1,0 +1,19 @@
+<h1> Index of Characters </h1>
+<%= link_to 'Back to Home', '/' %>
+<%= link_to 'New character', new_game_character_path(@game) %>
+<% if gm_user? %>
+  <table>
+    <tr>
+      <th>Pseudonym</th>
+      <th>Player</th>
+    </tr>
+
+    <% @characters.each do |character| %>
+      <tr>
+        <td><%= link_to character.pseudonym, game_character_path(@game, character) %></td>
+        <td><%= character.user.name %></td>
+      </tr>
+    <% end %>
+  </table>
+
+<% end %>

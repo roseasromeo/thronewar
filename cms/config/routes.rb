@@ -24,8 +24,10 @@ Rails.application.routes.draw do
   resources :games, only: [:show, :index, :new, :create] do
     resources :characters, only: [:show, :index, :new, :create, :destroy]
     resources :pledges, only: [:create, :destroy]
+    get '/start' => 'games#start'
+    get '/gm' => 'games#gm'
+    get '/player' => 'games#player'
   end
-
 
 
   # The priority is based upon order of creation: first created -> highest priority.

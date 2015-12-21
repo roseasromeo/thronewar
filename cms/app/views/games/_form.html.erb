@@ -1,0 +1,21 @@
+<%= semantic_form_for @game do |f| %>
+  <% if @game.errors.any? %>
+    <div id="error_explanation">
+      <h2>
+        <%= pluralize(@game.errors.count, "error") %> prohibited
+        this rules page from being saved:
+      </h2>
+      <ul>
+        <% @game.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <%= f.inputs do %>
+    <h1 class="game_title"><%= f.input :title %></h1>
+    <%= f.actions do %>
+      <%= f.action :submit, :label => "Create Game" %>
+    <% end %>
+  <% end %>
+<% end %>

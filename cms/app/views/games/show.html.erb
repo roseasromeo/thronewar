@@ -1,0 +1,16 @@
+<%= link_to 'Back to Games Index', games_path %>
+<h1 class="game_title">
+  <%= @game.title %>
+</h1>
+<p class="game_status">
+  <%= @game.status %>
+</p>
+<% if @game.preparing? %>
+  <p class="links"><%= link_to 'Create a New Character', new_game_character_path(@game) %></p>
+  <% if gm_user? %>
+    <p class="links"><%= link_to 'Start the Auction', game_start_path(@game) %></p>
+  <% end %>
+<% end %>
+<% if gm_user? || @game.complete? %>
+  <p class="links"><%= link_to 'Index of Character', game_characters_path(@game) %></p>
+<% end %>

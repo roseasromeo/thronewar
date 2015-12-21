@@ -1,13 +1,15 @@
 class CharactersController < ApplicationController
   def index
     if gm_user?
-      @characters = Character.all
+      @game = Game.find(params[:game_id])
+      @characters = @game.characters
     else
       redirect_to '/'
     end
   end
 
   def show
+    @game = Game.find(params[:game_id])
     character = Character.find(params[:id])
     if character.user == current_user
       my_character = true
@@ -23,7 +25,8 @@ class CharactersController < ApplicationController
 
   def new
     if logged_in?
-      @character = Character.new
+      @game = Game.find(params[:game_id])
+      @character = Character.new(game: @game)
     else
       redirect_to login_path
     end
@@ -48,11 +51,12 @@ class CharactersController < ApplicationController
 
   def create
     if logged_in?
+      @game = Game.find(params[:game_id])
       @user = current_user
-      @character = Character.new(user: @user, game: character_params[:game], pseudonym: character_params[:pseudonym], points_spent: 0)
+      @character = Character.new(user: @user, game: @game, pseudonym: character_params[:pseudonym], points_spent: 0)
 
       if @character.save
-        redirect_to @character
+        redirect_to game_character_path(@game, @character)
       else
         render 'new'
       end
@@ -100,7 +104,7 @@ class CharactersController < ApplicationController
 
   private
     def character_params
-      params.require(:character).permit(:game, :pseudonym, :points_spent)
+      params.require(:character).permit(:pseudonym, :points_spent)
     end
 
 end
