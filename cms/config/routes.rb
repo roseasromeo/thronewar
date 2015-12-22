@@ -6,9 +6,9 @@ Rails.application.routes.draw do
   root 'welcome#index'
 
   # Auth routes
-  get '/login' => 'auth#new'
+  get '/login' => 'auth#new', as: :login
   post '/login' => 'auth#login'
-  get '/logout' => 'auth#logout'
+  get '/logout' => 'auth#logout', as: :logout
 
   # Only create and new routes for users implemented
   resources :users, only: [:create, :new]
@@ -24,9 +24,15 @@ Rails.application.routes.draw do
   resources :games, only: [:show, :index, :new, :create] do
     resources :characters, only: [:show, :index, :new, :create, :destroy]
     resources :pledges, only: [:create, :destroy]
-    get '/start' => 'games#start'
-    get '/gm' => 'games#gm'
-    get '/player' => 'games#player'
+    member do
+      get 'start'
+      get 'gm'
+      post 'aspect'
+      post 'gift'
+      get 'player'
+      post 'pledged'
+    end
+
   end
 
 
