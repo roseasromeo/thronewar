@@ -6,11 +6,21 @@
   <%= @game.status %>
 </p>
 <% if @game.preparing? %>
-  <p class="links"><%= link_to 'Create a New Character', new_game_character_path(@game) %></p>
+  <% if @new_character %>
+    <p class="links"><%= link_to 'Create a New Character', new_game_character_path(@game) %></p>
+  <% end %>
   <% if gm_user? %>
-    <p class="links"><%= link_to 'Start the Auction', game_start_path(@game) %></p>
+    <p class="links"><%= link_to 'Start the Auction', start_game_path(@game) %></p>
+  <% end %>
+<% end %>
+<% if @game.started? %>
+  <% if @new_character != true %> <!-- i.e. user has a character for this game -->
+    <p class="links"><%= link_to 'Go to the Auction', player_game_path(@game) %></p>
+  <% end %>
+  <% if gm_user? %>
+    <p class="links"><%= link_to 'GM-side of Auction', gm_game_path(@game) %></p>
   <% end %>
 <% end %>
 <% if gm_user? || @game.complete? %>
-  <p class="links"><%= link_to 'Index of Character', game_characters_path(@game) %></p>
+  <p class="links"><%= link_to 'Index of Characters', game_characters_path(@game) %></p>
 <% end %>

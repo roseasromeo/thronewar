@@ -1,7 +1,9 @@
 <h1> Index of Characters </h1>
 <%= link_to 'Back to Home', '/' %>
-<%= link_to 'New character', new_game_character_path(@game) %>
-<% if gm_user? %>
+<% if @new_character %>
+  <%= link_to 'New character', new_game_character_path(@game) %>
+<% end %>
+<% if gm_user? || @game.completed? %>
   <table>
     <tr>
       <th>Pseudonym</th>
@@ -12,6 +14,9 @@
       <tr>
         <td><%= link_to character.pseudonym, game_character_path(@game, character) %></td>
         <td><%= character.user.name %></td>
+        <% if gm_user? %>
+          <td><%= link_to 'Delete', game_character_path(@game, character), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
       </tr>
     <% end %>
   </table>

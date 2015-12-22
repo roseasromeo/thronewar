@@ -2,6 +2,7 @@ class CharactersController < ApplicationController
   def index
     if gm_user?
       @game = Game.find(params[:game_id])
+      @new_character = @game.characters.where(user: @user).empty?
       @characters = @game.characters
     else
       redirect_to '/'
@@ -25,8 +26,14 @@ class CharactersController < ApplicationController
 
   def new
     if logged_in?
+      @user = current_user
       @game = Game.find(params[:game_id])
-      @character = Character.new(game: @game)
+      if @game.characters.where(user: @user).empty?
+        @character = Character.new(game: @game)
+      else
+        @character = @game.characters.where(user: @user)
+        redirect_to game_character_path(@game, @character)
+      end
     else
       redirect_to login_path
     end
@@ -53,12 +60,17 @@ class CharactersController < ApplicationController
     if logged_in?
       @game = Game.find(params[:game_id])
       @user = current_user
-      @character = Character.new(user: @user, game: @game, pseudonym: character_params[:pseudonym], points_spent: 0)
+      if @game.characters.where(user: @user).empty?
+        @character = Character.new(user: @user, game: @game, pseudonym: character_params[:pseudonym], points_spent: 0)
 
-      if @character.save
-        redirect_to game_character_path(@game, @character)
+        if @character.save
+          redirect_to game_character_path(@game, @character)
+        else
+          render 'new'
+        end
       else
-        render 'new'
+        @character = @game.characters.where(user: @user)
+        redirect_to game_character_path(@game, @character)
       end
     else
       redirect_to login_path
@@ -90,10 +102,11 @@ class CharactersController < ApplicationController
   def destroy
     if logged_in?
       if gm_user?
+        @game = Game.find(params[:game_id])
         @character = Character.find(params[:id])
         @character.destroy
 
-        redirect_to characters_path
+        redirect_to game_characters_path(@game)
       else
         redirect_to '/'
       end

@@ -1,0 +1,19 @@
+<table class="character_table">
+  <tr>
+    <th>Pseudonym</th>
+    <% if gm_user? || game.completed? %>
+      <th>Player</th>
+    <% end %>
+    <th>Points Spent</th>
+  </tr>
+
+  <% characters.each do |character| %>
+    <tr>
+      <td><%= character.pseudonym %></td>
+      <% if gm_user? || game.completed? %>
+        <td><%= character.user.name %></td>
+      <% end %>
+      <td><%= character.points_spent %></td>
+    </tr>
+  <% end %>
+</table>
