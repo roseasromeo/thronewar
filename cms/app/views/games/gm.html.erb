@@ -5,5 +5,15 @@ Ability to delete pledges submitted in current round
 Total spent points for each character
 Ability to advance the round?
 -->
+<p id="error"><%= flash[:error] %></p> <!-- make this prettier -->
 <h1 class="auction_title">Auction</h1>
-<%= render 'character_list', :game => @game, :character => @characters %>
+<%= render 'character_list', :game => @game, :characters => @characters, :aspect_exists => @aspect_exists, :gift_exists => @gift_exists, :aspect_pledges => @last_aspect_pledges, :gift_pledges => @last_gift_pledges %>
+<% if !@aspect_exists %>
+  <%= link_to "Start Aspect Auction", aspect_game_path, :method => :post %>
+<% end %>
+<% if !@gift_exists && @aspect_closed %>
+  <%= link_to "Start Gift Auction", gift_game_path, :method => :post  %>
+<% end %>
+<% if @aspect_exists && !@aspect_closed %>
+  <%= render 'auction_monitor', :game => @game, :characters => @characters, :phase => :aspect, :current_round => @current_aspect_round %>
+<% end %>

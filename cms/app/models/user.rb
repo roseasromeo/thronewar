@@ -11,9 +11,4 @@ class User < ActiveRecord::Base
 
   has_secure_password
 
-  # user types
-  # 0 = website admin
-  # 1 = GM (but not website admin)
-  # 2 = general
-
 end
