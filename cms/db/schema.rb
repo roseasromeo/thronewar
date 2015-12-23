@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151220211752) do
+ActiveRecord::Schema.define(version: 20151223020523) do
 
   create_table "auctions", force: :cascade do |t|
     t.integer  "game_id"
@@ -22,6 +22,16 @@ ActiveRecord::Schema.define(version: 20151220211752) do
   end
 
   add_index "auctions", ["game_id"], name: "index_auctions_on_game_id"
+
+  create_table "char_rounds", force: :cascade do |t|
+    t.integer  "character_id", null: false
+    t.integer  "round_id",     null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  add_index "char_rounds", ["character_id"], name: "index_char_rounds_on_character_id"
+  add_index "char_rounds", ["round_id"], name: "index_char_rounds_on_round_id"
 
   create_table "characters", force: :cascade do |t|
     t.string   "pseudonym",                null: false
@@ -55,7 +65,7 @@ ActiveRecord::Schema.define(version: 20151220211752) do
 
   create_table "items", force: :cascade do |t|
     t.boolean  "closed",      default: false
-    t.integer  "num_strikes", default: 0
+    t.integer  "num_strikes", default: 0,     null: false
     t.integer  "name",        default: 0,     null: false
     t.integer  "auction_id",                  null: false
     t.datetime "created_at",                  null: false
@@ -65,18 +75,18 @@ ActiveRecord::Schema.define(version: 20151220211752) do
   add_index "items", ["auction_id"], name: "index_items_on_auction_id"
 
   create_table "pledges", force: :cascade do |t|
-    t.integer  "rank",         default: 0, null: false
-    t.integer  "character_id",             null: false
-    t.integer  "round_id",                 null: false
-    t.integer  "item_id",                  null: false
-    t.integer  "value",                    null: false
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.integer  "rank",          default: 0, null: false
+    t.integer  "character_id",              null: false
+    t.integer  "char_round_id",             null: false
+    t.integer  "item_id",                   null: false
+    t.integer  "value",                     null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
+  add_index "pledges", ["char_round_id"], name: "index_pledges_on_char_round_id"
   add_index "pledges", ["character_id"], name: "index_pledges_on_character_id"
   add_index "pledges", ["item_id"], name: "index_pledges_on_item_id"
-  add_index "pledges", ["round_id"], name: "index_pledges_on_round_id"
 
   create_table "rounds", force: :cascade do |t|
     t.integer  "auction_id"
@@ -100,7 +110,7 @@ ActiveRecord::Schema.define(version: 20151220211752) do
     t.string   "subtitle"
     t.text     "sidebar"
     t.text     "body"
-    t.integer  "order_number"
+    t.integer  "order_number",  null: false
     t.integer  "rules_page_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false

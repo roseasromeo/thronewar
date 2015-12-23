@@ -23,7 +23,7 @@ Rails.application.routes.draw do
   # Auction System Routes
   resources :games, only: [:show, :index, :new, :create] do
     resources :characters, only: [:show, :index, :new, :create, :destroy]
-    resources :pledges, only: [:create, :destroy]
+    resources :char_rounds, only: [:create, :destroy]
     member do
       get 'start'
       get 'gm'

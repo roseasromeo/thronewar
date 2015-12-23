@@ -14,6 +14,9 @@
         <td><%= character.user.name %></td>
       <% end %>
       <td><%= character.points_spent %></td>
+      <% if @last_aspect_round != nil %>
+      <!-- ranks go here -->
+      <% end %>
     </tr>
   <% end %>
 </table>
