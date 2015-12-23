@@ -56,6 +56,7 @@ class GamesController < ApplicationController
 
   def gm
     if gm_user?
+      @user = current_user
       @game = Game.find(params[:id])
       if @game.preparing?
         redirect_to game_path(@game)
@@ -68,6 +69,7 @@ class GamesController < ApplicationController
   end
 
   def player
+    @user = current_user
     @game = Game.find(params[:id])
     if @game.preparing?
       redirect_to game_path(@game)
@@ -85,9 +87,10 @@ class GamesController < ApplicationController
         @current_round = nil
       end
       if @items != nil
+        @current_char_round = CharRound.new(round: @current_round, character: @character)
         @pledges = []
         @items.each do |item|
-          @pledges << Pledge.new(character: @character, round: @current_round, item: item, value: 0)
+          @pledges << Pledge.new(character: @character, char_round: @current_char_round, item: item, value: 0)
         end
       end
     end
