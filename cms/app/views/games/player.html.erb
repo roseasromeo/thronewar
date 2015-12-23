@@ -14,5 +14,5 @@ Total spent points
   <p class="waiting_message">Please wait for your Arbiter to start the Gift Auction.</p>
 <% end %>
 <% if @aspect_exists && !@aspect_closed %>
-  <%= render 'auction_pledging', :game => @game, :character => @character, :phase => :aspect, :auction => @aspect_auction, :items => @aspect_items, :current_round => @current_aspect_round, :pledges => @pledges %>
+  <%= render 'auction_pledging', :game => @game, :items => @items, :char_round => @current_char_round, :pledges => @pledges %>
 <% end %>
