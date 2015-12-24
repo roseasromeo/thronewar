@@ -75,6 +75,7 @@ class GamesController < ApplicationController
       redirect_to game_path(@game)
     else
       @character = @game.characters.where(user: @user).first
+
       get_auction
       if @aspect_exists && !@aspect_closed
         @items = @aspect_items
@@ -87,10 +88,11 @@ class GamesController < ApplicationController
         @current_round = nil
       end
       if @items != nil
-        @current_char_round = CharRound.new(round: @current_round, character: @character)
-        @pledges = []
-        @items.each do |item|
-          @pledges << Pledge.new(character: @character, char_round: @current_char_round, item: item, value: 0)
+        if @current_char_round == nil
+          @current_char_round = CharRound.new(round: @current_round, character: @character)
+          @items.count.times do
+            @current_char_round.pledges.build
+          end
         end
       end
     end

@@ -1,0 +1,5 @@
+<%= f.inputs do %>
+  <td class="pledge_field"><%= f.input :value, :required => false, :label => false %></td>
+  <%= f.input :item, :as => :select, :label => false, :collection => options_for_select([items[@item_index]], items[@item_index]) %>
+  <%= f.input :character, :as => :select, :label => false, :collection => options_for_select([@character], @character)  %>
+<% end %>
