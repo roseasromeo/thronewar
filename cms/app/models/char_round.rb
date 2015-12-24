@@ -4,4 +4,5 @@ class CharRound < ActiveRecord::Base
   has_many :pledges
 
   validates_presence_of :character, :round
+  accepts_nested_attributes_for :pledges, reject_if: :all_blank, allow_destroy: true
 end
