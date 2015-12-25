@@ -5,18 +5,11 @@ Ability to view submitted pledge
 Total spent points
 -->
 <h1 class="auction_title">Auction</h1>
-<%= render 'games/character_list', :game => @game, :characters => @characters, :aspect_exists => @aspect_exists, :gift_exists => @gift_exists, :aspect_pledges => @last_aspect_pledges, :gift_pledges => @last_gift_pledges %>
-<% if !@aspect_exists %>
-  <p class="waiting_message">Please wait for your Arbiter to start the Aspect Auction.</p>
-<% end %>
-<% if !@gift_exists && @aspect_closed %>
-  <p class="waiting_message">Please wait for your Arbiter to start the Gift Auction.</p>
-<% end %>
-<% if @aspect_exists && !@aspect_closed %>
-  <%= render 'form' %>
-  <% @char_round.pledges.each do |pledge| %>
-    <%= pledge.item_id %>
+<%= render 'games/character_list', :characters => @characters %>
+<% if @message != nil %>
+  <%= @message %>
+<% else %>
+  <% if (@aspect_exists && !@aspect_closed) || (@gift_exists && !@gift_closed) %>
+    <%= render 'form', :flash => flash %>
   <% end %>
-  <%= params %>
-  <%= params[:pledges_attributes] %>
 <% end %>

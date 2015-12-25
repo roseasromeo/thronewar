@@ -29,9 +29,10 @@ Rails.application.routes.draw do
       get 'gm'
       post 'aspect'
       post 'gift'
-      post 'pledged'
+      post 'close' #close round
+      post 'close_auction' #close auction
     end
-    get 'player' => 'char_rounds#new'
+    get 'player' => 'char_rounds#new', as: :player
   end
 
 

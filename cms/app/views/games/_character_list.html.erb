@@ -5,6 +5,18 @@
       <th>Player</th>
     <% end %>
     <th>Points Spent</th>
+    <% if @gift_pledges_to_display != nil %>
+      <% @gift_items.each do |item| %>
+        <th><%= item.name %> Points</th>
+        <th><%= item.name %> Rank</th>
+      <% end %>
+    <% end %>
+    <% if @aspect_pledges_to_display != nil %>
+      <% @aspect_items.each do |item| %>
+        <th><%= item.name %> Points</th>
+        <th><%= item.name %> Rank</th>
+      <% end %>
+    <% end %>
   </tr>
 
   <% characters.each do |character| %>
@@ -14,8 +26,19 @@
         <td><%= character.user.name %></td>
       <% end %>
       <td><%= character.points_spent %></td>
-      <% if @last_aspect_round != nil %>
-      <!-- ranks go here -->
+      <% if @gift_pledges_to_display != nil %>
+        <% @gift_items.each do |item| %>
+          <% pledge = @gift_pledges_to_display.where(item: item, character: character).first %>
+          <td><%= pledge.value %></td>
+          <td><%= pledge.rank %></td>
+        <% end %>
+      <% end %>
+      <% if @aspect_pledges_to_display != nil %>
+        <% @aspect_items.each do |item| %>
+          <% pledge = @aspect_pledges_to_display.where(item: item, character: character).first %>
+          <td><%= pledge.value %></td>
+          <td><%= pledge.rank %></td>
+        <% end %>
       <% end %>
     </tr>
   <% end %>

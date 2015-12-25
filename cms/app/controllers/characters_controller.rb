@@ -100,18 +100,14 @@ class CharactersController < ApplicationController
 =end
 
   def destroy
-    if logged_in?
-      if gm_user?
-        @game = Game.find(params[:game_id])
-        @character = Character.find(params[:id])
-        @character.destroy
+    if gm_user?
+      @game = Game.find(params[:game_id])
+      @character = Character.find(params[:id])
+      @character.destroy
 
-        redirect_to game_characters_path(@game)
-      else
-        redirect_to '/'
-      end
+      redirect_to game_characters_path(@game)
     else
-      redirect_to login_path
+      redirect_to '/'
     end
   end
 

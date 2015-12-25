@@ -15,7 +15,7 @@
 <% end %>
 <% if @game.started? %>
   <% if @new_character != true %> <!-- i.e. user has a character for this game -->
-    <p class="links"><%= link_to 'Go to the Auction', player_game_path(@game) %></p>
+    <p class="links"><%= link_to 'Go to the Auction', game_player_path(@game) %></p>
   <% end %>
   <% if gm_user? %>
     <p class="links"><%= link_to 'GM-side of Auction', gm_game_path(@game) %></p>
