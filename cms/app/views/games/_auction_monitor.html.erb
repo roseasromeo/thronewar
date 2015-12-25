@@ -1,1 +1,15 @@
-<%= @pledges = current_round.pledges %>
+<table class="pledge_display">
+  <tr>
+    <th>Pseudonym</th>
+    <th>User</th>
+    <% @items.each do |item| %>
+      <th><%= item.name %></th>
+    <% end %>
+  </tr>
+<% @current_round.char_rounds.each do |char_round| %>
+  <%= render 'pledge_display', :f => char_round %>
+<% end %>
+</table>
+<% if @all_pledges_in %>
+  <%= link_to 'Close Round', close_game_path(:current_round => @current_round, :auction => @auction), :method => :post %> <!-- make button -->
+<% end %>

@@ -36,19 +36,8 @@ class ApplicationController < ActionController::Base
       @auctions = @game.auctions
 
       get_aspect_auction
+      get_gift_auction
 
-      @gift_auction = @auctions.gift.first
-      @gift_exists = (@gift_auction != nil)
-
-      if @gift_exists
-        @last_gift_round = @gift_auction.rounds.order_by(number: :desc).first
-        @last_gift_pledges = @last_gift_round.pledges
-        @gift_closed = @gift_auction.closed?
-      else
-        @last_gift_round = nil
-        @last_gift_pledges = nil
-        @gift_closed = nil
-      end
     end
 
     def get_aspect_auction
@@ -64,13 +53,6 @@ class ApplicationController < ActionController::Base
           @last_aspect_pledges = nil
         end
         @aspect_items = @aspect_auction.items
-
-        #@battle = @items.battle.first
-        #@cunning = @items.cunning.first
-        #@destiny = @items.destiny.first
-        #@ego = @items.ego.first
-        #@flesh = @items.flesh.first
-
         @aspect_closed = @aspect_auction.closed?
       else
         @last_aspect_round = nil
@@ -79,16 +61,63 @@ class ApplicationController < ActionController::Base
       end
     end
 
+    def get_gift_auction
+      @gift_auction = @auctions.gift.first
+      @gift_exists = (@gift_auction != nil)
+      if @gift_exists
+        @current_gift_round = @gift_auction.rounds.order(number: :desc).first
+        if @current_gift_round.number != 1
+          @last_gift_round = @gift_auction.rounds.order(number: :desc).second
+          @last_gift_pledges = @last_gift_round.pledges
+        else
+          @last_gift_round = nil
+          @last_gift_pledges = nil
+        end
+        @gift_items = @gift_auction.items
+        @gift_closed = @gift_auction.closed?
+      else
+        @last_gift_round = nil
+        @last_gift_pledges = nil
+        @gift_closed = false
+      end
+    end
+
     def get_current_round
       if @aspect_exists && !@aspect_closed
         @items = @aspect_items
         @current_round = @current_aspect_round
+        @last_round = @last_aspect_round
+        @auction = @aspect_auction
+        @aspect_pledges_to_display = @last_aspect_pledges
+        @gift_pledges_to_display = nil
       elsif @gift_exists && !@gift_closed
         @items = @gift_items
         @current_round = @current_gift_round
+        @last_round = @last_gift_round
+        @auction = @gift_auction
+        @aspect_pledges_to_display = @current_aspect_round.pledges
+        @gift_pledges_to_display = @last_gift_pledges
+      elsif @aspect_closed && @gift_closed
+        @items = nil
+        @current_round = nil
+        @last_round = nil
+        @auction = nil
+        @aspect_pledges_to_display = @current_aspect_round.pledges
+        @gift_pledges_to_display = @current_gift_round.pledges
+      elsif @aspect_closed && !@gift_exists
+        @items = nil
+        @current_round = nil
+        @last_round = nil
+        @auction = nil
+        @aspect_pledges_to_display = @current_aspect_round.pledges
+        @gift_pledges_to_display = nil
       else
         @items = nil
         @current_round = nil
+        @last_round = nil
+        @auction = nil
+        @aspect_pledges_to_display = nil
+        @gift_pledges_to_display = nil
       end
     end
 end
