@@ -58,12 +58,23 @@ class GamesController < ApplicationController
     if gm_user?
       @user = current_user
       @game = Game.find(params[:id])
+      @player = false
+      if params[:display_toggle] != nil
+        @display_toggle = (params[:display_toggle] == "true")
+      else
+        @display_toggle = true
+      end
       if @game.preparing?
         redirect_to game_path(@game)
       else
         get_auction
         get_current_round
         @all_pledges_in = all_pledges_in?
+        if @current_round != nil && @last_round !=nil
+          @all_closed = all_items_closed?
+        else
+          @all_closed = false
+        end
       end
     else
       redirect_to '/'
@@ -73,6 +84,7 @@ class GamesController < ApplicationController
   def aspect
     @game = Game.find(params[:id])
     @auction = Auction.new(game: @game, phase: :aspect)
+    @player = false
     if @auction.save
       # Create the round
       @round = Round.new(auction: @auction, number: 1)
@@ -119,6 +131,7 @@ class GamesController < ApplicationController
   def gift
     @game = Game.find(params[:id])
     @auction = Auction.new(game: @game, phase: :gift)
+    @player = false
     if @auction.save
       # Create the round
       @round = Round.new(auction: @auction, number: 1)
@@ -160,17 +173,14 @@ class GamesController < ApplicationController
     if gm_user?
       @game = Game.find(params[:id])
       @current_round = Round.find(params[:current_round])
+      @player = false
       assign_ranks
       @all_closed = false
       if @current_round.number != 1
         get_auction
         get_current_round
         check_for_strikes
-        items = @last_round.items
-        @all_closed = true
-        items.each do |item|
-          @all_closed = @all_closed && item.closed?
-        end
+        @all_closed = all_items_closed?
       end
       @auction = Auction.find(params[:auction])
       if @all_closed
@@ -182,7 +192,7 @@ class GamesController < ApplicationController
           redirect_to gm_game_path, :all_closed => @all_closed
         else
           @errors = @round.errors
-          redirect_to gm_game_path, :flash => { :error => @errors }, :all_closed => @all_closed
+          redirect_to gm_game_path, :flash => { :error => @errors }
         end
       end
     else
@@ -194,6 +204,7 @@ class GamesController < ApplicationController
     if gm_user?
       @auction = Auction.find(params[:auction])
       @auction.closed = true
+      @player = false
       if @auction.save
         redirect_to gm_game_path
       else
@@ -202,6 +213,20 @@ class GamesController < ApplicationController
       end
     else
       redirect_to '/'
+    end
+  end
+
+  def display
+    @game = Game.find(params[:id])
+    if params[:display_toggle] == "true"
+      @display_toggle = false
+    else
+      @display_toggle = true
+    end
+    if params[:player] == "true"
+      redirect_to game_player_path(@game, :display_toggle => @display_toggle)
+    else
+      redirect_to gm_game_path(@game, :display_toggle => @display_toggle)
     end
   end
 
