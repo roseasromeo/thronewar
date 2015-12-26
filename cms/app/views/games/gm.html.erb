@@ -1,21 +1,24 @@
 <!-- Things that need to happen here:
-Ability to see ranks from previous round
-Ability to see pledges submitted in current round
-Ability to delete pledges submitted in current round
 Total spent points for each character
-Ability to advance the round?
 -->
+<% content_for :for_head do %>
+  <meta http-equiv="refresh" content="15" />
+<% end %>
+
 <p id="error"><%= flash[:error] %></p> <!-- make this prettier -->
 <h1 class="auction_title">Auction</h1>
 <%= render 'character_list', :characters => @characters %>
 <% if !@aspect_exists %>
-  <%= link_to "Start Aspect Auction", aspect_game_path, :method => :post %>
+  <%= link_to "Start Aspect Auction", aspect_game_path(@game), :method => :post %>
 <% end %>
 <% if !@gift_exists && @aspect_closed %>
-  <%= link_to "Start Gift Auction", gift_game_path, :method => :post  %>
+  <%= link_to "Start Gift Auction", gift_game_path(@game), :method => :post  %>
 <% end %>
 <% if (@aspect_exists && !@aspect_closed) || (@gift_exists && !@gift_closed) %>
-  <%= render 'auction_monitor' %>
+  <% if !@all_closed %>
+    <%= render 'auction_monitor' %>
+  <% else %>
+    <p>All items in this auction are closed.</p>
+  <% end %>
   <%= link_to "Close Auction", close_auction_game_path(:auction => @auction), :method => :post %>
 <% end %>
-<%= @compare %>

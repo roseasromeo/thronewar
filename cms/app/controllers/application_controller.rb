@@ -120,4 +120,17 @@ class ApplicationController < ActionController::Base
         @gift_pledges_to_display = nil
       end
     end
+
+    def all_items_closed?
+      if @current_round.number != 1
+        items = @last_round.items
+        all_closed = true
+        items.each do |item|
+          all_closed = all_closed && item.closed?
+        end
+      else
+        all_closed = false
+      end
+      all_closed
+    end
 end

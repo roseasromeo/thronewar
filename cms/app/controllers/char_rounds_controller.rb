@@ -2,6 +2,12 @@ class CharRoundsController < ApplicationController
   def new
     @user = current_user
     @game = Game.find(params[:game_id])
+    @player = true
+    if params[:display_toggle] != nil
+      @display_toggle = (params[:display_toggle] == "true")
+    else
+      @display_toggle = true
+    end
     if @game.preparing?
       redirect_to game_path(@game)
     else
@@ -9,8 +15,11 @@ class CharRoundsController < ApplicationController
 
       get_auction
       get_current_round
+      @all_closed = all_items_closed?
 
-      if @items == nil
+      if @all_closed
+        @message = "This auction is finished. Please wait for the Arbiter to continue."
+      elsif @items == nil
         @message = "Please wait for the Arbiter to start the next Auction."
       elsif pledge_made?
         @message = "Your pledge has been submitted. Please wait for the next round to start."
@@ -36,9 +45,11 @@ class CharRoundsController < ApplicationController
     @game = Game.find(params[:game_id])
     @user = current_user
     @character = @game.characters.where(user: @user).first
+    @player = true
     get_auction
     get_current_round
-    if CharRound.where(character: @character, round: @current_round).empty?
+    @all_closed = all_items_closed?
+    if CharRound.where(character: @character, round: @current_round).empty? && @all_closed
       @char_round = CharRound.new(character: @character, round: @current_round)
       if @char_round.save
         @pledge_values = []
@@ -76,7 +87,11 @@ class CharRoundsController < ApplicationController
         render 'new'
       end
     else
-      flash[:error] = "Pledges for this round already submitted. Please wait."
+      if @all_closed
+        flash[:error] = "This auction is finished. Please wait for the Arbiter to continue."
+      else
+        flash[:error] = "Pledges for this round already submitted. Please wait."
+      end
       redirect_to game_player_path(@game)
     end
   end
