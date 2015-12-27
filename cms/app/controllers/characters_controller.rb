@@ -1,7 +1,7 @@
 class CharactersController < ApplicationController
   def index
-    if gm_user?
-      @game = Game.find(params[:game_id])
+    @game = Game.find(params[:game_id])
+    if gm_user? || @game.complete?
       @new_character = @game.characters.where(user: @user).empty?
       @characters = @game.characters
     else
@@ -17,8 +17,12 @@ class CharactersController < ApplicationController
     else
       my_character = false
     end
-    if gm_user? || my_character
+    if gm_user? || my_character || @game.complete?
       @character = Character.find(params[:id])
+      if @game.complete?
+        get_auction
+        get_current_round
+      end
     else
       redirect_to new_character_path
     end

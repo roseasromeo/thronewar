@@ -3,17 +3,21 @@
   <td><%= link_to 'Delete', game_character_path(@game, @character), method: :delete, data: { confirm: 'Are you sure?' } %></td>
 <% end %>
 <%= link_to 'Back to Home', '/' %>
+<%= link_to 'Back to Game', game_path(@game) %>
 
 <!-- ADD LABELS! -->
 <h1 class="character_pseudonym">
-  <%= @character.pseudonym %>
+  Pseudonym: <%= @character.pseudonym %>
 </h1>
 <p class="character_player">
-  <%= @character.user.name %>
+  Player: <%= @character.user.name %>
 </p>
 <p class="character_game">
-  <%= @character.game.title %>
+  Game: <%= @character.game.title %>
 </p>
 <p class="character_points">
-  <%= @character.points_spent %>
+  Points Spent: <%= @character.points_spent %>
 </p>
+<% if @game.complete? %>
+  <%= render "pledges_ranks", :character => @character %>
+<% end %>
