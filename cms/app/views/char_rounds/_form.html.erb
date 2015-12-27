@@ -1,35 +1,23 @@
 <div class="pledge_form">
-  <div class="errors">
+  <div class="error_explanation">
     <% if flash[:error] != nil %>
       <% flash[:error].full_messages.each do |msg| %>
         <li><%= msg %></li>
       <% end %>
     <% end %>
   </div>
-  <table class="pledge_table">
-    <tr>
-      <% items = [] %>
-      <% @items.each do |item| %>
-        <th><%= item.name + item.num_strikes.to_s %></th>
-        <% items << item %>
-      <% end %>
-    </tr>
-    <% @item_index = 0 %>
-    <%= semantic_form_for [@game, @char_round] do |f| %>
-    <% if @char_round.errors.any? %>
-      <div id="error_explanation">
-        <h2>
-          <%= pluralize(@char_round.errors.count, "error") %> prohibited
-          this rules page from being saved:
-        </h2>
-        <ul>
-          <% @char_round.errors.full_messages.each do |msg| %>
-            <li><%= msg %></li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
-      <% f.inputs do %>
+  <% @item_index = 0 %>
+  <%= semantic_form_for [@game, @char_round] do |f| %>
+    <table class="pledge_table">
+      <tr>
+        <% items = [] %>
+        <% @items.each do |item| %>
+          <th><%= item.name.gsub("_"," ").titleize + ' Strikes: ' + strikes(item.num_strikes) %></th>
+          <% items << item %>
+        <% end %>
+      </tr>
+
+      <%= f.inputs do %>
         <tr>
           <% @pledges = @char_round.pledges %>
           <%= f.semantic_fields_for :pledges, @pledges do |pledge| %>
@@ -43,6 +31,6 @@
           <% end %>
         </tr>
       <% end %>
-    <% end %>
-  </table>
+    </table>
+  <% end %>
 </div>

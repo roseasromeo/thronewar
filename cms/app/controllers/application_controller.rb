@@ -28,7 +28,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  helper_method :current_user, :admin_user?, :gm_user?, :logged_in?
+  helper_method :current_user, :admin_user?, :gm_user?, :logged_in?, :strikes
 
   private
     def get_auction
@@ -95,21 +95,37 @@ class ApplicationController < ActionController::Base
         @current_round = @current_gift_round
         @last_round = @last_gift_round
         @auction = @gift_auction
-        @aspect_pledges_to_display = @current_aspect_round.pledges
+        if @current_aspect_round.pledges.empty?
+          @aspect_pledges_to_display = @last_aspect_round.pledges
+        else
+          @aspect_pledges_to_display = @current_aspect_round.pledges
+        end
         @gift_pledges_to_display = @last_gift_pledges
       elsif @aspect_closed && @gift_closed
         @items = nil
         @current_round = nil
         @last_round = nil
         @auction = nil
-        @aspect_pledges_to_display = @current_aspect_round.pledges
-        @gift_pledges_to_display = @current_gift_round.pledges
+        if @current_aspect_round.pledges.empty?
+          @aspect_pledges_to_display = @last_aspect_round.pledges
+        else
+          @aspect_pledges_to_display = @current_aspect_round.pledges
+        end
+        if @current_gift_round.pledges.empty?
+          @gift_pledges_to_display = @last_gift_round.pledges
+        else
+          @gift_pledges_to_display = @current_gift_round.pledges
+        end
       elsif @aspect_closed && !@gift_exists
         @items = nil
         @current_round = nil
         @last_round = nil
         @auction = nil
-        @aspect_pledges_to_display = @current_aspect_round.pledges
+        if @current_aspect_round.pledges.empty?
+          @aspect_pledges_to_display = @last_aspect_round.pledges
+        else
+          @aspect_pledges_to_display = @current_aspect_round.pledges
+        end
         @gift_pledges_to_display = nil
       else
         @items = nil
@@ -132,5 +148,17 @@ class ApplicationController < ActionController::Base
         all_closed = false
       end
       all_closed
+    end
+
+    def strikes(num_strikes)
+      if num_strikes == 0
+        string = '0'
+      else
+        string = ''
+      end
+      num_strikes.times do
+        string << 'X'
+      end
+      string
     end
 end

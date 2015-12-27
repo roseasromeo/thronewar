@@ -1,9 +1,9 @@
 <table class="pledge_display">
   <tr>
     <th>Pseudonym</th>
-    <th>User</th>
+    <th>Player</th>
     <% @items.each do |item| %>
-      <th><%= item.name %></th>
+      <th><%= item.name.gsub("_"," ").titleize + ' Strikes: ' + strikes(item.num_strikes) %></th>
     <% end %>
   </tr>
 <% @current_round.char_rounds.each do |char_round| %>

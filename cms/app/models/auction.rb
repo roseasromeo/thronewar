@@ -1,7 +1,7 @@
 class Auction < ActiveRecord::Base
   belongs_to :game
-  has_many :items
-  has_many :rounds
+  has_many :items, dependent: :destroy
+  has_many :rounds, dependent: :destroy
   has_many :char_rounds, through: :rounds
   has_many :pledges, through: :char_rounds
   has_many :characters, through: :game

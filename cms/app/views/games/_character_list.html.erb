@@ -3,41 +3,96 @@
 <% else %>
   <%= link_to "View Pledges", display_game_path(@game, :player => @player, :display_toggle => @display_toggle), :method => :post  %>
 <% end %>
+
 <table class="character_table">
   <tr>
     <th>Pseudonym</th>
-    <% if gm_user? || game.completed? %>
+    <% if gm_user? || @game.complete? %>
       <th>Player</th>
     <% end %>
-    <th>Points Spent</th>
-    <% if @gift_pledges_to_display != nil %>
-      <% @gift_items.each do |item| %>
-        <% if @display_toggle %>
-          <th><%= item.name %> Points</th>
-        <% else %>
-          <th><%= item.name %> Rank</th>
-        <% end %>
-      <% end %>
+
+    <% if @display_toggle %>
+      <th>Pledges</th>
+    <% else %>
+      <th>Rank</th>
     <% end %>
     <% if @aspect_pledges_to_display != nil %>
       <% @aspect_items.each do |item| %>
         <% if @display_toggle %>
-          <th><%= item.name %> Points</th>
+          <th><%= item.name.gsub("_"," ").titleize %></th>
         <% else %>
-          <th><%= item.name %> Rank</th>
+          <th><%= item.name.gsub("_"," ").titleize %></th>
         <% end %>
       <% end %>
     <% end %>
+    <th>Points Spent</th>
   </tr>
-
   <% characters.each do |character| %>
-    <tr>
+    <% if @character != nil && character.pseudonym == @character.pseudonym %>
+      <tr class="user_character">
+    <% else %>
+      <tr>
+    <% end %>
       <td><%= character.pseudonym %></td>
-      <% if gm_user? || game.completed? %>
+      <% if gm_user? || @game.complete? %>
         <td><%= character.user.name %></td>
       <% end %>
+      <% if @display_toggle %>
+        <td>Pledges</td>
+      <% else %>
+        <td>Rank</td>
+      <% end %>
+      <% if @aspect_pledges_to_display != nil %>
+        <% @aspect_items.each do |item| %>
+          <% pledge = @aspect_pledges_to_display.where(item: item, character: character).first %>
+          <% if @display_toggle %>
+            <td><%= pledge.value %></td>
+          <% else %>
+            <td><%= pledge.rank %></td>
+          <% end %>
+        <% end %>
+      <% end %>
       <td><%= character.points_spent %></td>
-      <% if @gift_pledges_to_display != nil %>
+    </tr>
+  <% end %>
+</table>
+<% if @gift_pledges_to_display != nil %>
+  <table class="character_table">
+    <tr>
+      <th>Pseudonym</th>
+      <% if gm_user? || @game.complete? %>
+        <th>Player</th>
+      <% end %>
+      <% if @display_toggle %>
+        <th>Pledges</th>
+      <% else %>
+        <th>Rank</th>
+      <% end %>
+      <% @gift_items.each do |item| %>
+        <% if @display_toggle %>
+          <th><%= item.name.gsub("_"," ").titleize %></th>
+        <% else %>
+          <th><%= item.name.gsub("_"," ").titleize %></th>
+        <% end %>
+      <% end %>
+      <th>Points Spent</th>
+    </tr>
+
+    <% characters.each do |character| %>
+      <% if character == @character %>
+        <tr class="user_character">
+      <% else %>
+        <tr>
+      <% end %>
+        <td><%= character.pseudonym %></td>
+        <% if gm_user? || @game.complete? %>
+          <td><%= character.user.name %></td>
+        <% end %>
+        <% if @display_toggle %>
+          <td>Pledges</td>
+        <% else %>
+          <td>Rank</td>
+        <% end %>
         <% @gift_items.each do |item| %>
           <% pledge = @gift_pledges_to_display.where(item: item, character: character).first %>
           <% if @display_toggle %>
@@ -46,17 +101,8 @@
             <td><%= pledge.rank %></td>
           <% end %>
         <% end %>
-      <% end %>
-      <% if @aspect_pledges_to_display != nil %>
-        <% @aspect_items.each do |item| %>
-          <% pledge = @aspect_pledges_to_display.where(item: item, character: character).first %>
-            <% if @display_toggle %>
-              <td><%= pledge.value %></td>
-            <% else %>
-              <td><%= pledge.rank %></td>
-            <% end %>
-        <% end %>
-      <% end %>
-    </tr>
-  <% end %>
-</table>
+        <td><%= character.points_spent %></td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>
