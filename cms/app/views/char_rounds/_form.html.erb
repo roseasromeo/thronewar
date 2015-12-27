@@ -1,11 +1,16 @@
 <div class="pledge_form">
   <div class="error_explanation">
     <% if flash[:error] != nil %>
-      <% flash[:error].full_messages.each do |msg| %>
+      <% flash_messages.each do |msg| %>
         <li><%= msg %></li>
       <% end %>
+      <% if flash_messages == ["Error message problem. Inform your Arbiter."] %>
+        <%= flash[:error] %>
+      <% end %>
+      <% flash.clear %>
     <% end %>
   </div>
+  
   <% @item_index = 0 %>
   <%= semantic_form_for [@game, @char_round] do |f| %>
     <table class="pledge_table">

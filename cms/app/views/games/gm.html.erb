@@ -2,10 +2,21 @@
 Total spent points for each character
 -->
 <% content_for :for_head do %>
-  <meta http-equiv="refresh" content="15" />
+  <meta http-equiv="refresh" content="10" />
 <% end %>
 
-<p id="error"><%= flash[:error] %></p> <!-- make this prettier -->
+<div class="error_explanation">
+  <% if flash[:error] != nil %>
+    <% flash_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    <% if flash_messages == ["Error message problem. Inform your Arbiter."] %>
+      <%= flash[:error] %>
+    <% end %>
+    <% flash.clear %>
+  <% end %>
+</div>
+
 <h1 class="auction_title">Auction</h1>
 <%= render 'character_list', :characters => @characters %>
 <% if !@aspect_exists %>
