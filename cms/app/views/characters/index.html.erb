@@ -1,5 +1,6 @@
 <h1> Index of Characters </h1>
 <%= link_to 'Back to Home', '/' %>
+<%= link_to 'Back to Game', game_path(@game) %>
 <% if @new_character %>
   <%= link_to 'New character', new_game_character_path(@game) %>
 <% end %>
