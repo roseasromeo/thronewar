@@ -28,7 +28,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  helper_method :current_user, :admin_user?, :gm_user?, :logged_in?, :strikes
+  helper_method :current_user, :admin_user?, :gm_user?, :logged_in?, :strikes, :flash_messages
 
   private
     def get_auction
@@ -160,5 +160,11 @@ class ApplicationController < ActionController::Base
         string << 'X'
       end
       string
+    end
+
+    def flash_messages
+      flash[:error].full_messages
+    rescue NoMethodError
+      ["Error message problem. Inform your Arbiter."]
     end
 end

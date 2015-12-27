@@ -105,12 +105,10 @@ class CharRoundsController < ApplicationController
       @errors = ActiveModel::Errors.new(@char_round)
       if @all_closed
         @errors[:base] << ("This auction is finished. Please wait for the Arbiter to continue.")
-        flash[:error] = @errors
       else
         @errors[:base] << ("Pledges for this round already submitted. Please wait.")
-        flash[:error] = @errors
       end
-      redirect_to game_player_path(@game)
+      redirect_to game_player_path(@game), :flash => { :error => @errors }
     end
   end
 
@@ -193,4 +191,5 @@ class CharRoundsController < ApplicationController
       end
       pledge_change
     end
+
 end
