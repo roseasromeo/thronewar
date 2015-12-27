@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  game_id: 
+  user_id: 
+  name: MyString
+  background: MyText
+  backstory_connections: MyText
+  goal: MyText
+  curses: MyText
+  standardform: MyText
+  flaw1: 1
+  flaw2: 1
+  luck: 1
+
+two:
+  game_id: 
+  user_id: 
+  name: MyString
+  background: MyText
+  backstory_connections: MyText
+  goal: MyText
+  curses: MyText
+  standardform: MyText
+  flaw1: 1
+  flaw2: 1
+  luck: 1
