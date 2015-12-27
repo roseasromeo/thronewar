@@ -4,8 +4,10 @@ Ability to submit pledges
 Ability to view submitted pledge
 Total spent points
 -->
-<% content_for :for_head do %>
-  <meta http-equiv="refresh" content="15" />
+<% if @message != nil %>
+  <% content_for :for_head do %>
+    <meta http-equiv="refresh" content="15"/>
+  <% end %>
 <% end %>
 
 <h1 class="auction_title">Auction</h1>

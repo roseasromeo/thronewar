@@ -12,14 +12,15 @@
   <% if gm_user? %>
     <p class="links"><%= link_to 'Start the Auction', start_game_path(@game) %></p>
   <% end %>
-<% end %>
-<% if @game.started? %>
+<% elsif @game.started? %>
   <% if @new_character != true %> <!-- i.e. user has a character for this game -->
     <p class="links"><%= link_to 'Go to the Auction', game_player_path(@game) %></p>
   <% end %>
   <% if gm_user? %>
     <p class="links"><%= link_to 'GM-side of Auction', gm_game_path(@game) %></p>
   <% end %>
+<% else %>
+  <%= render 'character_list', :characters => @characters %>
 <% end %>
 <% if gm_user? || @game.complete? %>
   <p class="links"><%= link_to 'Index of Characters', game_characters_path(@game) %></p>

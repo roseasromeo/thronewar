@@ -12,6 +12,16 @@ class GamesController < ApplicationController
       @user = current_user
       @game = Game.find(params[:id])
       @new_character = @game.characters.where(user: @user).empty?
+      @characters = @game.characters
+      if @game.complete?
+        get_auction
+        get_current_round
+        if params[:display_toggle] != nil
+          @display_toggle = (params[:display_toggle] == "true")
+        else
+          @display_toggle = true
+        end
+      end
     else
       redirect_to login_path
     end
@@ -66,7 +76,7 @@ class GamesController < ApplicationController
       end
       if @game.preparing?
         redirect_to game_path(@game)
-      else
+      elsif @game.started?
         get_auction
         get_current_round
         @all_pledges_in = all_pledges_in?
@@ -75,6 +85,9 @@ class GamesController < ApplicationController
         else
           @all_closed = false
         end
+      else
+        # @game.complete?
+        redirect_to game_path(@game)
       end
     else
       redirect_to '/'
@@ -157,7 +170,7 @@ class GamesController < ApplicationController
           @errors[:base] << ("Illusion error: #{msg}")
         end
       end
-      @guttermagic = Item.new(auction: @auction, name: :guttermagic)
+      @guttermagic = Item.new(auction: @auction, name: :gutter_magic)
       if !(@guttermagic.save)
         @guttermagic.errors.full_messages.each do |msg|
           @errors[:base] << ("Gutter Magic error: #{msg}")
@@ -175,6 +188,7 @@ class GamesController < ApplicationController
       @current_round = Round.find(params[:current_round])
       @player = false
       assign_ranks
+      set_points_spent
       @all_closed = false
       if @current_round.number != 1
         get_auction
@@ -206,7 +220,12 @@ class GamesController < ApplicationController
       @auction.closed = true
       @player = false
       if @auction.save
-        redirect_to gm_game_path
+        if @auction.gift?
+          @auction.game.complete!
+          redirect_to gm_game_path
+        else
+          redirect_to gm_game_path
+        end
       else
         @errors = @auction.errors
         redirect_to gm_game_path, :flash => { :error => @errors }
@@ -224,9 +243,17 @@ class GamesController < ApplicationController
       @display_toggle = true
     end
     if params[:player] == "true"
-      redirect_to game_player_path(@game, :display_toggle => @display_toggle)
+      if @game.started?
+        redirect_to game_player_path(@game, :display_toggle => @display_toggle)
+      else
+        redirect_to game_path(@game, :display_toggle => @display_toggle)
+      end
     else
-      redirect_to gm_game_path(@game, :display_toggle => @display_toggle)
+      if @game.started?
+        redirect_to gm_game_path(@game, :display_toggle => @display_toggle)
+      else
+        redirect_to game_path(@game, :display_toggle => @display_toggle)
+      end
     end
   end
 
@@ -286,7 +313,7 @@ class GamesController < ApplicationController
           current_pledges = current_round.pledges.where(item: item)
           last_pledges = last_round.pledges.where(item: item)
           current_max = current_pledges.maximum(:value)
-          last_max = last_round.pledges.maximum(:value)
+          last_max = last_pledges.maximum(:value)
 
           current_ranks = []
           current_pledges.order(rank: :asc).each do |pledge|
@@ -339,4 +366,37 @@ class GamesController < ApplicationController
       end
       same
     end
+
+    def set_points_spent
+      auctions = @game.auctions
+      aspect_auction = auctions.aspect.first
+      aspect_exists = (aspect_auction != nil)
+      if aspect_exists
+        current_aspect_round = aspect_auction.rounds.order(number: :desc).first
+        aspect_items = aspect_auction.items
+      end
+      gift_auction = auctions.gift.first
+      gift_exists = (gift_auction != nil)
+      if gift_exists
+        current_gift_round = gift_auction.rounds.order(number: :desc).first
+        gift_items = gift_auction.items
+      end
+
+      @game.characters.each do |character|
+        points_spent = 0
+        if aspect_exists
+          current_aspect_round.pledges.where(character: character).each do |pledge|
+            points_spent = points_spent + pledge.value
+          end
+        end
+        if gift_exists
+          current_gift_round.pledges.where(character: character).each do |pledge|
+            points_spent = points_spent + pledge.value
+          end
+        end
+        character.points_spent = points_spent
+        character.save
+      end
+    end
+
 end
