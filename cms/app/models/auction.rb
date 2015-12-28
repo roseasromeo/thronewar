@@ -10,4 +10,5 @@ class Auction < ActiveRecord::Base
 
   validates_presence_of :phase
   validates_presence_of :game
+  validates :closed, :inclusion => { :in => [true, false] }
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151223020523) do
+ActiveRecord::Schema.define(version: 20151227214552) do
 
   create_table "auctions", force: :cascade do |t|
     t.integer  "game_id"
@@ -32,6 +32,17 @@ ActiveRecord::Schema.define(version: 20151223020523) do
 
   add_index "char_rounds", ["character_id"], name: "index_char_rounds_on_character_id"
   add_index "char_rounds", ["round_id"], name: "index_char_rounds_on_round_id"
+
+  create_table "character_systems", force: :cascade do |t|
+    t.integer  "game_id"
+    t.string   "title",                   null: false
+    t.integer  "status",      default: 0, null: false
+    t.text     "description"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  add_index "character_systems", ["game_id"], name: "index_character_systems_on_game_id"
 
   create_table "characters", force: :cascade do |t|
     t.string   "pseudonym",                null: false
@@ -55,6 +66,50 @@ ActiveRecord::Schema.define(version: 20151223020523) do
 
   add_index "comments", ["rules_page_id"], name: "index_comments_on_rules_page_id"
   add_index "comments", ["user_id"], name: "index_comments_on_user_id"
+
+  create_table "final_characters", force: :cascade do |t|
+    t.integer  "character_system_id",               null: false
+    t.integer  "user_id",                           null: false
+    t.integer  "flaw1_id_id"
+    t.integer  "flaw2_id_id"
+    t.string   "name"
+    t.text     "background"
+    t.text     "backstory_connections"
+    t.text     "goal"
+    t.text     "curses"
+    t.text     "standardform"
+    t.text     "other"
+    t.integer  "luck",                  default: 0
+    t.integer  "approval",              default: 0, null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+  end
+
+  add_index "final_characters", ["character_system_id"], name: "index_final_characters_on_character_system_id"
+  add_index "final_characters", ["user_id"], name: "index_final_characters_on_user_id"
+
+  create_table "final_ranks", force: :cascade do |t|
+    t.integer  "character_id",                 null: false
+    t.integer  "item",         default: 0,     null: false
+    t.integer  "points",       default: 0
+    t.integer  "rank",         default: 0
+    t.boolean  "half",         default: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
+
+  add_index "final_ranks", ["character_id"], name: "index_final_ranks_on_character_id"
+
+  create_table "flaws", force: :cascade do |t|
+    t.integer  "character_system_id"
+    t.string   "name",                null: false
+    t.text     "description"
+    t.string   "link"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
+
+  add_index "flaws", ["character_system_id"], name: "index_flaws_on_character_system_id"
 
   create_table "games", force: :cascade do |t|
     t.string   "title",                  null: false
@@ -105,6 +160,17 @@ ActiveRecord::Schema.define(version: 20151223020523) do
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
   end
+
+  create_table "start_ranks", force: :cascade do |t|
+    t.integer  "character_id",             null: false
+    t.integer  "item",         default: 0, null: false
+    t.integer  "points",       default: 0
+    t.integer  "rank",         default: 0
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "start_ranks", ["character_id"], name: "index_start_ranks_on_character_id"
 
   create_table "subpages", force: :cascade do |t|
     t.string   "subtitle"

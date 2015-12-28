@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
 
   has_many :comments
   has_many :characters
+  has_many :final_characters
 
   enum user_type: [ :admin, :gm, :player ]
 

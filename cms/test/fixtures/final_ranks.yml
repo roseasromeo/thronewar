@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  character_id: 
+  item: 1
+  points: 1
+  rank: 1
+  half: false
+
+two:
+  character_id: 
+  item: 1
+  points: 1
+  rank: 1
+  half: false
