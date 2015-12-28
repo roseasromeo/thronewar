@@ -1,0 +1,2 @@
+module FinalCharactersHelper
+end

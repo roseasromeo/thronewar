@@ -1,0 +1,26 @@
+<%= semantic_form_for [@character_system, @final_character] do |f| %>
+  <h1 class="title"><%= f.input :name %></h1>
+  <% if gm_user? %>
+    <h2 class="player"><%= f.input :user, :as => :select, :collection => User.joins(:final_characters).merge(FinalCharacter.where.not(character_system: @character_system)) << @final_character.user, :label => "Player: ", :value => @final_character.user %></h2>
+  <% else %>
+    <h2 class="player">Player: <%= @final_character.user.name %></h2>
+  <% end %>
+  <%= f.input :blurb %>
+  <%= f.input :background %>
+  <%= f.input :backstory_connections %>
+  <%= f.input :goal %>
+  <%= f.input :curses %>
+  <%= f.input :standardform %>
+  <%= f.input :luck %>
+  <% if false %>
+  <%= f.input :flaw1, :as => :select, :collection => Flaw.where(character_system: @character_system) %>
+  <%= f.input :flaw2, :as => :select, :collection => Flaw.where(character_system: @character_system) %>
+  <% end %>
+  <li>Leftover Points: <%= @final_character.leftover_points %></li>
+  <li>Status: <%= @final_character.approval %></li>
+  <%= f.input :other %>
+  <%= f.actions do %>
+    <%= f.action :submit, :label => "Save Character Changes" %>
+    <%= f.action :cancel, :label => "Cancel Character Changes" %>
+  <% end %>
+<% end %>

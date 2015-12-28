@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151227214552) do
+ActiveRecord::Schema.define(version: 20151228024402) do
 
   create_table "auctions", force: :cascade do |t|
     t.integer  "game_id"
@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(version: 20151227214552) do
     t.integer  "leftover_points",       default: 0
     t.datetime "created_at",                        null: false
     t.datetime "updated_at",                        null: false
+    t.text     "blurb"
   end
 
   add_index "final_characters", ["character_system_id"], name: "index_final_characters_on_character_system_id"

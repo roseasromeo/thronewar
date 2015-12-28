@@ -13,11 +13,15 @@
     <% else %>
       <tr>
     <% end %>
-      <td><%= link_to final_character.name, final_character_path(final_character) %></td>
+      <% if final_character.name = "" %>
+        <td><%= link_to "Anonymous", character_system_final_character_path(@character_system,final_character) %></td>
+      <% else %>
+        <td><%= link_to final_character.name, character_system_final_character_path(@character_system,final_character) %></td>
+      <% end %>
       <td><%= final_character.user.name %></td>
       <% if gm_user? || @character_system.started? %>
-        <td><%= final_character.flaw1_id %></td>
-        <td><%= final_character.flaw2_id %></td>
+        <td><%= final_character.flaw1 %></td>
+        <td><%= final_character.flaw2 %></td>
       <% end %>
     </tr>
   <% end %>
