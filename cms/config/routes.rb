@@ -37,7 +37,7 @@ Rails.application.routes.draw do
   end
 
   resources :character_systems, only: [:show, :index, :new, :create] do
-    resources :final_characters, only: [:edit, :update, :destroy]
+    resources :final_characters, only: [:show, :edit, :update, :destroy]
   end
 
 

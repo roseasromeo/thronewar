@@ -3,6 +3,6 @@ class FinalRank < ActiveRecord::Base
 
   enum item: [ :battle, :cunning, :destiny, :ego, :flesh, :command, :change, :illusion, :gutter_magic ]
 
-  validates_presence_of :character, :item
+  validates_presence_of :final_character, :item
   validates :half, :inclusion => { :in => [true, false] }
 end

@@ -1,8 +1,8 @@
 <%= link_to 'Back to Games Index', games_path %>
-<h1 class="game_title">
+<h1 class="title">
   <%= @game.title %>
 </h1>
-<p class="game_status">
+<p class="status">
   <%= @game.status %>
 </p>
 <% if @game.preparing? %>

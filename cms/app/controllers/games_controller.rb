@@ -13,6 +13,9 @@ class GamesController < ApplicationController
       @game = Game.find(params[:id])
       @new_character = @game.characters.where(user: @user).empty?
       @characters = @game.characters
+      if !@new_character
+        @character = @game.characters.where(user: @user).first
+      end
       if @game.complete?
         get_auction
         get_current_round
