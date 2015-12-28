@@ -10,6 +10,6 @@ class FinalCharacter < ActiveRecord::Base
 
   enum approval: [:not_submitted, :submitted, :rejected, :approved]
 
-  validates_presence_of :game, :user, :approval
+  validates_presence_of :character_system, :user, :approval
 
 end

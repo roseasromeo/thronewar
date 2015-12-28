@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(version: 20151227214552) do
   add_index "char_rounds", ["round_id"], name: "index_char_rounds_on_round_id"
 
   create_table "character_systems", force: :cascade do |t|
-    t.integer  "game_id"
+    t.integer  "game_id",                 null: false
     t.string   "title",                   null: false
     t.integer  "status",      default: 0, null: false
     t.text     "description"
@@ -81,6 +81,7 @@ ActiveRecord::Schema.define(version: 20151227214552) do
     t.text     "other"
     t.integer  "luck",                  default: 0
     t.integer  "approval",              default: 0, null: false
+    t.integer  "leftover_points",       default: 0
     t.datetime "created_at",                        null: false
     t.datetime "updated_at",                        null: false
   end
@@ -89,16 +90,16 @@ ActiveRecord::Schema.define(version: 20151227214552) do
   add_index "final_characters", ["user_id"], name: "index_final_characters_on_user_id"
 
   create_table "final_ranks", force: :cascade do |t|
-    t.integer  "character_id",                 null: false
-    t.integer  "item",         default: 0,     null: false
-    t.integer  "points",       default: 0
-    t.integer  "rank",         default: 0
-    t.boolean  "half",         default: false
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.integer  "final_character_id",                 null: false
+    t.integer  "item",               default: 0,     null: false
+    t.integer  "points",             default: 0
+    t.integer  "rank",               default: 0
+    t.boolean  "half",               default: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
   end
 
-  add_index "final_ranks", ["character_id"], name: "index_final_ranks_on_character_id"
+  add_index "final_ranks", ["final_character_id"], name: "index_final_ranks_on_final_character_id"
 
   create_table "flaws", force: :cascade do |t|
     t.integer  "character_system_id"
@@ -162,15 +163,15 @@ ActiveRecord::Schema.define(version: 20151227214552) do
   end
 
   create_table "start_ranks", force: :cascade do |t|
-    t.integer  "character_id",             null: false
-    t.integer  "item",         default: 0, null: false
-    t.integer  "points",       default: 0
-    t.integer  "rank",         default: 0
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.integer  "final_character_id",             null: false
+    t.integer  "item",               default: 0, null: false
+    t.integer  "points",             default: 0
+    t.integer  "rank",               default: 0
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
   end
 
-  add_index "start_ranks", ["character_id"], name: "index_start_ranks_on_character_id"
+  add_index "start_ranks", ["final_character_id"], name: "index_start_ranks_on_final_character_id"
 
   create_table "subpages", force: :cascade do |t|
     t.string   "subtitle"

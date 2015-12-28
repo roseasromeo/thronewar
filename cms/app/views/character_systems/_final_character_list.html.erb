@@ -1,0 +1,24 @@
+<table class="character_table">
+  <tr>
+    <th>Name</th>
+    <th>Player</th>
+    <% if gm_user? || @character_system.started? %>
+      <th>Flaw 1</th>
+      <th>Flaw 2</th>
+    <% end %>
+  </tr>
+  <% final_characters.each do |final_character| %>
+    <% if @final_character != nil && final_character.user == @final_character.user %>
+      <tr class="user_character">
+    <% else %>
+      <tr>
+    <% end %>
+      <td><%= link_to final_character.name, final_character_path(final_character) %></td>
+      <td><%= final_character.user.name %></td>
+      <% if gm_user? || @character_system.started? %>
+        <td><%= final_character.flaw1_id %></td>
+        <td><%= final_character.flaw2_id %></td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
