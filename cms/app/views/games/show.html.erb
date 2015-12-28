@@ -21,6 +21,9 @@
   <% end %>
 <% else %>
   <%= render 'character_list', :characters => @characters %>
+  <% if gm_user? %>
+    <p class="links"><%= link_to "Create Character System", new_character_system_path(:game_id => @game) %></p>
+  <% end %>
 <% end %>
 <% if gm_user? || @game.complete? %>
   <p class="links"><%= link_to 'Index of Characters', game_characters_path(@game) %></p>

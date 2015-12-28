@@ -2,7 +2,7 @@ class CreateFlaws < ActiveRecord::Migration
   def change
     create_table :flaws do |t|
       t.belongs_to :character_system, index: true, foreign_key: true
-      t.string :name
+      t.string :name, null: false
       t.text :description
       t.string :link
 
