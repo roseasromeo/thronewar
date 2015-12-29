@@ -1,0 +1,10 @@
+<div class='nested-fields'>
+  <%= f.inputs do %>
+    <%= f.object.item %>
+    <% item = f.object.item %>
+    <%= item %>
+    <%= start_ranks.limit(@item_counter + 1).offset(@item_counter).first.item %>
+    <%= f.input :rank, :as => :select, :collection => rank_collection(item, @final_character) %>
+    <% puts @item_counter + 1 %>
+  <% end %>
+</div>

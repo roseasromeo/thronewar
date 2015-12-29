@@ -100,6 +100,8 @@ class CharacterSystemsController < ApplicationController
     def create_ranks(item, round, character, final_character)
       item_name = item.name
       pledge = round.pledges.where(item: item, character: character).first
+      puts pledge.rank
+      puts pledge.value
       start_rank = StartRank.new(final_character: final_character, item: item_name, points: pledge.value, rank: pledge.rank)
       final_rank = FinalRank.new(final_character: final_character, item: item_name, points: pledge.value, rank: pledge.rank, half: false)
       if start_rank.save

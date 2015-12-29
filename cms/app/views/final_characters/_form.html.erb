@@ -5,20 +5,28 @@
   <% else %>
     <h2 class="player">Player: <%= @final_character.user.name %></h2>
   <% end %>
-  <%= f.input :blurb %>
-  <%= f.input :background %>
-  <%= f.input :backstory_connections %>
-  <%= f.input :goal %>
-  <%= f.input :curses %>
-  <%= f.input :standardform %>
+  <li>Leftover Points: <%= @final_character.leftover_points %></li>
+  <li>Status: <%= @final_character.approval %></li>
   <%= f.input :luck %>
+  <div id='ranks'>
+    <% @start_ranks = @final_character.start_ranks.order(:item) %>
+    <% @final_ranks = @final_character.final_ranks.order(:item) %>
+    <% @item_counter = 0 %>
+    <%= f.semantic_fields_for :final_ranks, @final_ranks do |final_rank, i| %>
+      <%= render 'final_rank_fields', :f => final_rank, :start_ranks => @start_ranks %>
+    <% end %>
+  </div>
   <% if false %>
   <%= f.input :flaw1, :as => :select, :collection => Flaw.where(character_system: @character_system) %>
   <%= f.input :flaw2, :as => :select, :collection => Flaw.where(character_system: @character_system) %>
   <% end %>
-  <li>Leftover Points: <%= @final_character.leftover_points %></li>
-  <li>Status: <%= @final_character.approval %></li>
-  <%= f.input :other %>
+  <%= f.input :blurb, :input_html => { :class => "text_entry_small" } %>
+  <%= f.input :background, :input_html => { :class => "text_entry" } %>
+  <%= f.input :backstory_connections, :input_html => { :class => "text_entry" } %>
+  <%= f.input :goal, :input_html => { :class => "text_entry" } %>
+  <%= f.input :curses, :input_html => { :class => "text_entry" } %>
+  <%= f.input :standardform, :label => "Standard Form", :input_html => { :class => "text_entry" } %>
+  <%= f.input :other, :input_html => { :class => "text_entry_small" } %>
   <%= f.actions do %>
     <%= f.action :submit, :label => "Save Character Changes" %>
     <%= f.action :cancel, :label => "Cancel Character Changes" %>
