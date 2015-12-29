@@ -1,1 +1,24 @@
 <%= link_to "Edit Character", edit_character_system_final_character_path(@character_system,@final_character) %>
+
+<h1 class="title"><%= @final_character.name %></h1>
+<h2 class="player">Player: <%= @final_character.user.name %></h2>
+<% if @show_all %>
+  <p>Leftover Points: <%= @final_character.leftover_points %></p>
+  <p>Status: <%= @final_character.approval %></p>
+  <p>Luck: <%= @final_character.luck %></p>
+<% end %>
+<% if @final_character.approved? || gm_user? || @show_all %>
+  <p>Blurb: <%= html_safe_rescue(@final_character.blurb) %></p>
+  <p>Standard Form: <%= html_safe_rescue(@final_character.standardform) %></p>
+  <% if false %>
+  <p>Flaw 1: <%= @final_character.flaw1 %></p>
+  <p>Flaw 2: <%= @final_character.flaw2 %></p>
+  <% end %>
+<% end %>
+<% if @show_all %>
+  <p>Background: <%= html_safe_rescue(@final_character.background) %></p>
+  <p>Backstory Connections: <%= html_safe_rescue(@final_character.backstory_connections) %></p>
+  <p>Goal: <%= html_safe_rescue(@final_character.goal) %></p>
+  <p>Curses: <%= html_safe_rescue(@final_character.curses) %></p>
+  <p>Other: <%= html_safe_rescue(@final_character.other) %></p>
+<% end %>
