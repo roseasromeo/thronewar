@@ -1,4 +1,6 @@
 class CharacterSystemsController < ApplicationController
+  require 'csv'
+
   def index
     if gm_user?
       @character_systems = CharacterSystem.all
@@ -47,9 +49,7 @@ class CharacterSystemsController < ApplicationController
       @aspect_auction = @game.auctions.aspect.first
       @gift_auction = @game.auctions.gift.first
       @errors = ActiveModel::Errors.new(@character_system)
-
       default_flaws
-
       @characters.each do |character|
         user = character.user
 
@@ -94,28 +94,30 @@ class CharacterSystemsController < ApplicationController
 
   private
     def default_flaws
-
+      filename = Rails.root + 'app/assets/files/flaws.utf8.csv'
+      CSV.foreach(filename, :headers => true) do |row|
+        row_hash = row.to_hash
+        flaw = Flaw.new(character_system: @character_system, name: row_hash['name'], description: row_hash['description'], link: row_hash['link'])
+        if flaw.save
+          # do nothing
+        else
+          flaw.errors.full_messages.each do |msg|
+            @errors[:base] << ("Flaw error: #{msg}")
+          end
+        end
+      end
     end
 
     def create_ranks(item, round, character, final_character)
       item_name = item.name
       pledge = round.pledges.where(item: item, character: character).first
-      puts pledge.rank
-      puts pledge.value
-      start_rank = StartRank.new(final_character: final_character, item: item_name, points: pledge.value, rank: pledge.rank)
-      final_rank = FinalRank.new(final_character: final_character, item: item_name, points: pledge.value, rank: pledge.rank, half: false)
-      if start_rank.save
+      rank = Rank.new(final_character: final_character, item: item_name, public_points: pledge.value, private_points: pledge.value, public_rank: pledge.rank, private_rank: pledge.rank)
+
+      if rank.save
         # do nothing
       else
-        start_rank.errors.full_messages.each do |msg|
+        rank.errors.full_messages.each do |msg|
           @errors[:base] << ("Start Rank #{item_name} error: #{msg}")
-        end
-      end
-      if final_rank.save
-        # do nothing
-      else
-        final_rank.errors.full_messages.each do |msg|
-          @errors[:base] << ("Final Rank #{item_name} error: #{msg}")
         end
       end
     end

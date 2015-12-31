@@ -1,0 +1,12 @@
+<div class='nested-ranks'>
+    <tr>
+      <td><%= f.item.gsub("_"," ").titleize %></td>
+      <td><%= f.public_rank %></td>
+      <td><%= f.public_points %></td>
+      <% if @show_all %>
+        <% final_rank = f.private_rank + 0.5*(f.half ? 1 : 0) %>
+        <td><%= final_rank.to_i == final_rank ? final_rank.to_i : final_rank %></td>
+        <td><%= f.private_points %></td>
+      <% end %>
+    </tr>
+</div>

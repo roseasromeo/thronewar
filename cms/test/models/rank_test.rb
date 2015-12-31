@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class FinalRankTest < ActiveSupport::TestCase
+class RankTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

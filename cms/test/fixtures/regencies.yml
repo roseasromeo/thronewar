@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  final_character_id: 
+  name: MyString
+  description: MyText
+  basic_property1: 1
+  basic_property2: 1
+  basic_property3: 1
+  intermediate_property1: 1
+  intermediate_property2: 1
+  advanced_property: 1
+
+two:
+  final_character_id: 
+  name: MyString
+  description: MyText
+  basic_property1: 1
+  basic_property2: 1
+  basic_property3: 1
+  intermediate_property1: 1
+  intermediate_property2: 1
+  advanced_property: 1
