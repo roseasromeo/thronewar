@@ -23,10 +23,10 @@
       <% end %>
     </table>
   </div>
-  <% if false %>
-  <%= f.input :flaw1, :as => :select, :collection => Flaw.where(character_system: @character_system) %>
-  <%= f.input :flaw2, :as => :select, :collection => Flaw.where(character_system: @character_system) %>
-  <% end %>
+
+  <%= f.input :flaw1_id, :as => :select, :collection => Flaw.where(character_system: @character_system) %>
+  <%= f.input :flaw2_id, :as => :select, :collection => Flaw.where(character_system: @character_system) %>
+
   <%= f.input :blurb, :input_html => { :class => "text_entry_small" } %>
   <%= f.input :background, :input_html => { :class => "text_entry" } %>
   <%= f.input :backstory_connections, :label => "Backstory Connections", :input_html => { :class => "text_entry" } %>

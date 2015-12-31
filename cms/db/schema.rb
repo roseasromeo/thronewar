@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151230151316) do
+ActiveRecord::Schema.define(version: 20151231143333) do
 
   create_table "auctions", force: :cascade do |t|
     t.integer  "game_id"
@@ -70,8 +70,6 @@ ActiveRecord::Schema.define(version: 20151230151316) do
   create_table "final_characters", force: :cascade do |t|
     t.integer  "character_system_id",               null: false
     t.integer  "user_id",                           null: false
-    t.integer  "flaw1_id_id"
-    t.integer  "flaw2_id_id"
     t.string   "name"
     t.text     "background"
     t.text     "backstory_connections"
@@ -85,6 +83,8 @@ ActiveRecord::Schema.define(version: 20151230151316) do
     t.datetime "created_at",                        null: false
     t.datetime "updated_at",                        null: false
     t.text     "blurb"
+    t.integer  "flaw1_id"
+    t.integer  "flaw2_id"
   end
 
   add_index "final_characters", ["character_system_id"], name: "index_final_characters_on_character_system_id"
