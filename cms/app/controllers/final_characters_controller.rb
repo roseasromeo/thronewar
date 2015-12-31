@@ -3,6 +3,8 @@ class FinalCharactersController < ApplicationController
     @final_character = FinalCharacter.find(params[:id])
     @user = current_user
     @character_system = @final_character.character_system
+    @flaw1 = (@final_character.flaw1 != nil ? Flaw.find(@final_character.flaw1) : nil)
+    @flaw2 = (@final_character.flaw2 != nil ? Flaw.find(@final_character.flaw2) : nil)
     if gm_user? || @final_character.user == @user || @character_system.complete?
       @show_all = true
     else
@@ -28,7 +30,21 @@ class FinalCharactersController < ApplicationController
       @character_system = CharacterSystem.find(params[:character_system_id])
       @user = User.find(final_character_params[:user_id])
       leftover_points = 0
-      if @final_character.update(character_system: @character_system, user: @user, name: final_character_params[:name], blurb: final_character_params[:blurb], background: final_character_params[:background], backstory_connections: final_character_params[:backstory_connections], goal: final_character_params[:goal], curses: final_character_params[:curses], standardform: final_character_params[:standardform], other: final_character_params[:other], luck: final_character_params[:luck], leftover_points: leftover_points)
+      flaw1_id = final_character_params[:flaw1_id]
+      puts flaw1_id
+      if flaw1_id != ""
+        @flaw1 = Flaw.find(flaw1_id)
+      else
+        @flaw1 = nil
+      end
+      flaw2_id = final_character_params[:flaw2_id]
+      if flaw2_id != ""
+        @flaw2 = Flaw.find(flaw2_id)
+        puts @flaw2
+      else
+        @flaw2 = nil
+      end
+      if @final_character.update(character_system: @character_system, user: @user, name: final_character_params[:name], blurb: final_character_params[:blurb], background: final_character_params[:background], backstory_connections: final_character_params[:backstory_connections], goal: final_character_params[:goal], curses: final_character_params[:curses], standardform: final_character_params[:standardform], other: final_character_params[:other], luck: final_character_params[:luck], leftover_points: leftover_points, flaw1: @flaw1, flaw2: @flaw2)
         @final_character.ranks.each do |rank|
           item_number = Rank.items[rank.item]
           if final_character_params[:ranks_attributes][item_number.to_s].has_key?("private_rank")
