@@ -13,7 +13,7 @@
     <% else %>
       <tr>
     <% end %>
-      <% if final_character.name = "" %>
+      <% if final_character.name == "" || final_character.name == nil %>
         <td><%= link_to "Anonymous", character_system_final_character_path(@character_system,final_character) %></td>
       <% else %>
         <td><%= link_to final_character.name, character_system_final_character_path(@character_system,final_character) %></td>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151228024402) do
+ActiveRecord::Schema.define(version: 20151230151316) do
 
   create_table "auctions", force: :cascade do |t|
     t.integer  "game_id"
@@ -90,18 +90,6 @@ ActiveRecord::Schema.define(version: 20151228024402) do
   add_index "final_characters", ["character_system_id"], name: "index_final_characters_on_character_system_id"
   add_index "final_characters", ["user_id"], name: "index_final_characters_on_user_id"
 
-  create_table "final_ranks", force: :cascade do |t|
-    t.integer  "final_character_id",                 null: false
-    t.integer  "item",               default: 0,     null: false
-    t.integer  "points",             default: 0
-    t.integer  "rank",               default: 0
-    t.boolean  "half",               default: false
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
-  end
-
-  add_index "final_ranks", ["final_character_id"], name: "index_final_ranks_on_final_character_id"
-
   create_table "flaws", force: :cascade do |t|
     t.integer  "character_system_id"
     t.string   "name",                null: false
@@ -145,6 +133,37 @@ ActiveRecord::Schema.define(version: 20151228024402) do
   add_index "pledges", ["character_id"], name: "index_pledges_on_character_id"
   add_index "pledges", ["item_id"], name: "index_pledges_on_item_id"
 
+  create_table "ranks", force: :cascade do |t|
+    t.integer  "final_character_id"
+    t.integer  "item",                               null: false
+    t.integer  "public_points",      default: 0
+    t.integer  "private_points",     default: 0
+    t.integer  "public_rank",        default: 0
+    t.integer  "private_rank",       default: 0
+    t.boolean  "half",               default: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
+
+  add_index "ranks", ["final_character_id"], name: "index_ranks_on_final_character_id"
+
+  create_table "regencies", force: :cascade do |t|
+    t.integer  "final_character_id"
+    t.string   "name"
+    t.text     "description"
+    t.integer  "points",                 default: 0
+    t.integer  "basic_property1",        default: 0
+    t.integer  "basic_property2",        default: 0
+    t.integer  "basic_property3",        default: 0
+    t.integer  "intermediate_property1", default: 0
+    t.integer  "intermediate_property2", default: 0
+    t.integer  "advanced_property",      default: 0
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
+
+  add_index "regencies", ["final_character_id"], name: "index_regencies_on_final_character_id"
+
   create_table "rounds", force: :cascade do |t|
     t.integer  "auction_id"
     t.integer  "number",     default: 1
@@ -163,17 +182,6 @@ ActiveRecord::Schema.define(version: 20151228024402) do
     t.datetime "updated_at",               null: false
   end
 
-  create_table "start_ranks", force: :cascade do |t|
-    t.integer  "final_character_id",             null: false
-    t.integer  "item",               default: 0, null: false
-    t.integer  "points",             default: 0
-    t.integer  "rank",               default: 0
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-  end
-
-  add_index "start_ranks", ["final_character_id"], name: "index_start_ranks_on_final_character_id"
-
   create_table "subpages", force: :cascade do |t|
     t.string   "subtitle"
     t.text     "sidebar"
@@ -185,6 +193,22 @@ ActiveRecord::Schema.define(version: 20151228024402) do
   end
 
   add_index "subpages", ["rules_page_id"], name: "index_subpages_on_rules_page_id"
+
+  create_table "tools", force: :cascade do |t|
+    t.integer  "final_character_id",             null: false
+    t.string   "name"
+    t.integer  "points",             default: 0
+    t.integer  "property1",          default: 0
+    t.integer  "property2",          default: 0
+    t.integer  "property3",          default: 0
+    t.integer  "property4",          default: 0
+    t.integer  "property5",          default: 0
+    t.integer  "property6",          default: 0
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
+
+  add_index "tools", ["final_character_id"], name: "index_tools_on_final_character_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                       null: false

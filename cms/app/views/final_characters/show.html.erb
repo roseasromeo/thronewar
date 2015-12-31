@@ -1,5 +1,4 @@
 <%= link_to "Edit Character", edit_character_system_final_character_path(@character_system,@final_character) %>
-
 <h1 class="title"><%= @final_character.name %></h1>
 <h2 class="player">Player: <%= @final_character.user.name %></h2>
 <% if @show_all %>
@@ -7,6 +6,23 @@
   <p>Status: <%= @final_character.approval %></p>
   <p>Luck: <%= @final_character.luck %></p>
 <% end %>
+<div id='ranks'>
+  <table class="ranks_table">
+    <% @ranks = @final_character.ranks %>
+    <tr>
+      <th>Item</th>
+      <th>Public Rank</th>
+      <th>Public Point Cost</th>
+      <% if @show_all %>
+        <th>Final Rank</th>
+        <th>Final Point Cost</th>
+      <% end %>
+    </tr>
+    <% @ranks.each do |rank| %>
+      <%= render 'rank_display', :f => rank %>
+    <% end %>
+  </table>
+</div>
 <% if @final_character.approved? || gm_user? || @show_all %>
   <p>Blurb: <%= html_safe_rescue(@final_character.blurb) %></p>
   <p>Standard Form: <%= html_safe_rescue(@final_character.standardform) %></p>
