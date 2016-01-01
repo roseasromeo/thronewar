@@ -3,6 +3,8 @@ class CharacterSystem < ActiveRecord::Base
   has_many :final_characters, dependent: :destroy
   has_many :flaws, dependent: :destroy
   has_many :ranks, through: :final_characters
+  has_many :tools, through: :final_characters
+  has_many :regencies, through: :final_characters
 
   enum status: [:preparing, :started, :complete]
 

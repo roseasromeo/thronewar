@@ -49,5 +49,6 @@
   <p>Other: <%= html_safe_rescue(@final_character.other) %></p>
 <% end %>
 <% if @final_character.not_submitted? && (gm_user? || @user == @final_character.user) %>
+  <p class="links"><%= link_to "New Tool", new_character_system_tool_path(@character_system,final_character_id: @final_character) %></p>
   <p class="links"><%= link_to "Submit Character for Approval", character_system_final_character_submit_path(@character_system,@final_character), :method => :post %></p>
 <% end %>

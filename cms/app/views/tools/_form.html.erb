@@ -1,0 +1,14 @@
+<%= semantic_form_for @tool do |f| %>
+  <%= f.inputs do %>
+    <%= f.input :property1 %>
+    <%= f.input :property2 %>
+    <%= f.input :property3 %>
+    <%= f.input :property4 %>
+    <%= f.input :property5 %>
+    <%= f.input :property6 %>
+    <%= f.input :final_character, :as => :hidden, :value => @final_character %>
+    <%= f.actions do %>
+      <%= f.action :submit, :label => "Save Tool" %>
+    <% end %>
+  <% end %>
+<% end %>
