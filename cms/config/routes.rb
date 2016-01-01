@@ -37,7 +37,12 @@ Rails.application.routes.draw do
   end
 
   resources :character_systems, only: [:show, :index, :new, :create] do
-    resources :final_characters, only: [:show, :edit, :update]
+    resources :final_characters, only: [:show, :edit, :update] do
+      post 'submit'
+      post 'approve'
+    end
+    resources :tools
+    resources :regencies
   end
 
 

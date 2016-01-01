@@ -7,6 +7,15 @@ class Rank < ActiveRecord::Base
   validates_presence_of :final_character, :item
   validates :half, :inclusion => { :in => [true, false] }
 
+  def aspect?
+    if self.item == :battle || self.item == :cunning || self.item == :destiny || self.item == :ego || self.item == :flesh
+      aspect = true
+    else
+      aspect = false
+    end
+    aspect
+  end
+
   private
     def set_half
       if private_rank != public_rank
@@ -21,4 +30,5 @@ class Rank < ActiveRecord::Base
       new_rank = final_character.character_system.ranks.where(item: Rank.items[item], public_rank: private_rank).first
       self.private_points = new_rank.public_points
     end
+
 end

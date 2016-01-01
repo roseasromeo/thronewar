@@ -1,0 +1,2 @@
+class RegenciesController < ApplicationController
+end

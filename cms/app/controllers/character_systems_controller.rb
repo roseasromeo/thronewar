@@ -72,6 +72,7 @@ class CharacterSystemsController < ApplicationController
           items.each do |item|
             create_ranks(item, round, character, final_character)
           end
+          final_character.save
         else
           final_character.errors.full_messages.each do |msg|
             @errors[:base] << ("Final Character error: #{msg}")
