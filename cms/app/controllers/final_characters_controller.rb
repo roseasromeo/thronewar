@@ -1,10 +1,27 @@
 class FinalCharactersController < ApplicationController
+  include Rules
+
+  helper_method :html_safe_rescue, :ranks_collection, :aspect_level, :gift_level
+
   def show
     @final_character = FinalCharacter.find(params[:id])
     @user = current_user
     @character_system = @final_character.character_system
-    @flaw1 = (@final_character.flaw1 != nil ? Flaw.find(@final_character.flaw1) : nil)
-    @flaw2 = (@final_character.flaw2 != nil ? Flaw.find(@final_character.flaw2) : nil)
+    @flaw1 = (@final_character.flaw1 != nil ? Flaw.find(@final_character.flaw1.id) : nil)
+    @flaw2 = (@final_character.flaw2 != nil ? Flaw.find(@final_character.flaw2.id) : nil)
+    @buy_up_total = 0
+    @final_character.ranks.each do |rank|
+      @buy_up_total = @buy_up_total + (rank.public_rank - rank.private_rank)
+      if rank.item == "ego"
+        @ego_rank = rank.private_rank
+      end
+    end
+    @talent = talent(@ego_rank, @character_system.ranks.where(item: Rank.items[:ego]).maximum(:public_rank))
+    if @buy_up_total > @talent
+      @talent_violation = true
+    else
+      @talent_violation = false
+    end
     if gm_user? || @final_character.user == @user || @character_system.complete?
       @show_all = true
     else
@@ -31,7 +48,6 @@ class FinalCharactersController < ApplicationController
       @user = User.find(final_character_params[:user_id])
       leftover_points = 0
       flaw1_id = final_character_params[:flaw1_id]
-      puts flaw1_id
       if flaw1_id != ""
         @flaw1 = Flaw.find(flaw1_id)
       else
@@ -52,6 +68,7 @@ class FinalCharactersController < ApplicationController
             rank.save
           end
         end
+        @final_character.save
         redirect_to [@character_system, @final_character]
       else
         render 'edit'
@@ -61,7 +78,25 @@ class FinalCharactersController < ApplicationController
     end
   end
 
-  helper_method :html_safe_rescue, :ranks_collection
+  def submit
+    @final_character = FinalCharacter.find(params[:final_character_id])
+    @character_system = @final_character.character_system
+    notices = approval(@final_character)
+    if false && (notices.empty? || notices == nil)
+      @final_character.submitted!
+    else
+      flash[:notice] = notices
+    end
+    redirect_to character_system_final_character_path(@character_system, @final_character)
+  end
+
+  def approve
+    redirect_to character_system_final_character_path(@character_system, @final_character)
+  end
+
+  def reject
+    redirect_to character_system_final_character_path(@character_system, @final_character)
+  end
 
   private
     def final_character_params
@@ -91,7 +126,5 @@ class FinalCharactersController < ApplicationController
       end
       collection
     end
-
-
 
 end

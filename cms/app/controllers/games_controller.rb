@@ -25,6 +25,9 @@ class GamesController < ApplicationController
           @display_toggle = true
         end
         @no_character_system = CharacterSystem.where(game: @game).empty?
+        if !@no_character_system
+          @character_system = CharacterSystem.where(game: @game).first
+        end
       end
     else
       redirect_to login_path

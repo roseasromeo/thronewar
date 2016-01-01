@@ -4,6 +4,7 @@
     <h2 class="player"><%= f.input :user, :as => :select, :collection => User.joins(:final_characters).merge(FinalCharacter.where.not(character_system: @character_system)) << @final_character.user, :label => "Player: ", :value => @final_character.user %></h2>
   <% else %>
     <h2 class="player">Player: <%= @final_character.user.name %></h2>
+    <%= f.input :user_id, :as => :hidden, :value => @final_character.user.id %>
   <% end %>
   <li>Leftover Points: <%= @final_character.leftover_points %></li>
   <li>Status: <%= @final_character.approval %></li>

@@ -24,6 +24,9 @@
   <% if gm_user? && @no_character_system %>
     <p class="links"><%= link_to "Create Character System", new_character_system_path(:game_id => @game) %></p>
   <% end %>
+  <% if !@no_character_system %>
+    <p class="links"><%= link_to "Go to Character System", character_system_path(@character_system) %></p>
+  <% end %>
 <% end %>
 <% if gm_user? || @game.complete? %>
   <p class="links"><%= link_to 'Index of Characters', game_characters_path(@game) %></p>
