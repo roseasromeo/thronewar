@@ -1,0 +1,21 @@
+<!-- Things that need to happen here:
+Ability to see ranks from previous round
+Ability to submit pledges
+Ability to view submitted pledge
+Total spent points
+-->
+<% if @message != nil %>
+  <% content_for :for_head do %>
+    <meta http-equiv="refresh" content="10"/>
+  <% end %>
+<% end %>
+
+<h1 class="auction_title">Auction</h1>
+<%= render 'games/character_list', :characters => @characters %>
+<% if @message != nil %>
+  <%= @message %>
+<% else %>
+  <% if (@aspect_exists && !@aspect_closed) || (@gift_exists && !@gift_closed) %>
+    <%= render 'form', :flash => flash %>
+  <% end %>
+<% end %>

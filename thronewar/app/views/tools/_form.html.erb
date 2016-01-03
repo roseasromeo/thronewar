@@ -1,0 +1,30 @@
+<% if @tool.errors.any? %>
+  <div id="error_explanation">
+    <h2>
+      <%= pluralize(@tool.errors.count, "error") %> prohibited
+      this Tool from being saved:
+    </h2>
+    <ul>
+      <% @tool.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+<%= semantic_form_for [@character_system, @tool] do |f| %>
+  <%= f.inputs do %>
+    <%= f.input :name %>
+    <fieldset class="checkboxes">
+      <p>Abilities</p>
+      <ul>
+        <% @ability_collection.each do |ability| %>
+          <li><label><%= check_box_tag "tool[abilities][]", ability[1], f.object.abilities.include?(ability[1].to_s) %> <%= ability[0] %></label></li>
+        <% end %>
+      </ul>
+    </fieldset>
+    <%= f.input :final_character, :label => false, :as => :number, :input_html => { :class => "hidden", :value => @final_character.id } %>
+    <%= f.actions do %>
+      <%= f.action :submit, :label => "Save Tool" %>
+    <% end %>
+  <% end %>
+<% end %>

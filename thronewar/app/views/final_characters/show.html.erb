@@ -1,0 +1,97 @@
+<%= link_to "Edit Character", edit_character_system_final_character_path(@character_system,@final_character) %>
+<%= link_to "Back to Character System Home", character_system_path(@character_system) %>
+<%= flash[:notice] %>
+<h1 class="title"><%= @final_character.name %></h1>
+<h2 class="player">Player: <%= @final_character.user.name %></h2>
+<% if @show_all %>
+  <p>Leftover Points: <%= @final_character.leftover_points %></p>
+  <p>Asset Points Spent (Maximum 32): <%= @final_character.asset_points %></p>
+  <p>Status: <%= @final_character.approval %></p>
+  <p>Luck: <%= @final_character.luck %></p>
+  <p>Total Number of Buy-ups: <%= @buy_up_total %></p>
+  <p>Ego Talent: <%= @talent %></p>
+  <p>Destiny Fate: <%= @fate %></p>
+  <% if @talent_violation %>
+    <p class="error">Too many buy-ups have been selected given the character's Talent number.</p>
+  <% end %>
+<% end %>
+<div id='ranks'>
+  <table class="ranks_table">
+    <h3>Ranks</h3>
+    <% @ranks = @final_character.ranks %>
+    <tr>
+      <th>Item</th>
+      <th>Public Rank</th>
+      <th>Public Level</th>
+      <th>Public Point Cost</th>
+      <% if @show_all %>
+        <th>Final Rank</th>
+        <th>Final Level</th>
+        <th>Final Point Cost</th>
+      <% end %>
+    </tr>
+    <% @ranks.each do |rank| %>
+      <%= render 'rank_display', :f => rank %>
+    <% end %>
+  </table>
+</div>
+<% if @final_character.approved? || gm_user? || @show_all %>
+  <p>Blurb: <%= html_safe_rescue(@final_character.blurb) %></p>
+  <p>Standard Form: <%= html_safe_rescue(@final_character.standard_form) %></p>
+  <% if @flaw1 != nil %>
+    <p class="flaw">Flaw 1: <%= link_to @flaw1.name.titleize, '/' + @flaw1.link %> <%= @flaw1.description %></p>
+  <% end %>
+  <% if @flaw2 != nil %>
+    <p class="flaw">Flaw 2: <%= link_to @flaw2.name.titleize, '/' + @flaw2.link %> <%= @flaw2.description %></p>
+  <% end %>
+<% end %>
+<% if @show_all %>
+  <p>Background: <%= html_safe_rescue(@final_character.background) %></p>
+  <p>Backstory Connections: <%= html_safe_rescue(@final_character.backstory_connections) %></p>
+  <p>Goal: <%= html_safe_rescue(@final_character.goal) %></p>
+  <p>Curses: <%= html_safe_rescue(@final_character.curses) %></p>
+  <% if @gutter_magic %>
+    <p>Extra Wishes: <%= @final_character.extra_wishes %></p>
+    <p>Wishes: <%= html_safe_rescue(@final_character.wishes) %></p>
+  <% end %>
+  <div id='tools'>
+    <% @tools = @final_character.tools %>
+    <% if !@tools.empty? %>
+      <h3>Tools</h3>
+      <table class="tools_table">
+        <tr>
+          <th>Name</th>
+          <th>Points</th>
+        </tr>
+        <% @tools.each do |tool| %>
+          <%= render 'tool_display', :f => tool %>
+        <% end %>
+      </table>
+    <% end %>
+    <% if @final_character.not_submitted? && (gm_user? || @user == @final_character.user) %>
+      <p class="links"><%= link_to "New Tool", new_character_system_tool_path(@character_system,final_character: @final_character) %></p>
+    <% end %>
+  </div>
+  <div id='regencies'>
+    <% @regencies = @final_character.regencies %>
+    <% if !@regencies.empty? %>
+    <h3>Regencies</h3>
+      <table class="regencies_table">
+        <tr>
+          <th>Name</th>
+          <th>Points</th>
+        </tr>
+        <% @regencies.each do |regency| %>
+          <%= render 'regency_display', :f => regency %>
+        <% end %>
+      </table>
+    <% end %>
+    <% if @final_character.not_submitted? && (gm_user? || @user == @final_character.user) %>
+      <p class="links"><%= link_to "New Regency", new_character_system_regency_path(@character_system,final_character: @final_character) %></p>
+    <% end %>
+  </div>
+  <p>Other: <%= html_safe_rescue(@final_character.other) %></p>
+<% end %>
+<% if @final_character.not_submitted? && (gm_user? || @user == @final_character.user) %>
+  <p class="links"><%= link_to "Submit Character for Approval", character_system_final_character_submit_path(@character_system,@final_character), :method => :post %></p>
+<% end %>

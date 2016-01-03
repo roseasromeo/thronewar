@@ -1,0 +1,36 @@
+<table class="character_table">
+  <tr>
+    <th>Name</th>
+    <th>Player</th>
+    <% if gm_user? || @character_system.started? %>
+      <th>Flaw 1</th>
+      <th>Flaw 2</th>
+    <% end %>
+  </tr>
+  <% final_characters.each do |final_character| %>
+    <% if @final_character != nil && final_character.user == @final_character.user %>
+      <tr class="user_character">
+    <% else %>
+      <tr>
+    <% end %>
+      <% if final_character.name == "" || final_character.name == nil %>
+        <td><%= link_to "Anonymous", character_system_final_character_path(@character_system,final_character) %></td>
+      <% else %>
+        <td><%= link_to final_character.name, character_system_final_character_path(@character_system,final_character) %></td>
+      <% end %>
+      <td><%= final_character.user.name %></td>
+      <% if gm_user? || @character_system.started? %>
+        <% if final_character.flaw1 != nil %>
+          <td><%= link_to final_character.flaw1.name.titleize, '/' + final_character.flaw1.link %></td>
+        <% else %>
+          <td>No Flaw</td>
+        <% end %>
+        <% if final_character.flaw2 != nil %>
+          <td><%= link_to final_character.flaw2.name.titleize, '/' + final_character.flaw2.link %></td>
+        <% else %>
+          <td>No Flaw</td>
+        <% end %>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
