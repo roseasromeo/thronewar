@@ -10,6 +10,9 @@ class RulesPagesController < ApplicationController
   def show
     if logged_in?
       @rules_page = RulesPage.find_by_slug(params[:id])
+      if @rules_page == nil
+        redirect_to rules_pages_path
+      end
     else
       redirect_to login_path
     end

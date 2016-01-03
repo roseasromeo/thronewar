@@ -6,7 +6,7 @@
     <h2 class="player">Player: <%= @final_character.user.name %></h2>
     <%= f.input :user_id, :as => :hidden, :value => @final_character.user.id %>
   <% end %>
-  <li>Leftover Points: <%= @final_character.leftover_points %></li>
+  <li>Leftover Points (as of last edit): <%= @final_character.leftover_points %></li>
   <li>Status: <%= @final_character.approval %></li>
   <%= f.input :luck %>
   <div id='ranks'>
