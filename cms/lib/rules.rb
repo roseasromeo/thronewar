@@ -142,6 +142,7 @@ module Rules
       flaw = true
     end
     if final_character.flaw2 != nil && final_character.flaw2.name == "All the World's a Stage"
+      puts "we found the stage flaw"
       flaw = true
     end
     flaw
