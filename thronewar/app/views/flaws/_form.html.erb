@@ -1,9 +1,0 @@
-<%= semantic_form_for [@character_system, @flaw] do |f| %>
-  <%= f.inputs do %>
-    <%= f.input :name %>
-    <%= f.input :description, :input_html => {:class => "text_entry"} %>
-    <%= f.input :link %>
-    <%= f.input :character_system, as: :hidden %>
-    <%= f.actions %>
-  <% end %>
-<% end %>

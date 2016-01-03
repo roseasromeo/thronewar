@@ -1,9 +1,0 @@
-<%= f.inputs do %>
-  <% last_pledge_value = 0 %>
-  <% if @pledge_values != nil && @pledge_values[@item_index] != nil %>
-    <% last_pledge_value = @pledge_values[@item_index] %>
-  <% elsif @last_pledges != nil %>
-    <% last_pledge_value = @last_pledges.where(item: item).first.value %>
-  <% end %>
-  <td class="pledge_field"><%= f.input :value, :required => false, :label => false, :input_html => { :value => last_pledge_value } %></td>
-<% end %>
