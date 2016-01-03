@@ -12,11 +12,22 @@ class FinalCharactersController < ApplicationController
     @buy_up_total = 0
     @final_character.ranks.each do |rank|
       @buy_up_total = @buy_up_total + (rank.public_rank - rank.private_rank)
+      if rank.item == "destiny"
+        @destiny_rank = rank.private_rank
+      end
       if rank.item == "ego"
         @ego_rank = rank.private_rank
       end
+      if rank.item == "gutter_magic"
+        if rank.private_rank > 0
+          @gutter_magic = true
+        else
+          @gutter_magic = false
+        end
+      end
     end
     @talent = talent(@ego_rank, @character_system.ranks.where(item: Rank.items[:ego]).maximum(:public_rank))
+    @fate = fate(@destiny_rank, @character_system.ranks.where(item: Rank.items[:destiny]).maximum(:public_rank),fate_flaw?(@final_character))
     if @buy_up_total > @talent
       @talent_violation = true
     else
@@ -33,6 +44,17 @@ class FinalCharactersController < ApplicationController
     @final_character = FinalCharacter.find(params[:id])
     @user = current_user
     @character_system = @final_character.character_system
+
+    @flaw1_id = @final_character.flaw1 == nil ? nil : @final_character.flaw1.id
+    @flaw2_id = @final_character.flaw2 == nil ? nil : @final_character.flaw2.id
+
+    gutter_rank = @final_character.ranks.where(item: Rank.items[:gutter_magic]).first
+    if gutter_rank.private_rank > 0
+      @gutter_magic = true
+    else
+      @gutter_magic = false
+    end
+
     if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
       # edit
     else
@@ -43,24 +65,37 @@ class FinalCharactersController < ApplicationController
   def update
     @user = current_user
     @final_character = FinalCharacter.find(params[:id])
+    @character_system = @final_character.character_system
+
+    @flaw1_id = @final_character.flaw1 == nil ? nil : @final_character.flaw1.id
+    @flaw2_id = @final_character.flaw2 == nil ? nil : @final_character.flaw2.id
+
+    gutter_rank = @final_character.ranks.where(item: Rank.items[:gutter_magic]).first
+    if gutter_rank.private_rank > 0
+      @gutter_magic = true
+    else
+      @gutter_magic = false
+    end
+
     if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
       @character_system = CharacterSystem.find(params[:character_system_id])
       @user = User.find(final_character_params[:user_id])
       leftover_points = 0
-      flaw1_id = final_character_params[:flaw1_id]
+      flaw1_id = final_character_params[:flaw1]
       if flaw1_id != "" && flaw1_id != nil
         @flaw1 = Flaw.find(flaw1_id)
       else
         @flaw1 = nil
       end
-      flaw2_id = final_character_params[:flaw2_id]
+      flaw2_id = final_character_params[:flaw2]
       if flaw2_id != "" && flaw2_id != nil
         @flaw2 = Flaw.find(flaw2_id)
         puts @flaw2
       else
         @flaw2 = nil
       end
-      if @final_character.update(character_system: @character_system, user: @user, name: final_character_params[:name], blurb: final_character_params[:blurb], background: final_character_params[:background], backstory_connections: final_character_params[:backstory_connections], goal: final_character_params[:goal], curses: final_character_params[:curses], standard_form: final_character_params[:standard_form], other: final_character_params[:other], luck: final_character_params[:luck], leftover_points: leftover_points) #flaw1: @flaw1, flaw2: @flaw2
+
+      if @final_character.update(character_system: @character_system, user: @user, name: final_character_params[:name], blurb: final_character_params[:blurb], background: final_character_params[:background], backstory_connections: final_character_params[:backstory_connections], goal: final_character_params[:goal], curses: final_character_params[:curses], wishes: final_character_params[:wishes], extra_wishes: final_character_params[:extra_wishes], standard_form: final_character_params[:standard_form], other: final_character_params[:other], luck: final_character_params[:luck], flaw1: @flaw1, flaw2: @flaw2) #
         @final_character.ranks.each do |rank|
           item_number = Rank.items[rank.item]
           if final_character_params[:ranks_attributes][item_number.to_s].has_key?("private_rank")
@@ -100,7 +135,7 @@ class FinalCharactersController < ApplicationController
 
   private
     def final_character_params
-      params.require(:final_character).permit(:user_id, :flaw1_id, :flaw2_id, :name, :blurb, :background, :backstory_connections, :goal, :curses, :standard_form, :other, :luck, :leftover_points, ranks_attributes: [:id, :private_rank])
+      params.require(:final_character).permit(:user_id, :flaw1, :flaw2, :name, :blurb, :background, :backstory_connections, :goal, :curses, :wishes, :extra_wishes, :standard_form, :other, :luck, :leftover_points, ranks_attributes: [:id, :private_rank])
     end
 
     def html_safe_rescue(text)

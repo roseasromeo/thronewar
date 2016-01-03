@@ -19,3 +19,15 @@
     <% end %>
   <% end %>
 <% end %>
+<% if !@regency.keeper_abilities.empty? %>
+  <h3>Keeper Abilities</h3>
+  <% @regency.keeper_abilities.each do |ability_num| %>
+    <% if !ability_num.empty? %>
+      <% @keeper_collection.each do |ability_key| %>
+        <% if ability_key[1] == ability_num.to_i %>
+          <p><%= ability_key[0] %></p>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

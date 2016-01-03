@@ -1,6 +1,6 @@
 class ToolAbilityValidator < ActiveModel::Validator
   include Rules
-  
+
   def validate(tool)
     final_character = tool.final_character
     ability_collection = tool_abilities_collection(final_character,false)
@@ -46,6 +46,10 @@ class ToolAbilityValidator < ActiveModel::Validator
     if wisp && ability_count > 1
       valid = false
       tool.errors[:abilities] << "No other abilities may be included with the Wisp ability."
+    end
+    if ability_count > 3
+      valid = false
+      tool.errors[:abilities] << "Tools have a maximum of three abilities."
     end
     if tool.points > 6
       valid = false

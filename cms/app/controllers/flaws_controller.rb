@@ -1,0 +1,2 @@
+class FlawsController < ApplicationController
+end
