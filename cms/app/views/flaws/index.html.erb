@@ -1,0 +1,24 @@
+<%= link_to "Back to Character System Home", character_system_path(@character_system) %>
+<h1>Flaws</h1>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Short Description</th>
+    <% if admin_user? %>
+      <th>Delete?</th>
+    <% end %>
+  </tr>
+
+  <% @flaws.each do |flaw| %>
+    <tr>
+      <td><%= link_to flaw.name, '/' + flaw.link %></td>
+      <td><%= flaw.description %></td>
+      <% if admin_user? %>
+        <td><%= link_to 'Delete', character_system_flaw_path(@character_system,flaw), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
+<% if gm_user? %>
+  <%= link_to 'Add Flaw', new_character_system_flaw_path(@character_system) %>
+<% end %>

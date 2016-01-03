@@ -43,6 +43,7 @@ Rails.application.routes.draw do
     end
     resources :tools
     resources :regencies
+    resources :flaws, only: [:index, :new, :create, :destroy]
   end
 
 

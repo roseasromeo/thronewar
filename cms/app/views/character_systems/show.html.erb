@@ -8,3 +8,5 @@
   <%= @character_system.status %>
 </p>
 <%= render 'final_character_list', :final_characters => @final_characters %>
+
+<%= link_to "Flaw Index", character_system_flaws_path(@character_system) %>
