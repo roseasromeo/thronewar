@@ -27,8 +27,12 @@ class Rank < ActiveRecord::Base
     end
 
     def set_private_points
-      new_rank = final_character.character_system.ranks.where(item: Rank.items[item], public_rank: private_rank).first
-      self.private_points = new_rank.public_points
+      if private_rank != public_rank
+        new_rank = final_character.character_system.ranks.where(item: Rank.items[item], public_rank: private_rank).first
+        self.private_points = new_rank.public_points
+      else
+        self.private_points = self.public_points
+      end
     end
 
 end
