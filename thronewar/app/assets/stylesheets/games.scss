@@ -1,0 +1,42 @@
+// Place all the styles related to the Games controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+table.character_table, table.pledges_ranks_table {
+  word-wrap: break-word;
+  border: 1px solid;
+  border-collapse: collapse;
+  padding: 5px;
+  margin-bottom: 15px;
+  td, th {
+    border: 1px solid;
+    padding: 5px;
+  }
+  th {
+    background-color: #C1E1A6;
+  }
+  td {
+    background-color: #bddbd3;
+  }
+  tr.user_character td {
+    background-color: #ADD8E6;
+  }
+}
+
+table.pledge_display {
+  margin-top: 15px;
+  word-wrap: break-word;
+  border: 1px solid;
+  border-collapse: collapse;
+  padding: 5px;
+  td, th {
+    border: 1px solid;
+    padding: 5px;
+  }
+  th {
+    background-color: #81bab9;
+  }
+  td {
+    background-color: #bddbd3;
+  }
+}

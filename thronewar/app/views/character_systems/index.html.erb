@@ -1,0 +1,13 @@
+<h1> Index of Character Systems </h1>
+<%= link_to 'Back to Home', '/' %>
+<table>
+  <tr>
+    <th>Title</th>
+  </tr>
+
+  <% @character_systems.each do |character_system| %>
+    <tr>
+      <td><%= link_to character_system.title, character_system_path(character_system) %></td>
+    </tr>
+  <% end %>
+</table>

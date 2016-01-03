@@ -1,0 +1,35 @@
+<!-- Things that need to happen here:
+Total spent points for each character
+-->
+<% content_for :for_head do %>
+  <meta http-equiv="refresh" content="10" />
+<% end %>
+
+<div class="error_explanation">
+  <% if flash[:error] != nil %>
+    <% flash_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    <% if flash_messages == ["Error message problem. Inform your Arbiter."] %>
+      <%= flash[:error] %>
+    <% end %>
+    <% flash.clear %>
+  <% end %>
+</div>
+
+<h1 class="auction_title">Auction</h1>
+<%= render 'character_list', :characters => @characters %>
+<% if !@aspect_exists %>
+  <%= link_to "Start Aspect Auction", aspect_game_path(@game), :method => :post %>
+<% end %>
+<% if !@gift_exists && @aspect_closed %>
+  <%= link_to "Start Gift Auction", gift_game_path(@game), :method => :post  %>
+<% end %>
+<% if (@aspect_exists && !@aspect_closed) || (@gift_exists && !@gift_closed) %>
+  <% if !@all_closed %>
+    <%= render 'auction_monitor' %>
+  <% else %>
+    <p>All items in this auction are closed.</p>
+  <% end %>
+  <%= link_to "Close Auction", close_auction_game_path(:auction => @auction), :method => :post %>
+<% end %>
