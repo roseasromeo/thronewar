@@ -4,8 +4,8 @@ class FinalCharacter < ActiveRecord::Base
   has_many :ranks, dependent: :destroy
   has_many :tools, dependent: :destroy
   has_many :regencies, dependent: :destroy
-  belongs_to :flaw1, :class_name => 'Flaw'
-  belongs_to :flaw2, :class_name => 'Flaw'
+  belongs_to :flaw1, :class_name => 'Flaw', foreign_key: 'flaw1'
+  belongs_to :flaw2, :class_name => 'Flaw', foreign_key: 'flaw2'
 
   after_save :calculate_points
 

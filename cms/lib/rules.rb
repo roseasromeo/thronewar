@@ -352,4 +352,133 @@ module Rules
     end
     blank
   end
+
+  def font?(final_character)
+    #This is not right--need to check for font ability
+    ranks = final_character.ranks
+    font = false
+    if ranks.where(item: Rank.items[:gutter_magic]).first.private_rank > 0
+      font = true
+    end
+    font
+  end
+
+  def tool_abilities_collection(final_character,all_abilities)
+    ranks = final_character.ranks
+    collection = []
+    i = 0
+    # Command basic abilities
+    collection << ["Command Basic (1pt): Rational", i]
+    i = i + 1
+    collection << ["Command Basic (1pt): Armor", i]
+    i = i + 1
+    collection << ["Command Basic (1pt): Heroic", i]
+    i = i + 1
+    # Change basic abilities
+    collection << ["Change Basic (1pt): Threatening", i]
+    i = i + 1
+    collection << ["Change Basic (1pt): Light-footed", i]
+    i = i + 1
+    collection << ["Change Basic (1pt): Sharp", i]
+    i = i + 1
+    # Illusion basic abilities
+    collection << ["Illusion Basic (1pt): Inconspicuous", i]
+    i = i + 1
+    collection << ["Illusion Basic (1pt): Wisp", i]
+    i = i + 1
+    collection << ["Illusion Basic (1pt): Hidden", i]
+    i = i + 1
+    # Gutter Magic basic abilities
+    if font?(final_character) || all_abilities
+      collection << ["Gutter Magic Basic (1pt): Wand", i]
+    end
+    i = i + 1
+    if font?(final_character) || all_abilities
+      collection << ["Gutter Magic Basic (1pt): Dowsing", i]
+    end
+    i = i + 1
+    if font?(final_character) || all_abilities
+      collection << ["Gutter Magic Basic (1pt): Independent", i]
+    end
+    i = i + 1
+    # Command intermediate abilities
+    collection << ["Command Intermediate (2pt): Guard", i]
+    i = i + 1
+    collection << ["Command Intermediate (2pt): Analytic", i]
+    i = i + 1
+    # Change intermediate abilities
+    collection << ["Change Intermediate (2pt): Precision", i]
+    i = i + 1
+    collection << ["Change Intermediate (2pt): Coercive", i]
+    i = i + 1
+    # Illusion intermediate abilities
+    collection << ["Illusion Intermediate (2pt): Masked", i]
+    i = i + 1
+    collection << ["Illusion Intermediate (2pt): Telepathic", i]
+    i = i + 1
+    # Gutter Magic intermediate abilities
+    if font?(final_character) || all_abilities
+      collection << ["Gutter Magic Intermediate (2pt): Intuition", i]
+    end
+    i = i + 1
+    if font?(final_character) || all_abilities
+      collection << ["Gutter Magic Intermediate (2pt): Collar", i]
+    end
+    i = i + 1
+
+    # Command advanced ability
+    if ranks.where(item: Rank.items[:command]).first.private_rank > 0 || all_abilities
+      collection << ["Command Advanced (3pt): Real", i]
+    end
+    i = i + 1
+    # Change advanced ability
+    if ranks.where(item: Rank.items[:change]).first.private_rank > 0 || all_abilities
+      collection << ["Change Advanced (3pt): Alternate Form", i]
+    end
+    i = i + 1
+    # Illusion advanced ability
+    if ranks.where(item: Rank.items[:illusion]).first.private_rank > 0 || all_abilities
+      collection << ["Illusion Advanced (3pt): Improved Wisp", i]
+    end
+    i = i + 1
+
+    collection
+  end
+
+  # Ability Numbers
+  def improved_wisp_num
+    23
+  end
+  def collar_num
+    19
+  end
+  def wisp_num
+    7
+  end
+
+  def regency_abilities_collection
+    collection = []
+    i = 0
+    # Basic abilities
+    collection << ["Basic (1pt): Physical Walls", i]
+    i = i + 1
+    collection << ["Basic (1pt): Adherent", i]
+    i = i + 1
+    collection << ["Basic (1pt): Luxurious", i]
+    i = i + 1
+    # Intermediate abilities
+    collection << ["Intermediate (2pt): Environment", i]
+    i = i + 1
+    collection << ["Intermediate (2pt): Metaphysical Walls", i]
+    i = i + 1
+    # Advanced abilities
+    collection << ["Advanced (3pt): Keeper", i]
+    i = i + 1
+    collection << ["Advanced (3pt): Puzzle", i]
+    i = i + 1
+    collection << ["Advanced (3pt): Walking", i]
+    i = i + 1
+
+    collection
+  end
 end

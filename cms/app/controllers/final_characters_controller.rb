@@ -48,19 +48,19 @@ class FinalCharactersController < ApplicationController
       @user = User.find(final_character_params[:user_id])
       leftover_points = 0
       flaw1_id = final_character_params[:flaw1_id]
-      if flaw1_id != ""
+      if flaw1_id != "" && flaw1_id != nil
         @flaw1 = Flaw.find(flaw1_id)
       else
         @flaw1 = nil
       end
       flaw2_id = final_character_params[:flaw2_id]
-      if flaw2_id != ""
+      if flaw2_id != "" && flaw2_id != nil
         @flaw2 = Flaw.find(flaw2_id)
         puts @flaw2
       else
         @flaw2 = nil
       end
-      if @final_character.update(character_system: @character_system, user: @user, name: final_character_params[:name], blurb: final_character_params[:blurb], background: final_character_params[:background], backstory_connections: final_character_params[:backstory_connections], goal: final_character_params[:goal], curses: final_character_params[:curses], standardform: final_character_params[:standardform], other: final_character_params[:other], luck: final_character_params[:luck], leftover_points: leftover_points, flaw1: @flaw1, flaw2: @flaw2)
+      if @final_character.update(character_system: @character_system, user: @user, name: final_character_params[:name], blurb: final_character_params[:blurb], background: final_character_params[:background], backstory_connections: final_character_params[:backstory_connections], goal: final_character_params[:goal], curses: final_character_params[:curses], standard_form: final_character_params[:standard_form], other: final_character_params[:other], luck: final_character_params[:luck], leftover_points: leftover_points) #flaw1: @flaw1, flaw2: @flaw2
         @final_character.ranks.each do |rank|
           item_number = Rank.items[rank.item]
           if final_character_params[:ranks_attributes][item_number.to_s].has_key?("private_rank")
@@ -100,7 +100,7 @@ class FinalCharactersController < ApplicationController
 
   private
     def final_character_params
-      params.require(:final_character).permit(:user_id, :flaw1_id, :flaw2_id, :name, :blurb, :background, :backstory_connections, :goal, :curses, :standardform, :other, :luck, :leftover_points, ranks_attributes: [:id, :private_rank])
+      params.require(:final_character).permit(:user_id, :flaw1_id, :flaw2_id, :name, :blurb, :background, :backstory_connections, :goal, :curses, :standard_form, :other, :luck, :leftover_points, ranks_attributes: [:id, :private_rank])
     end
 
     def html_safe_rescue(text)

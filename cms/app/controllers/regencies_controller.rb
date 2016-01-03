@@ -1,7 +1,10 @@
 class RegenciesController < ApplicationController
+  include Rules
+
   def index
     @character_system = CharacterSystem.find(params[:character_system_id])
-    if gm_user?
+
+    if gm_user? || @character_system.complete?
       @regencies = @character_system.regencies
     else
       redirect_to [@character_system]
@@ -13,7 +16,9 @@ class RegenciesController < ApplicationController
     @regency = Regency.find(params[:id])
     @final_character = @regency.final_character
     @character_system = @final_character.character_system
+    @ability_collection = regency_abilities_collection
     @show_all = false
+
     if gm_user? || @final_character.user == @user || @character_system.complete?
       @show_all = true
     else
@@ -23,7 +28,10 @@ class RegenciesController < ApplicationController
 
   def new
     @user = current_user
-    @final_character = FinalCharacter.find(params[:final_character_id])
+    @final_character = FinalCharacter.find(params[:final_character])
+    @character_system = CharacterSystem.find(params[:character_system_id])
+    @ability_collection = regency_abilities_collection
+
     if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
       @regency = Regency.new
     else
@@ -35,6 +43,9 @@ class RegenciesController < ApplicationController
     @user = current_user
     @regency = Regency.find(params[:id])
     @final_character = @regency.final_character
+    @character_system = CharacterSystem.find(params[:character_system_id])
+    @ability_collection = regency_abilities_collection
+
     if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
       # edit
     else
@@ -44,9 +55,12 @@ class RegenciesController < ApplicationController
 
   def create
     @user = current_user
-    @final_character = FinalCharacter.find(regency_params[:final_character_id])
+    @final_character = FinalCharacter.find(regency_params[:final_character])
+    @character_system = CharacterSystem.find(params[:character_system_id])
+    @ability_collection = regency_abilities_collection
+
     if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
-      @regency.new(regency_params)
+      @regency = Regency.new(name: regency_params[:name], description: regency_params[:description], final_character: @final_character, abilities: regency_params[:abilities])
       if @regency.save
         redirect_to [@character_system, @regency]
       else
@@ -60,9 +74,13 @@ class RegenciesController < ApplicationController
   def update
     @user = current_user
     @regency = Regency.find(params[:id])
-    @final_character = FinalCharacter.find(regency_params[:final_character_id])
+    @final_character = FinalCharacter.find(regency_params[:final_character])
+    @character_system = CharacterSystem.find(params[:character_system_id])
+    @ability_collection = regency_abilities_collection
+
     if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
-      if @regency.update(regency_params)
+      if @regency.update(name: regency_params[:name], description: regency_params[:description], final_character: @final_character, abilities: regency_params[:abilities])
+        @final_character.save
         redirect_to [@character_system, @regency]
       else
         render 'edit'
@@ -75,7 +93,9 @@ class RegenciesController < ApplicationController
   def destroy
     @user = current_user
     @regency = Regency.find(params[:id])
-    @final_character = FinalCharacter.find(regency_params[:final_character_id])
+    @final_character = FinalCharacter.find(regency_params[:final_character])
+    @character_system = CharacterSystem.find(params[:character_system_id])
+
     if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
       @regency.destroy
       redirect_to [@character_system]
@@ -86,6 +106,6 @@ class RegenciesController < ApplicationController
 
   private
     def regency_params
-      params.require(:regency).permit(:final_character_id)
+      params.require(:regency).permit(:final_character, :name, :description, :abilities => [])
     end
 end
