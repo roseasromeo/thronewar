@@ -28,7 +28,7 @@ class ToolsController < ApplicationController
 
   def new
     @user = current_user
-    @final_character = FinalCharacter.find(params[:final_character_id])
+    @final_character = FinalCharacter.find(params[:final_character])
     @character_system = CharacterSystem.find(params[:character_system_id])
     @ability_collection = tool_abilities_collection(@final_character, false)
 
@@ -94,7 +94,7 @@ class ToolsController < ApplicationController
   def destroy
     @user = current_user
     @tool = Tool.find(params[:id])
-    @final_character = FinalCharacter.find(tool_params[:final_character_id])
+    @final_character = FinalCharacter.find(tool_params[:final_character])
     @character_system = CharacterSystem.find(params[:character_system_id])
 
     if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)

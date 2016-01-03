@@ -16,6 +16,6 @@ class RulesPage < ActiveRecord::Base
   end
 
   def create_slug
-    self.slug = self.name.gsub(" ","")
+    self.slug = self.name.gsub(" ","").gsub("\'","")
   end
 end

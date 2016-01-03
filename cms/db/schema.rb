@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160103185120) do
+ActiveRecord::Schema.define(version: 20160103202943) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,6 +90,7 @@ ActiveRecord::Schema.define(version: 20160103185120) do
     t.integer  "leftover_points",       default: 0
     t.datetime "created_at",                        null: false
     t.datetime "updated_at",                        null: false
+    t.integer  "extra_wishes",          default: 0
   end
 
   add_index "final_characters", ["character_system_id"], name: "index_final_characters_on_character_system_id", using: :btree

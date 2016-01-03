@@ -125,6 +125,28 @@ module Rules
     targets
   end
 
+  def fate(private_rank, lowest_rank, fate_flaw)
+    fate_tokens = 5
+    if private_rank > 0
+      fate_tokens = fate_tokens + 1 + lowest_rank - private_rank
+    end
+    if fate_flaw
+      fate_tokens = fate_tokens - 2
+    end
+    fate_tokens
+  end
+
+  def fate_flaw?(final_character)
+    flaw = false
+    if final_character.flaw1 != nil && final_character.flaw1.name == "All the World's a Stage"
+      flaw = true
+    end
+    if final_character.flaw2 != nil && final_character.flaw2.name == "All the World's a Stage"
+      flaw = true
+    end
+    flaw
+  end
+
   def talent(private_rank, lowest_rank)
     one_count = 0
     two_count = 0
@@ -302,6 +324,9 @@ module Rules
     if final_character.leftover_points < 0
       notices << "Purchases have exceeded maximum point expenditure. Please add Flaws, decrease Luck, decrease buy-ups, or remove other purchases."
     end
+    if final_character.asset_points > 32
+      notices << "Tool and Regency purchases have exceeded the 32 point maximum allowed."
+    end
 
     # Buying up too much
     ego_rank = final_character.ranks.where(item: Rank.items[:ego]).first.private_rank
@@ -315,7 +340,25 @@ module Rules
       notices << "Too many buy-ups for current Ego Talent. Please decrease number of ranks purchased."
     end
 
-    #check for blanks
+    # Invalid Tools
+    if !final_character.tools.empty?
+      final_character.tools.each do |tool|
+        if !tool.save
+          notices << "Tool #{tool.name} is invalid. Please check that the requirements for all abilities are met."
+        end
+      end
+    end
+
+    # Invalid Regencies
+    if !final_character.regencies.empty?
+      final_character.regencies.each do |regency|
+        if !regency.save
+          notices << "Regency #{regency.name} is invalid. Please check that the requirements for all abilities are met."
+        end
+      end
+    end
+
+    # check for blanks
     if check_blank(final_character.blurb)
       notices << "Blurb must be completed before submission."
     end
@@ -334,8 +377,21 @@ module Rules
     if check_blank(final_character.curses)
       notices << "Curses must be completed before submission."
     end
-    if check_blank(final_character.standardform)
+    if check_blank(final_character.standard_form)
       notices << "Standard Form must be completed before submission."
+    end
+
+    # Check if need wishes
+    gutter_rank = final_character.ranks.where(item: Rank.items[:gutter_magic]).first
+    if gutter_rank.private_rank > 0
+      gutter_magic = true
+    else
+      gutter_magic = false
+    end
+    if gutter_magic
+      if check_blank(final_character.wishes)
+        notices << "Wishes must be completed before submission."
+      end
     end
 
     #check if flaws same
@@ -477,6 +533,50 @@ module Rules
     collection << ["Advanced (3pt): Puzzle", i]
     i = i + 1
     collection << ["Advanced (3pt): Walking", i]
+    i = i + 1
+
+    collection
+  end
+
+  def keeper_abilities_collection
+    collection = []
+    i = 0
+    # Command basic abilities
+    collection << ["Command Basic (1pt): Rational", i]
+    i = i + 1
+    collection << ["Command Basic (1pt): Armor", i]
+    i = i + 1
+    collection << ["Command Basic (1pt): Heroic", i]
+    i = i + 1
+    # Change basic abilities
+    collection << ["Change Basic (1pt): Threatening", i]
+    i = i + 1
+    collection << ["Change Basic (1pt): Light-footed", i]
+    i = i + 1
+    collection << ["Change Basic (1pt): Sharp", i]
+    i = i + 1
+    # Illusion basic abilities
+    collection << ["Illusion Basic (1pt): Inconspicuous", i]
+    i = i + 1
+    collection << ["Illusion Basic (1pt): Wisp", i]
+    i = i + 1
+    collection << ["Illusion Basic (1pt): Hidden", i]
+    i = i + 1
+
+    # Command intermediate abilities
+    collection << ["Command Intermediate (2pt): Guard", i]
+    i = i + 1
+    collection << ["Command Intermediate (2pt): Analytic", i]
+    i = i + 1
+    # Change intermediate abilities
+    collection << ["Change Intermediate (2pt): Precision", i]
+    i = i + 1
+    collection << ["Change Intermediate (2pt): Coercive", i]
+    i = i + 1
+    # Illusion intermediate abilities
+    collection << ["Illusion Intermediate (2pt): Masked", i]
+    i = i + 1
+    collection << ["Illusion Intermediate (2pt): Telepathic", i]
     i = i + 1
 
     collection
