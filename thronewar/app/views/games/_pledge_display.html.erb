@@ -1,8 +1,0 @@
-<tr>
-  <td><%= f.character.pseudonym %></td>
-  <td><%= f.character.user.name %></td>
-  <% @items.each do |item| %>
-    <td><%= f.pledges.where(:item => item).first.value %></td>
-  <% end %>
-  <td><%= link_to 'Delete', game_char_round_path(@game, f), method: :delete, data: { confirm: 'Are you sure?' } %></td>
-</tr>
