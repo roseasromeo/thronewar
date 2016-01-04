@@ -1,7 +1,4 @@
 <%= semantic_form_for [@character_system, @final_character] do |f| %>
-<% @ranks.each do |rank| %>
-<%= rank.item %>
-<% end %>
   <h1 class="title"><%= f.input :name %></h1>
   <% if gm_user? %>
     <h2 class="player"><%= f.input :user, :as => :select, :collection => User.joins(:final_characters).merge(FinalCharacter.where.not(character_system: @character_system)) << @final_character.user, :label => "Player: ", :value => @final_character.user, :include_blank => false %></h2>
