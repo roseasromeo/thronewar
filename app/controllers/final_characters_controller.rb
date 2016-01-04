@@ -9,8 +9,10 @@ class FinalCharactersController < ApplicationController
     @character_system = @final_character.character_system
     @flaw1 = (@final_character.flaw1 != nil ? Flaw.find(@final_character.flaw1.id) : nil)
     @flaw2 = (@final_character.flaw2 != nil ? Flaw.find(@final_character.flaw2.id) : nil)
+    @ranks = @final_character.ranks.order(Rank.items[:item])
+
     @buy_up_total = 0
-    @final_character.ranks.each do |rank|
+    @ranks.each do |rank|
       @buy_up_total = @buy_up_total + (rank.public_rank - rank.private_rank)
       if rank.item == "destiny"
         @destiny_rank = rank.private_rank
@@ -56,7 +58,7 @@ class FinalCharactersController < ApplicationController
     end
 
     if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
-      # edit
+      @ranks = @final_character.ranks.order(Rank.items[:item])
     else
       redirect_to character_system_final_character_path(@character_system, @final_character)
     end
