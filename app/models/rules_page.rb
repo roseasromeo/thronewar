@@ -27,9 +27,11 @@ class RulesPage < ActiveRecord::Base
 
     def subpages_valid
       valid = true
+      puts "We're validating"
       self.subpages.each do |subpage|
         if subpage.order_number == nil || subpage.subtitle == nil
           valid = false
+          puts "something's not right"
           errors.add(:subpages, "All subpages must have order number and subtitle.")
         end
       end
