@@ -24,7 +24,7 @@ class CharactersController < ApplicationController
         get_current_round
       end
     else
-      redirect_to new_character_path
+      redirect_to new_game_character_path(@game)
     end
   end
 
@@ -55,7 +55,7 @@ class CharactersController < ApplicationController
     if gm_user? || my_character
       @character = character
     else
-      redirect_to new_character_path
+      redirect_to new_game_character_path(@game)
     end
   end
 =end
@@ -98,7 +98,7 @@ class CharactersController < ApplicationController
         render 'edit'
       end
     else
-      redirect_to new_character_path
+      redirect_to new_game_character_path(@game)
     end
   end
 =end

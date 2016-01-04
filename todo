@@ -10,6 +10,8 @@ Group tool abilities
 
 Sortable bid tables
 Math in auction
+Show pledge just made
+Move close Auction link
 
 send email on reject/approve
 
@@ -17,3 +19,5 @@ printable sheets for tools, regencies, characters
 (Admin and player)
 
 Add list of user's characters to home page
+
+fix case-sensitivity on emails
