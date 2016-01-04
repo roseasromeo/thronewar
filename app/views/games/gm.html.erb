@@ -30,6 +30,6 @@ Total spent points for each character
     <%= render 'auction_monitor' %>
   <% else %>
     <p>All items in this auction are closed.</p>
+    <%= link_to "Close Auction", close_auction_game_path(:auction => @auction), :method => :post %>
   <% end %>
-  <%= link_to "Close Auction", close_auction_game_path(:auction => @auction), :method => :post %>
 <% end %>

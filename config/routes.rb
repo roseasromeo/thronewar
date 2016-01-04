@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       post 'gift'
       post 'close' #close round
       post 'close_auction' #close auction
+      get 'close_auction' #close auction
       post 'display' # change between Ranks and Points Displayed
     end
     get 'player' => 'char_rounds#new', as: :player
