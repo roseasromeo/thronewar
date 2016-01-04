@@ -37,7 +37,7 @@
       </tr>
     </table>
     <div id='subpages'>
-      <% @subpages = @rules_page.subpages.sort_by(&:order_number) %>
+      <% @subpages = @rules_page.subpages.sort_by{|subpage| subpage.order_number rescue nil} %>
       <%= f.semantic_fields_for :subpages, @subpages do |subpage| %>
         <%= render 'subpage_fields', :f => subpage, :subpage_index => @subpage_index %>
       <% end %>
