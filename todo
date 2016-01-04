@@ -4,9 +4,11 @@ Add flesh forms
 Add ability choosing--fix "font?"
 fix flash notices on submission
 Reorder character show and edit pages
+implement dryad regency stuff
 
 Tool and regency forms
 Group tool abilities
+Should Improved Wisp let you exceed 3 ability cap?
 
 Sortable bid tables
 Math in auction
@@ -21,3 +23,7 @@ printable sheets for tools, regencies, characters
 Add list of user's characters to home page
 
 fix case-sensitivity on emails
+
+Allow editing of character_system description only
+
+Refactor auction code
