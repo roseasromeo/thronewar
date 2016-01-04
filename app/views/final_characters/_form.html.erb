@@ -1,4 +1,7 @@
 <%= semantic_form_for [@character_system, @final_character] do |f| %>
+<% @ranks.each do |rank| %>
+<%= rank.item %>
+<% end %>
   <h1 class="title"><%= f.input :name %></h1>
   <% if gm_user? %>
     <h2 class="player"><%= f.input :user, :as => :select, :collection => User.joins(:final_characters).merge(FinalCharacter.where.not(character_system: @character_system)) << @final_character.user, :label => "Player: ", :value => @final_character.user, :include_blank => false %></h2>
@@ -18,7 +21,7 @@
         <th>Public Point Cost</th>
         <th>Final Rank and Point Cost</th>
       </tr>
-      <%= f.semantic_fields_for @ranks do |rank| %>
+      <%= f.semantic_fields_for :ranks, @ranks do |rank| %>
         <%= render 'rank_fields', :f => rank, :ranks_collection => @ranks_collection %>
       <% end %>
     </table>
