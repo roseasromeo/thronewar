@@ -148,6 +148,17 @@ module Rules
     flaw
   end
 
+  def flesh_forms(private_rank, lowest_rank, form_flaw)
+    forms = 1
+    if private_rank > 0
+      forms = forms + 1 + lowest_rank - private_rank
+    end
+    if forms
+      forms = forms - 1
+    end
+    forms
+  end
+
   def talent(private_rank, lowest_rank)
     one_count = 0
     two_count = 0

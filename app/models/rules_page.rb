@@ -5,7 +5,7 @@ class RulesPage < ActiveRecord::Base
 
   has_many :subpages, -> { order(:order_number) }, dependent: :destroy
   has_many :comments, dependent: :destroy
-  accepts_nested_attributes_for :subpages, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :subpages, reject_if: :subpage_invalid, allow_destroy: true
   validates :title, presence: true, length: { minimum: 5 }, uniqueness: true
   validates_presence_of :name, :slug
   validates :slug, uniqueness: true
@@ -15,7 +15,12 @@ class RulesPage < ActiveRecord::Base
     slug
   end
 
-  def create_slug
-    self.slug = self.name.gsub(" ","").gsub("\'","")
-  end
+  private
+    def create_slug
+      self.slug = self.name.gsub(" ","").gsub("\'","")
+    end
+
+    def subpage_invalid(attributes)
+      attributes['order_number'] == nil || attributes['subtitle'] == nil
+    end
 end
