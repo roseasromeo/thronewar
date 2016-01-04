@@ -223,6 +223,8 @@ class GamesController < ApplicationController
 
   def close_auction
     if gm_user?
+      get_auction
+      get_current_round
       if !@current_round.pledges.empty?
         assign_ranks
       end
