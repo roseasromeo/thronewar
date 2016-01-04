@@ -223,6 +223,7 @@ class GamesController < ApplicationController
 
   def close_auction
     if gm_user?
+      @game = Game.find(params[:id])
       get_auction
       get_current_round
       if !@current_round.pledges.empty?
