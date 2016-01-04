@@ -14,6 +14,7 @@ class FinalCharactersController < ApplicationController
     @buy_up_total = 0
     @ranks.each do |rank|
       @buy_up_total = @buy_up_total + (rank.public_rank - rank.private_rank)
+      puts rank.item
       if rank.item == "destiny"
         @destiny_rank = rank.private_rank
       end
