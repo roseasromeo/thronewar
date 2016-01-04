@@ -223,6 +223,9 @@ class GamesController < ApplicationController
 
   def close_auction
     if gm_user?
+      if !@current_round.pledges.empty?
+        assign_ranks
+      end
       @auction = Auction.find(params[:auction])
       @auction.closed = true
       @player = false
