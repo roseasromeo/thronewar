@@ -60,6 +60,9 @@ class FinalCharactersController < ApplicationController
 
     if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
       @ranks = @final_character.ranks.order(:item)
+      @ranks.each do |rank|
+        puts rank.item
+      end
     else
       redirect_to character_system_final_character_path(@character_system, @final_character)
     end
