@@ -10,6 +10,7 @@ class RulesPage < ActiveRecord::Base
   validates_presence_of :name, :slug
   validates :slug, uniqueness: true
   validates :name, uniqueness: true
+  validate :subpages_valid
 
   def to_param
     slug
@@ -22,5 +23,16 @@ class RulesPage < ActiveRecord::Base
 
     def subpage_invalid(attributes)
       attributes['order_number'] == nil || attributes['subtitle'] == nil
+    end
+
+    def subpages_valid
+      valid = true
+      self.subpages.each do |subpage|
+        if subpage.order_number == nil || subpage.subtitle == nil
+          valid = false
+          errors.add(:subpages, "All subpages must have order number and subtitle.")
+        end
+      end
+      valid
     end
 end
