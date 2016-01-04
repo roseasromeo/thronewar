@@ -51,10 +51,6 @@ gem 'tinymce-rails'
 # Use ffaker to create fake data for tests
 # gem ffaker
 
-
-gem 'bcrypt-ruby', require: 'bcrypt'
-
-
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
