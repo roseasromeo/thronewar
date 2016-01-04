@@ -11,7 +11,6 @@
   <%= f.input :luck %>
   <div id='ranks'>
     <table class="ranks_table">
-      <% @ranks = @final_character.ranks %>
       <% @ranks_collection = ranks_collection(@ranks, @character_system.ranks) %>
       <tr>
         <th>Item</th>
@@ -19,7 +18,7 @@
         <th>Public Point Cost</th>
         <th>Final Rank and Point Cost</th>
       </tr>
-      <%= f.semantic_fields_for :ranks, @ranks do |rank| %>
+      <%= f.semantic_fields_for @ranks do |rank| %>
         <%= render 'rank_fields', :f => rank, :ranks_collection => @ranks_collection %>
       <% end %>
     </table>
