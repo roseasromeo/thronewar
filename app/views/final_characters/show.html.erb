@@ -3,6 +3,9 @@
 <%= flash[:notice] %>
 <h1 class="title"><%= @final_character.name %></h1>
 <h2 class="player">Player: <%= @final_character.user.name %></h2>
+<% @ranks.each do |rank| %>
+<%= rank.item %>
+<% end %>
 <% if @show_all %>
   <p>Leftover Points: <%= @final_character.leftover_points %></p>
   <p>Asset Points Spent (Maximum 32): <%= @final_character.asset_points %></p>
