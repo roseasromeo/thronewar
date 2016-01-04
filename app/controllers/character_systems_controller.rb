@@ -118,7 +118,7 @@ class CharacterSystemsController < ApplicationController
         # do nothing
       else
         rank.errors.full_messages.each do |msg|
-          @errors[:base] << ("Start Rank #{item_name} error: #{msg}")
+          @errors[:base] << ("Rank #{item_name} error: #{msg}")
         end
       end
     end

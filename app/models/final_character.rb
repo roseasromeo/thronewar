@@ -36,7 +36,6 @@ class FinalCharacter < ActiveRecord::Base
 
   private
     def calculate_points
-      puts "calculation"
       point_total = 0
 
       #Ranks
