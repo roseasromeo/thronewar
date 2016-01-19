@@ -9,7 +9,7 @@
 <table class="page_intro">
   <tr>
     <td class="page_intro">
-      <%= @rules_page.text.html_safe %>
+      <%= sanitize @rules_page.text, :tags => %w(p strong b i u table tr th td a), :attributes => %w(href) %>
     </td>
   </tr>
 </table>

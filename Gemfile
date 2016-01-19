@@ -44,6 +44,9 @@ gem 'formtastic'
 # Use TinyMCE for rich text editing
 gem 'tinymce-rails'
 
+# User Rails Html Sanitizer for sanitizing
+gem 'rails-html-sanitizer'
+
 # testing stuff
 # Use travis-ci for testing and coveralls for coverage
 # gem 'travis'
