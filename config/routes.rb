@@ -15,6 +15,9 @@ Rails.application.routes.draw do
 
   # Rules Routes
   # Nest the routes for subpages and comments within rules pages
+  get 'rules_pages/import' => 'rules_pages#import'
+  post 'rules_pages/import' => 'rules_pages#import'
+
   resources :rules_pages do
     resources :subpages
     resources :comments
