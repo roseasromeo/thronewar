@@ -10,7 +10,7 @@
     });
 </script>
 <h1>Rules Page: Import from Text</h1>
-<p>Specify name for the page links. Paste text into box below.</p>
+<p>Specify name for the page links. Paste text into box below. Use #? to designate each title and body of each section. Sidebars must be added manually</p>
 <%= form_tag do %>
   <p><%= label_tag :name, "Page name for links" %>
   <%= text_field_tag :name, @name, required: true %></p>

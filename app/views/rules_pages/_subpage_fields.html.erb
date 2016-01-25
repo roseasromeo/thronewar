@@ -20,13 +20,11 @@
   <% @class_ta = 'textarea.' + @class_t %>
   <script type="text/javascript">
     tinyMCE.init({
-      plugins: 'link',
+      plugins: 'link table',
       link_title: false,
       target_list: false,
       selector: "<%= @class_ta %>",
-      toolbar1: 'bold italic underline | link',
-      toolbar2: 'fontsizeselect | fontselect',
-      font_formats: 'Garamond=garamond,verdana;' + 'Courier New=courier new,courier;' + 'Helvetica=helvetica;'+ 'Impact=impact,chicago;',
+      toolbar: 'bold italic underline | link | table',
       menubar: false,
       statusbar: false,
       });
