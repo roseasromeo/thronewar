@@ -113,34 +113,34 @@ class RulesPagesController < ApplicationController
 
       @rules_page = RulesPage.new(slug: params[:name].gsub(" ","").gsub("\'",""), name: params[:name], title: title, text: intro)
       if @rules_page.save() #right now, not checking for errors...
-        # nothing
+        for i in 0..((@parsed_text.length - 3)/2 - 1)
+          puts i
+          subtitle = strip_tags(@parsed_text[3 + 2*i])
+          body = @parsed_text[4 + 2*i]
+          if body.strip == ''
+            body = ''
+          end
+          subpage = Subpage.new(rules_page: @rules_page, subtitle: subtitle, body: body, sidebar: '', order_number: i)
+          if subpage.save()
+            # nothing right now
+          else
+            error = true
+          end
+        end
+        if error == true
+          @rules_page.destroy
+        else
+          redirect_to rules_page_path(@rules_page)
+        end
       else
         error = true
+        flash[:error] = "Error saving. Check that \#? are paired."
       end
 
-      for i in 0..((@parsed_text.length - 3)/2 - 1)
-        puts i
-        subtitle = strip_tags(@parsed_text[3 + 2*i])
-        body = @parsed_text[4 + 2*i]
-        if body.strip == ''
-          body = ''
-        end
-        subpage = Subpage.new(rules_page: @rules_page, subtitle: subtitle, body: body, sidebar: '', order_number: i)
-        if subpage.save()
-          # nothing right now
-        else
-          error = true
-        end
-      end
-      if error == true
-        @rules_page.destroy
-      else
-        redirect_to rules_page_path(@rules_page)
-      end
     else
       #If need anything in get view?
       @text = ''
-      @name =
+      @name = ''
       @parsed = false
     end
   end

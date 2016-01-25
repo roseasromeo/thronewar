@@ -3,6 +3,7 @@
 <% if logged_in? %>
   <% if admin_user? %>
     <%= link_to 'New rules page', new_rules_page_path %>
+    <%= link_to 'Import rules page', import_path %>
   <% end %>
 <% end %>
 
