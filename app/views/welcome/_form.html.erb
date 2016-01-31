@@ -1,0 +1,39 @@
+<%= semantic_form_for @link_index, :url => homepage_update_path do |f| %>
+  <% if @link_index.errors.any? %>
+    <div id="error_explanation">
+      <h2>
+        <%= pluralize(@link_index.errors.count, "error") %> prohibited
+        this table of contents from being saved:
+      </h2>
+      <ul>
+        <% @link_index.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <%= f.inputs do %>
+    <%= f.input :title, :as => :hidden, :value => @link_index.title %>
+    <div id='content_links'>
+      <table class='content_link_header'>
+        <tr>
+          <th class='string_header'>Display Text</th>
+          <th class='string_header'>Link</th>
+          <th class='integer_header'>Order</th>
+          <th class='integer_header'>Indent</th>
+          <th class='links_header'>Delete?</th>
+        </tr>
+      </table>
+      <% @content_links = @link_index.content_links.sort_by{|content_link| [content_link.order ? 0 : 1,content_link.order || 0]} %>
+      <%= f.semantic_fields_for :content_links, @content_links do |content_link| %>
+        <%= render 'content_link_fields', :f => content_link %>
+      <% end %>
+      <div class='links'>
+        <%= link_to_add_association 'add link', f, :content_links %>
+      </div>
+    </div>
+    <%= f.actions do %>
+      <%= f.action :submit, :as => :button, :label => "Save" %>
+    <% end %>
+  <% end %>
+<% end %>
