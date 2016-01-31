@@ -1,3 +1,29 @@
 // Place all the styles related to the welcome controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+table.content_link_row, table.content_link_header {
+  width: 100%;
+  table-layout: fixed;
+  td.string, th.string_header {
+    width: 40%;
+    li {
+      margin-bottom: 0em;
+      input {
+        width: 90%;
+      }
+    }
+  }
+  td.integer, th.integer_header {
+    width: 10%;
+    li {
+      margin-bottom: 0em;
+    }
+  }
+  td.links, th.links_header {
+    width: 10%;
+    li {
+      margin-bottom: 0em;
+    }
+  }
+}

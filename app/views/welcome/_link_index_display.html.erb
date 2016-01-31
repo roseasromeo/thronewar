@@ -1,0 +1,5 @@
+<div class="link_index">
+  <% @link_index.content_links.order(:order).each do |content_link| %>
+    <%= render 'content_link_display', :f => content_link %>
+  <% end %>
+</div>

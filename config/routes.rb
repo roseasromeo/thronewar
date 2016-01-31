@@ -14,10 +14,16 @@ Rails.application.routes.draw do
   resources :users, only: [:create, :new]
 
   # Rules Routes
-  # Nest the routes for subpages and comments within rules pages
+  # Import routes
   get 'rules_pages/import' => 'rules_pages#import', as: :import
   post 'rules_pages/import' => 'rules_pages#import'
 
+  # Table of Contents routes
+  get '/edit' => 'welcome#edit', as: :homepage_edit
+  post '/update' => 'welcome#update', as: :homepage_update
+  patch '/update' => 'welcome#update', as: :homepage_update2
+
+  # Nest the routes for subpages and comments within rules pages
   resources :rules_pages do
     resources :subpages
     resources :comments

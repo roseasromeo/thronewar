@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160103202943) do
+ActiveRecord::Schema.define(version: 20160130172537) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,6 +70,18 @@ ActiveRecord::Schema.define(version: 20160103202943) do
   add_index "comments", ["rules_page_id"], name: "index_comments_on_rules_page_id", using: :btree
   add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
 
+  create_table "content_links", force: :cascade do |t|
+    t.string   "name",                      null: false
+    t.string   "link",                      null: false
+    t.integer  "order",         default: 0, null: false
+    t.integer  "level",         default: 0, null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.integer  "link_index_id",             null: false
+  end
+
+  add_index "content_links", ["link_index_id"], name: "index_content_links_on_link_index_id", using: :btree
+
   create_table "final_characters", force: :cascade do |t|
     t.integer  "character_system_id",               null: false
     t.integer  "user_id",                           null: false
@@ -124,6 +136,12 @@ ActiveRecord::Schema.define(version: 20160103202943) do
   end
 
   add_index "items", ["auction_id"], name: "index_items_on_auction_id", using: :btree
+
+  create_table "link_indices", force: :cascade do |t|
+    t.string   "title",      null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "pledges", force: :cascade do |t|
     t.integer  "rank",          default: 0, null: false

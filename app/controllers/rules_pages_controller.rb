@@ -3,7 +3,7 @@ class RulesPagesController < ApplicationController
 
   def index
     if logged_in?
-      @rules_pages = RulesPage.all
+      @rules_pages = RulesPage.all.order(:title)
     else
       redirect_to login_path
     end
@@ -56,7 +56,7 @@ class RulesPagesController < ApplicationController
           render 'new'
         end
       else
-        redirect_to root
+        redirect_to root_path
       end
     else
       redirect_to login_path
@@ -75,7 +75,7 @@ class RulesPagesController < ApplicationController
           render 'edit'
         end
       else
-        redirect_to root
+        redirect_to root_path
       end
     else
       redirect_to login_path
