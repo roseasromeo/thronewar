@@ -1,0 +1,14 @@
+<% if !@active_characters.empty? %>
+  <div class="active_characters">
+    <h3>Characters in Auctions</h3>
+    <table>
+        <tr>
+          <th>Pseudonym</th>
+          <th>Game</th>
+        </tr>
+        <% @active_characters.each do |character| %>
+          <%= render 'character_fields', character: character %>
+        <% end %>
+    </table>
+  </div>
+<% end %>

@@ -21,12 +21,9 @@ send email on reject/approve
 printable sheets for tools, regencies, characters
 (Admin and player)
 
-Add list of user's characters to home page
-Develop home page
+
 Quicklist of Rules Pages
-Active Games to Join
-Active Characters in auctions
-Characters in Character System (present and past)
+Tidy up homepage
 
 fix case-sensitivity on emails
 
@@ -37,3 +34,5 @@ Refactor auction code
 Push Import Link
 Add lists as allowed in sanitation
 Allow italics and bold?
+Fix Losing single character on table import
+Add "Edit as plain text"

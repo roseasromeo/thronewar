@@ -1,0 +1,14 @@
+<% if !@past_final_characters.empty? %>
+  <div class="past_final_characters">
+    <h3>Past Characters</h3>
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Throne War</th>
+      </tr>
+      <% @past_final_characters.each do |final_character| %>
+        <%= render 'final_character_fields', final_character: final_character %>
+      <% end %>
+    </table>
+  </div>
+<% end %>
