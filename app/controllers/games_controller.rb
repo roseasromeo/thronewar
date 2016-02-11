@@ -1,4 +1,6 @@
 class GamesController < ApplicationController
+  helper_method :sort_column, :sort_direction
+
   def index
     if logged_in?
       @games = Game.all
@@ -86,6 +88,12 @@ class GamesController < ApplicationController
       elsif @game.started?
         get_auction
         get_current_round
+        if @aspect_pledges_to_display != nil
+          @aspect_pledges_to_display = sort_pledges(@aspect_pledges_to_display, sort_column, sort_direction)
+        end
+        if @gift_pledges_to_display != nil
+          @gift_pledges_to_display = sort_pledges(@gift_pledges_to_display, sort_column, sort_direction)
+        end
         @all_pledges_in = all_pledges_in?
         if @current_round != nil && @last_round !=nil
           @all_closed = all_items_closed?
@@ -412,4 +420,32 @@ class GamesController < ApplicationController
       end
     end
 
+    def sort_column
+      if Character.column_names.include?(params[:sort])
+        params[:sort]
+      elsif Item.names.include?(params[:sort])
+        params[:sort]
+      elsif params[:sort] == "points_spent"
+        params[:sort]
+      else
+        "pseudonym"
+      end
+    end
+
+    def sort_direction
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+    end
+
+    def sort_pledges(pledges, column, direction)
+      if Character.column_names.include?(column)
+        pledges.include(:character).order("characters." + column + direction)
+      elsif Item.names.include?(params[:sort])
+        params[:sort]
+      elsif params[:sort] == "points_spent"
+        params[:sort]
+      else
+        "pseudonym"
+      end
+      pledges
+    end
 end
