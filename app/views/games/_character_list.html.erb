@@ -6,9 +6,9 @@
 
 <table class="character_table">
   <tr>
-    <th>Pseudonym</th>
+    <th><%= sortable "pseudonym", "Pseudonym" %></th>
     <% if gm_user? || @game.complete? %>
-      <th>Player</th>
+      <th><%= sortable "pseudonym", "Player" %></th>
     <% end %>
 
     <% if @display_toggle %>
@@ -19,9 +19,9 @@
     <% if @aspect_pledges_to_display != nil %>
       <% @aspect_items.each do |item| %>
         <% if @display_toggle %>
-          <th><%= item.name.gsub("_"," ").titleize %></th>
+          <th><%= sortable item.name, item.name.gsub("_"," ").titleize %></th>
         <% else %>
-          <th><%= item.name.gsub("_"," ").titleize %></th>
+          <th><%= sortable item.name, item.name.gsub("_"," ").titleize %></th>
         <% end %>
       <% end %>
     <% end %>
@@ -60,9 +60,9 @@
 <% if @gift_pledges_to_display != nil %>
   <table class="character_table">
     <tr>
-      <th>Pseudonym</th>
+      <th><%= sortable "pseudonym", "Pseudonym" %></th>
       <% if gm_user? || @game.complete? %>
-        <th>Player</th>
+        <th><%= sortable "player", "Player" %></th>
       <% end %>
       <% if @display_toggle %>
         <th>Pledges</th>
@@ -71,12 +71,12 @@
       <% end %>
       <% @gift_items.each do |item| %>
         <% if @display_toggle %>
-          <th><%= item.name.gsub("_"," ").titleize %></th>
+          <th><%= sortable item.name, item.name.gsub("_"," ").titleize %></th>
         <% else %>
-          <th><%= item.name.gsub("_"," ").titleize %></th>
+          <th><%= sortable item.name, item.name.gsub("_"," ").titleize %></th>
         <% end %>
       <% end %>
-      <th>Points Spent</th>
+      <th><%= sortable "points_spent", "Points Spent" %></th>
     </tr>
 
     <% characters.each do |character| %>

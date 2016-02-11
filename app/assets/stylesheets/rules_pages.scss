@@ -11,6 +11,7 @@ h1.page_title {
   padding: 10px;
   background-color: #81bab9;
   text-align: center;
+  font-family: Garamond, Helvetica, sans-serif;
 }
 
 h2.subpage_title {
@@ -22,6 +23,7 @@ h2.subpage_title {
   padding: 10px;
   background-color: #81bab9;
   text-align: center;
+  font-family: Garamond, Helvetica, sans-serif;
 }
 
 //Intro
@@ -35,6 +37,8 @@ td.page_intro {
   border-radius: 25px;
   padding: 10px;
   width: 100%;
+  font-family: inherit;
+  font-size: inherit;
 }
 
 //Subpage
