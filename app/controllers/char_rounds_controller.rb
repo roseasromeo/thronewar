@@ -1,4 +1,6 @@
 class CharRoundsController < ApplicationController
+  helper_method :sort_column, :sort_direction
+
   def new
     @user = current_user
     @game = Game.find(params[:game_id])
@@ -15,18 +17,30 @@ class CharRoundsController < ApplicationController
 
       get_auction
       get_current_round
+      if @aspect_pledges_to_display != nil
+        @aspect_characters = sort_characters(@characters, sort_column, sort_direction, @aspect_pledges_to_display)
+      else
+        @aspect_characters = @characters
+      end
+      if @gift_pledges_to_display != nil
+        @gift_characters = sort_characters(@characters, sort_column, sort_direction, @gift_pledges_to_display)
+      else
+        @gift_characters = @characters
+      end
       if @current_round != nil && @current_round.number != 1
         @all_closed = all_items_closed?
       else
         @all_closed = false
       end
 
+      @pledges_just_made = nil
       if @all_closed
         @message = "This auction is finished. Please wait for the Arbiter to continue."
       elsif @items == nil
         @message = "Please wait for the Arbiter to start the next Auction."
       elsif pledge_made?
         @message = "Your pledge has been submitted. Please wait for the next round to start."
+        @pledges_just_made = CharRound.where(character: @character, round: @current_round).first.pledges
       elsif @character == nil
         @message = "This user account does not have a character for this auction."
       else
@@ -56,6 +70,16 @@ class CharRoundsController < ApplicationController
     max_points = 120
     get_auction
     get_current_round
+    if @aspect_pledges_to_display != nil
+      @aspect_characters = sort_characters(@characters, sort_column, sort_direction, @aspect_pledges_to_display)
+    else
+      @aspect_characters = @characters
+    end
+    if @gift_pledges_to_display != nil
+      @gift_characters = sort_characters(@characters, sort_column, sort_direction, @gift_pledges_to_display)
+    else
+      @gift_characters = @characters
+    end
     @all_closed = all_items_closed?
     if CharRound.where(character: @character, round: @current_round).empty? && !@all_closed
       @char_round = CharRound.new(character: @character, round: @current_round)
