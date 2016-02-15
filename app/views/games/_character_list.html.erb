@@ -6,9 +6,9 @@
 
 <table class="character_table">
   <tr>
-    <th><%= sortable "pseudonym", "Pseudonym" %></th>
+    <th><%= sortable "pseudonym", "Pseudonym", @display_toggle %></th>
     <% if gm_user? || @game.complete? %>
-      <th><%= sortable "pseudonym", "Player" %></th>
+      <th><%= sortable "name", "Player", @display_toggle %></th>
     <% end %>
 
     <% if @display_toggle %>
@@ -19,15 +19,15 @@
     <% if @aspect_pledges_to_display != nil %>
       <% @aspect_items.each do |item| %>
         <% if @display_toggle %>
-          <th><%= sortable item.name, item.name.gsub("_"," ").titleize %></th>
+          <th><%= sortable item.name, item.name.gsub("_"," ").titleize, true %></th>
         <% else %>
-          <th><%= sortable item.name, item.name.gsub("_"," ").titleize %></th>
+          <th><%= sortable item.name, item.name.gsub("_"," ").titleize, false %></th>
         <% end %>
       <% end %>
     <% end %>
-    <th>Points Spent</th>
+    <th><%= sortable "points_spent", "Points Spent", @display_toggle %></th>
   </tr>
-  <% characters.each do |character| %>
+  <% aspect_characters.each do |character| %>
     <% if @character != nil && character.pseudonym == @character.pseudonym %>
       <tr class="user_character">
     <% else %>
@@ -62,7 +62,7 @@
     <tr>
       <th><%= sortable "pseudonym", "Pseudonym" %></th>
       <% if gm_user? || @game.complete? %>
-        <th><%= sortable "player", "Player" %></th>
+        <th><%= sortable "name", "Player" %></th>
       <% end %>
       <% if @display_toggle %>
         <th>Pledges</th>
@@ -71,15 +71,15 @@
       <% end %>
       <% @gift_items.each do |item| %>
         <% if @display_toggle %>
-          <th><%= sortable item.name, item.name.gsub("_"," ").titleize %></th>
+          <th><%= sortable item.name, item.name.gsub("_"," ").titleize, true %></th>
         <% else %>
-          <th><%= sortable item.name, item.name.gsub("_"," ").titleize %></th>
+          <th><%= sortable item.name, item.name.gsub("_"," ").titleize, false %></th>
         <% end %>
       <% end %>
-      <th><%= sortable "points_spent", "Points Spent" %></th>
+      <th><%= sortable "points_spent", "Points Spent", @display_toggle %></th>
     </tr>
 
-    <% characters.each do |character| %>
+    <% gift_characters.each do |character| %>
       <% if character == @character %>
         <tr class="user_character">
       <% else %>
