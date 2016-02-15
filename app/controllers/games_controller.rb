@@ -21,6 +21,16 @@ class GamesController < ApplicationController
       if @game.complete?
         get_auction
         get_current_round
+        if @aspect_pledges_to_display != nil
+          @aspect_characters = sort_characters(@characters, sort_column, sort_direction, @aspect_pledges_to_display)
+        else
+          @aspect_characters = @characters
+        end
+        if @gift_pledges_to_display != nil
+          @gift_characters = sort_characters(@characters, sort_column, sort_direction, @gift_pledges_to_display)
+        else
+          @gift_characters = @characters
+        end
         if params[:display_toggle] != nil
           @display_toggle = (params[:display_toggle] == "true")
         else
@@ -89,10 +99,14 @@ class GamesController < ApplicationController
         get_auction
         get_current_round
         if @aspect_pledges_to_display != nil
-          @aspect_pledges_to_display = sort_pledges(@aspect_pledges_to_display, sort_column, sort_direction)
+          @aspect_characters = sort_characters(@characters, sort_column, sort_direction)
+        else
+          @aspect_characters = @characters
         end
         if @gift_pledges_to_display != nil
-          @gift_pledges_to_display = sort_pledges(@gift_pledges_to_display, sort_column, sort_direction)
+          @gift_characters = sort_characters(@characters, sort_column, sort_direction)
+        else
+          @gift_characters = @characters
         end
         @all_pledges_in = all_pledges_in?
         if @current_round != nil && @last_round !=nil
@@ -423,9 +437,9 @@ class GamesController < ApplicationController
     def sort_column
       if Character.column_names.include?(params[:sort])
         params[:sort]
-      elsif Item.names.include?(params[:sort])
+      elsif User.column_names.include?(params[:sort])
         params[:sort]
-      elsif params[:sort] == "points_spent"
+      elsif Item.names.include?(params[:sort])
         params[:sort]
       else
         "pseudonym"
@@ -436,16 +450,34 @@ class GamesController < ApplicationController
       %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
     end
 
-    def sort_pledges(pledges, column, direction)
+    def sort_characters(characters, column, direction, pledges)
       if Character.column_names.include?(column)
-        pledges.include(:character).order("characters." + column + direction)
-      elsif Item.names.include?(params[:sort])
-        params[:sort]
-      elsif params[:sort] == "points_spent"
-        params[:sort]
+        characters = characters.order(column + " " + direction)
+      elsif User.column_names.include?(column)
+        characters = characters.includes(:user).order("users." + column + " " + direction)
+      elsif Item.names.include?(column)
+        if direction == "asc"
+          characters = characters.sort_by{|character| pledge_array(character, pledges, column)}
+        else
+          characters = characters.sort_by{|character| -pledge_array(character, pledges, column)}
+        end
       else
-        "pseudonym"
+        characters = characters.order("pseudonym" + " " + "asc")
       end
-      pledges
+      characters
+    end
+
+    def pledge_array(character, pledges, column)
+      item = Item.where(auction: pledges.first.char_round.round.auction, name: Item.names[column]).first
+      if pledges.where(character: character, item: item).first != nil
+        pledge_array = pledges.where(character: character, item: item).first.value
+        puts column
+      else
+        pledge_array = 0
+        puts column
+      end
+
+      puts pledge_array
+      pledge_array
     end
 end
