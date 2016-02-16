@@ -44,8 +44,11 @@ gem 'formtastic'
 # Use TinyMCE for rich text editing
 gem 'tinymce-rails'
 
-# User Rails Html Sanitizer for sanitizing
+# Use Rails Html Sanitizer for sanitizing
 gem 'rails-html-sanitizer'
+
+# Make routes case-insensitive
+gem 'route_downcaser'
 
 # testing stuff
 # Use travis-ci for testing and coveralls for coverage
