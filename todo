@@ -6,6 +6,8 @@ Notes
 4. Push sortable bid tables
 5. Push round numbers
 6. Push last pledge showing
+7. Push route downcasing
+
 
 Navbar?
 
@@ -19,7 +21,11 @@ fix leftover points
 
 Tool and regency forms
 Group tool abilities
-Should Improved Wisp let you exceed 3 ability cap?
+
+
+.sort_by{|ability| [ability_category(ability)[0],
+    ability_category(ability)[1], ability_category(ability)[2], ability_category(ability)[3],
+    (ability.empty? ? 0 : ability.to_i) ]} %>
 
 Math in auction
 
@@ -59,3 +65,5 @@ Combat Example
 --Didn't finish Cunning but started Destiny
 Cooldown is not clarified--Resources??
 Clarify stuff in Destiny
+
+Should Improved Wisp let you exceed 3 ability cap?
