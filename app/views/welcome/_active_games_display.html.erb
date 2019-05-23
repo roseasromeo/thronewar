@@ -1,0 +1,13 @@
+<% if !@active_games.empty? %>
+  <div class="active_games">
+    <h3>Auctions to Join</h3>
+    <table>
+        <tr>
+          <th>Game</th>
+        </tr>
+        <% @active_games.each do |game| %>
+          <%= render 'game_fields', game: game %>
+        <% end %>
+    </table>
+  </div>
+<% end %>

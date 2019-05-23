@@ -1,0 +1,18 @@
+<h3 class="last_pledge">Pledge This Round</h3>
+<% if (@aspect_exists && !@aspect_closed) %>
+  <% items = @aspect_items %>
+<% else %>
+  <% items = @gift_items %>
+<% end %>
+<table class="last_pledge">
+  <tr>
+    <% items.each do |item| %>
+      <th><%= item.name.gsub("_"," ").titleize %></th>
+    <% end %>
+  </tr>
+  <tr>
+    <% items.each do |item| %>
+      <td><%= pledges.where(item: item).first.value %></td>
+    <% end %>
+  </tr>
+</table>

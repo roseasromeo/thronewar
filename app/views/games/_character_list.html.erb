@@ -1,0 +1,109 @@
+<% if @display_toggle %>
+  <%= link_to "View Ranks", display_game_path(@game, :player => @player, :display_toggle => @display_toggle), :method => :post  %>
+<% else %>
+  <%= link_to "View Pledges", display_game_path(@game, :player => @player, :display_toggle => @display_toggle), :method => :post  %>
+<% end %>
+
+<table class="character_table">
+  <tr>
+    <th><%= sortable "pseudonym", "Pseudonym", @display_toggle %></th>
+    <% if gm_user? || @game.complete? %>
+      <th><%= sortable "name", "Player", @display_toggle %></th>
+    <% end %>
+
+    <% if @display_toggle %>
+      <th>Pledges</th>
+    <% else %>
+      <th>Rank</th>
+    <% end %>
+    <% if @aspect_pledges_to_display != nil %>
+      <% @aspect_items.each do |item| %>
+        <% if @display_toggle %>
+          <th><%= sortable item.name, item.name.gsub("_"," ").titleize, true %></th>
+        <% else %>
+          <th><%= sortable item.name, item.name.gsub("_"," ").titleize, false %></th>
+        <% end %>
+      <% end %>
+    <% end %>
+    <th><%= sortable "points_spent", "Points Spent", @display_toggle %></th>
+  </tr>
+  <% aspect_characters.each do |character| %>
+    <% if @character != nil && character.pseudonym == @character.pseudonym %>
+      <tr class="user_character">
+    <% else %>
+      <tr>
+    <% end %>
+      <td><%= character.pseudonym %></td>
+      <% if gm_user? || @game.complete? %>
+        <td><%= character.user.name %></td>
+      <% end %>
+      <% if @display_toggle %>
+        <td>Pledges</td>
+      <% else %>
+        <td>Rank</td>
+      <% end %>
+      <% if @aspect_pledges_to_display != nil %>
+        <% @aspect_items.each do |item| %>
+          <% pledge = @aspect_pledges_to_display.where(item: item, character: character).first %>
+          <% if @display_toggle %>
+            <td><%= pledge.value %></td>
+          <% else %>
+            <td><%= pledge.rank %></td>
+          <% end %>
+        <% end %>
+      <% end %>
+      <td><%= character.points_spent %></td>
+    </tr>
+  <% end %>
+</table>
+
+<% if @gift_pledges_to_display != nil %>
+  <table class="character_table">
+    <tr>
+      <th><%= sortable "pseudonym", "Pseudonym" %></th>
+      <% if gm_user? || @game.complete? %>
+        <th><%= sortable "name", "Player" %></th>
+      <% end %>
+      <% if @display_toggle %>
+        <th>Pledges</th>
+      <% else %>
+        <th>Rank</th>
+      <% end %>
+      <% @gift_items.each do |item| %>
+        <% if @display_toggle %>
+          <th><%= sortable item.name, item.name.gsub("_"," ").titleize, true %></th>
+        <% else %>
+          <th><%= sortable item.name, item.name.gsub("_"," ").titleize, false %></th>
+        <% end %>
+      <% end %>
+      <th><%= sortable "points_spent", "Points Spent", @display_toggle %></th>
+    </tr>
+
+    <% gift_characters.each do |character| %>
+      <% if character == @character %>
+        <tr class="user_character">
+      <% else %>
+        <tr>
+      <% end %>
+        <td><%= character.pseudonym %></td>
+        <% if gm_user? || @game.complete? %>
+          <td><%= character.user.name %></td>
+        <% end %>
+        <% if @display_toggle %>
+          <td>Pledges</td>
+        <% else %>
+          <td>Rank</td>
+        <% end %>
+        <% @gift_items.each do |item| %>
+          <% pledge = @gift_pledges_to_display.where(item: item, character: character).first %>
+          <% if @display_toggle %>
+            <td><%= pledge.value %></td>
+          <% else %>
+            <td><%= pledge.rank %></td>
+          <% end %>
+        <% end %>
+        <td><%= character.points_spent %></td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>

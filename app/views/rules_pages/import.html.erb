@@ -1,0 +1,36 @@
+<script type="text/javascript">
+  tinyMCE.init({
+    plugins: 'link table',
+    link_title: false,
+    target_list: false,
+    selector: 'textarea.tiny_mce',
+    toolbar: 'bold italic underline | link | table',
+    menubar: false,
+    statusbar: false,
+    });
+</script>
+<h1>Rules Page: Import from Text</h1>
+<p>Specify name for the page links. Paste text into box below. Use #? to designate each title and body of each section. Sidebars must be added manually</p>
+<%= form_tag do %>
+  <p><%= label_tag :name, "Page name for links" %>
+  <%= text_field_tag :name, @name, required: true %></p>
+  <p><%= label_tag(:content, "Page contents") %></p>
+  <p><%= text_area_tag :content, @text, class: 'tiny_mce', rows: 10 %></p>
+  <%= submit_tag("Save Page") %>
+<% end %>
+<% if @parsed %>
+  <% counter = 0 %>
+  <% @parsed_text.each do |item| %>
+    <% if counter == 1 %>
+      <h1>Title: <%= sanitize item, :tags => %w(), :attributes => %w() %></h1>
+    <% elsif counter == 2 %>
+      <p>Intro: <%= sanitize item, :tags => %w(p strong b i u table tr th td a), :attributes => %w(href) %></p>
+      <%= item %>
+    <% elsif counter%2 == 1 %>
+      <h2>Subpage title: <%= sanitize item, :tags => %w(), :attributes => %w() %></h2>
+    <% else %>
+      Body: <%= sanitize item, :tags => %w(p strong b i u table tr th td a), :attributes => %w(href) %>
+    <% end %>
+    <% counter = counter + 1 %>
+  <% end %>
+<% end %>

@@ -1,0 +1,29 @@
+<h1>Welcome to the Throne War: The Fae Realms website!</h1>
+
+<div class="homepage">
+  <div class="rules_pages">
+    <% if current_user == nil %>
+      <p class="links"><%= link_to 'Create an Account', new_user_path %></p>
+    <% else %>
+      <%= render 'link_index_display' %>
+      <% if admin_user? %>
+        <p class="links"><%= link_to 'Edit Table of Contents', homepage_edit_path %></p>
+      <% end %>
+      <p class="links"><%= link_to 'Index of Rules Pages', rules_pages_path %></p>
+    <% end %>
+  </div>
+  <div class="character_systems">
+    <% if current_user != nil %>
+      <%= render 'active_final_characters_display' %>
+      <%= render 'past_final_characters_display' %>
+      <p class="links"><%= link_to 'Index of All Character Systems', character_systems_path %></p>
+    <% end %>
+  </div>
+  <div class="auctions">
+    <% if current_user != nil %>
+      <%= render 'active_characters_display' %>
+      <%= render 'active_games_display' %>
+      <p class="links"><%= link_to 'Index of All Games', games_path %></p>
+    <% end %>
+  </div>
+</div>

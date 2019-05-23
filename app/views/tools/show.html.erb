@@ -1,0 +1,58 @@
+<p class="links"><%= link_to "Edit Tool", edit_character_system_tool_path(@character_system,@tool) %></p>
+<p class="links"><%= link_to "Back to Character", character_system_final_character_path(@character_system,@final_character) %></p>
+<h1>Name: <%= @tool.name %></h1>
+<%if @tool.final_character.name == "" || @tool.final_character.name == nil %>
+  <p>Belongs to: Anonymous </p>
+<% else %>
+  <p>Belongs to: <%= @tool.final_character.name %></p>
+<% end %>
+<p> User: <%= @tool.final_character.user.name %></p>
+<p> Points: <%= @tool.points %></p>
+<h2>Abilities</h2>
+<table class="abilities">
+  <tr>
+    <% if @tool_categories[0] == true %>
+      <th>Command</th>
+    <% end %>
+    <% if @tool_categories[1] == true %>
+      <th>Change</th>
+    <% end %>
+    <% if @tool_categories[2] == true %>
+      <th>Illusion</th>
+    <% end %>
+    <% if @tool_categories[3] == true %>
+      <th>Gutter Magic</th>
+    <% end %>
+  </tr>
+  <% abilities_sorted = @tool.abilities.sort_by{|ability| ability_sort(ability)} %>
+  <% ab_cat = 0 %>
+  <tr>
+    <% abilities_sorted.each do |ability_num| %>
+
+      <% if !ability_num.empty? %>
+        <% if ability_category(ability_num)[0] == true && ab_cat == 0 %>
+          <% ab_cat = 1 %>
+          <td><ul>
+        <% elsif ability_category(ability_num)[1] == true && ab_cat <= 1 %>
+          </ul></td>
+          <% ab_cat = 2 %>
+          <td><ul>
+        <% elsif ability_category(ability_num)[2] == true && ab_cat <= 2 %>
+          </ul></td>
+          <% ab_cat = 3 %>
+          <td><ul>
+        <% elsif ability_category(ability_num)[3] == true && ab_cat <= 3 %>
+          </ul></td>
+          <% ab_cat = 4 %>
+          <td><ul>
+        <% end %>
+        <% @ability_collection.each do |ability_key| %>
+          <% if ability_key[1] == ability_num.to_i %>
+            <li><%= ability_key[0] %></li>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+    </ul></td>
+  </tr>
+</table>

@@ -1,0 +1,32 @@
+<div class='nested-fields'>
+  <% @subpage_index = @subpage_index + 1 %>
+  <%= f.inputs do %>
+    <h2 class='subpage_title'><%= f.input :subtitle, :label => "Subtitle (Anchor)" %></h2>
+    <%= f.input :order_number, :label => "Position on page" %>
+    <table>
+      <tr>
+        <th class='sidebar'>Sidebar</th>
+        <th class='body'>Body Text</th>
+      <tr>
+        <% @class_t = 'tinymce' + @subpage_index.to_s %>
+        <td class='sidebar'><%= f.input :sidebar, :input_html => { :class => @class_t, :rows => 10, :cols => 120 }%></td>
+        <td class='body'><%= f.input :body, :input_html => { :class => @class_t, :rows => 10, :cols => 120 } %></td>
+      </tr>
+      <tr>
+        <td class='links'><%= link_to_remove_association "remove subpage", f %></td>
+      </tr>
+    </table>
+  <% end %>
+  <% @class_ta = 'textarea.' + @class_t %>
+  <script type="text/javascript">
+    tinyMCE.init({
+      plugins: 'link table',
+      link_title: false,
+      target_list: false,
+      selector: "<%= @class_ta %>",
+      toolbar: 'bold italic underline | link | table',
+      menubar: false,
+      statusbar: false,
+      });
+  </script>
+</div>

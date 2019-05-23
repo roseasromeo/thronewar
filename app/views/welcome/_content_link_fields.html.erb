@@ -1,0 +1,13 @@
+<div class='nested-fields'>
+  <%= f.inputs do %>
+    <table class='content_link_row'>
+      <tr>
+        <td class='string'><%= f.input :name, label: false %></td>
+        <td class='string'><%= f.input :link, label: false %></td>
+        <td class='integer'><%= f.input :order, label: false %></td>
+        <td class='integer'><%= f.input :level, label: false %></td>
+        <td class='links'><%= link_to_remove_association "Delete", f %></td>
+      </tr>
+    </table>
+  <% end %>
+</div>
