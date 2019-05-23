@@ -4,12 +4,15 @@ Notes
 2. Push Home button in header
 3. Push italics in pages
 4. Push sortable bid tables
+5. Push round numbers
+6. Push last pledge showing
+7. Push route downcasing
+
 
 Navbar?
 
-
 Add other math to form/show
-Add flesh forms--new model with environment and perk selected, can have as many as want but check cap at submission, alert before hand
+Add flesh forms--new model with environment and perk selected, can have as many as want but check cap at submission, alert beforehand
 Add ability choosing--fix "font?"
 fix flash notices on submission
 Reorder character show and edit pages
@@ -18,25 +21,22 @@ fix leftover points
 
 Tool and regency forms
 Group tool abilities
-Should Improved Wisp let you exceed 3 ability cap?
+
+
+.sort_by{|ability| [ability_category(ability)[0],
+    ability_category(ability)[1], ability_category(ability)[2], ability_category(ability)[3],
+    (ability.empty? ? 0 : ability.to_i) ]} %>
 
 Math in auction
-Show pledge just made
-Round numbers
 
 send email on reject/approve
 
 printable sheets for tools, regencies, characters
 (Admin and player)
 
-
-
-
 Allow editing of character_system description only
 
 Refactor auction code
-
-Add lists as allowed in sanitation
 
 Fix Losing single character on table import
 Add "Edit as plain text"
@@ -49,6 +49,11 @@ in game app
 
 
 RULES NOTES
+
+Overall:
+Target with a capital
+The World page
+
 Battle Ready: Celfiro bit, equipping Tools?
 CHECK Level links (Level not Levels)
 Charges?
@@ -56,3 +61,9 @@ encounter versus combat
 Combine Resources and Fundamentals?
 Combat Example
 --Stopped at Cunning
+
+--Didn't finish Cunning but started Destiny
+Cooldown is not clarified--Resources??
+Clarify stuff in Destiny
+
+Should Improved Wisp let you exceed 3 ability cap?

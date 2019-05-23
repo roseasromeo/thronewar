@@ -99,12 +99,12 @@ class GamesController < ApplicationController
         get_auction
         get_current_round
         if @aspect_pledges_to_display != nil
-          @aspect_characters = sort_characters(@characters, sort_column, sort_direction)
+          @aspect_characters = sort_characters(@characters, sort_column, sort_direction, @aspect_pledges_to_display)
         else
           @aspect_characters = @characters
         end
         if @gift_pledges_to_display != nil
-          @gift_characters = sort_characters(@characters, sort_column, sort_direction)
+          @gift_characters = sort_characters(@characters, sort_column, sort_direction, @gift_pledges_to_display)
         else
           @gift_characters = @characters
         end
@@ -434,50 +434,4 @@ class GamesController < ApplicationController
       end
     end
 
-    def sort_column
-      if Character.column_names.include?(params[:sort])
-        params[:sort]
-      elsif User.column_names.include?(params[:sort])
-        params[:sort]
-      elsif Item.names.include?(params[:sort])
-        params[:sort]
-      else
-        "pseudonym"
-      end
-    end
-
-    def sort_direction
-      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
-    end
-
-    def sort_characters(characters, column, direction, pledges)
-      if Character.column_names.include?(column)
-        characters = characters.order(column + " " + direction)
-      elsif User.column_names.include?(column)
-        characters = characters.includes(:user).order("users." + column + " " + direction)
-      elsif Item.names.include?(column)
-        if direction == "asc"
-          characters = characters.sort_by{|character| pledge_array(character, pledges, column)}
-        else
-          characters = characters.sort_by{|character| -pledge_array(character, pledges, column)}
-        end
-      else
-        characters = characters.order("pseudonym" + " " + "asc")
-      end
-      characters
-    end
-
-    def pledge_array(character, pledges, column)
-      item = Item.where(auction: pledges.first.char_round.round.auction, name: Item.names[column]).first
-      if pledges.where(character: character, item: item).first != nil
-        pledge_array = pledges.where(character: character, item: item).first.value
-        puts column
-      else
-        pledge_array = 0
-        puts column
-      end
-
-      puts pledge_array
-      pledge_array
-    end
 end

@@ -1,5 +1,6 @@
 class ToolsController < ApplicationController
   include Rules
+  helper_method :font?, :ability_category, :ability_sort
 
   def index
     @character_system = CharacterSystem.find(params[:character_system_id])
@@ -21,6 +22,7 @@ class ToolsController < ApplicationController
 
     if gm_user? || @final_character.user == @user || @character_system.complete?
       @show_all = true
+      @tool_categories = ability_categories(@tool.abilities)
     else
       redirect_to [@character_system]
     end
@@ -110,4 +112,62 @@ class ToolsController < ApplicationController
       params.require(:tool).permit(:final_character, :name, :description, :abilities => [])
     end
 
+    def ability_categories(abilities)
+      categories = [false, false, false, false]
+      abilities.each do |ability|
+        i = 0
+        ab_cat = ability_category(ability)
+        categories.each do |category|
+          categories[i] = (category || ab_cat[i])
+          i = i + 1
+        end
+      end
+      categories
+    end
+
+    def ability_category(ability)
+      categories = [false, false, false, false]
+      command_keys = [0, 1, 2, 12, 13, 20]
+      change_keys = [3, 4, 5, 14, 15, 21]
+      illusion_keys = [6, 7, 8, 16, 17, 22]
+      gutter_magic_keys = [9, 10, 11, 18, 19]
+      if !ability.empty?
+        ability_key = ability.to_i
+        command_keys.each do |key|
+          if ability_key == key
+            categories[0] = true
+          end
+        end
+        change_keys.each do |key|
+          if ability_key == key
+            categories[1] = true
+          end
+        end
+        illusion_keys.each do |key|
+          if ability_key == key
+            categories[2] = true
+          end
+        end
+        gutter_magic_keys.each do |key|
+          if ability_key == key
+            categories[3] = true
+          end
+        end
+      end
+      categories
+    end
+
+    def ability_sort(ability)
+      if !ability.empty?
+        value1 = (ability_category(ability)[0] ? 0 : 1)*100000
+        value2 = (ability_category(ability)[1] ? 0 : 1)*10000
+        value3 = (ability_category(ability)[2] ? 0 : 1)*1000
+        value4 = (ability_category(ability)[3] ? 0 : 1)*100
+        value5 = ability.to_i
+        return_value = value1 + value2 + value3 + value4 + value5
+      else
+        return_value = 0
+      end
+      return_value
+    end
 end
