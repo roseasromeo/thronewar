@@ -30,3 +30,21 @@ table.pledge_table {
 td.pledge_field input {
   width: 80%
 }
+
+table.last_pledge {
+  word-wrap: break-word;
+  border: 1px solid;
+  border-collapse: collapse;
+  padding: 5px;
+  margin-bottom: 15px;
+  td, th {
+    border: 1px solid;
+    padding: 5px;
+  }
+  th {
+    background-color: #C1E1A6;
+  }
+  td {
+    background-color: #ADD8E6;
+  }
+}
