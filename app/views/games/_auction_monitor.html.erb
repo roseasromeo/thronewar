@@ -1,0 +1,16 @@
+<h2 class="round_number">Round <%= @round_number %></h2>
+<table class="pledge_display">
+  <tr>
+    <th>Pseudonym</th>
+    <th>Player</th>
+    <% @items.each do |item| %>
+      <th><%= item.name.gsub("_"," ").titleize + ' Strikes: ' + strikes(item.num_strikes) %></th>
+    <% end %>
+  </tr>
+  <% @current_round.char_rounds.each do |char_round| %>
+    <%= render 'pledge_display', :f => char_round %>
+  <% end %>
+</table>
+<% if @all_pledges_in %>
+  <%= link_to 'Close Round', close_game_path(:current_round => @current_round, :auction => @auction), :method => :post %> <!-- make button -->
+<% end %>

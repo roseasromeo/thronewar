@@ -1,0 +1,55 @@
+<% if admin_user? %>
+    <%= link_to 'Edit Page', edit_rules_page_path(@rules_page) %>
+<% end %>
+<%= link_to 'Back to Rules Index', rules_pages_path %>
+
+<h1 class="page_title">
+  <%= @rules_page.title %>
+</h1>
+<table class="page_intro">
+  <tr>
+    <td class="page_intro">
+      <%= sanitize @rules_page.text, :tags => %w(p strong b i em u table tr th td a ul ol li), :attributes => %w(href) %>
+    </td>
+  </tr>
+</table>
+<div id='subpages'>
+  <% @rules_page.subpages.order(:order_number).each do |subpage| %>
+    <%= render 'subpage_display', :f => subpage %>
+  <% end %>
+</div>
+
+<% if logged_in? %>
+  <% if admin_user? %>
+    <%= link_to 'Edit Page', edit_rules_page_path(@rules_page) %>
+    <%= link_to 'Delete Page', rules_page_path, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    <div class='comments'>
+      <% if @rules_page.comments.exists? %>
+        <table class="comment">
+          <tr class="comment_header">
+            <th class='user'>User</th>
+            <th class="comment_body">Comment</th>
+            <% if admin_user? %>
+              <th class="comment_link"></th>
+            <% end %>
+          </tr>
+          <% @rules_page.comments.each do |comment| %>
+            <%= render 'comment_display', :f => comment %>
+          <% end %>
+        </table>
+      <% end %>
+      <%= semantic_form_for([@rules_page, @rules_page.comments.build]) do |f| %>
+        <p>
+          <%= f.inputs do %>
+            <%= f.input :body, :label => 'Comment', :input_html => {:class => "comment"}%>
+            <%= f.actions do %>
+              <%= f.action :submit, :as => :button, :label => "Add comment" %>
+            <% end %>
+          <% end %>
+        </p>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+
+<%= link_to 'Back to Rules Index', rules_pages_path %>

@@ -1,0 +1,91 @@
+<% if @tool.errors.any? %>
+  <div id="error_explanation">
+    <h2>
+      <%= pluralize(@tool.errors.count, "error") %> prohibited
+      this Tool from being saved:
+    </h2>
+    <ul>
+      <% @tool.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+<%= semantic_form_for [@character_system, @tool] do |f| %>
+  <%= f.inputs do %>
+    <%= f.input :name %>
+    <%= f.input :description %>
+    <fieldset class="checkboxes">
+      <p>Abilities</p>
+      <table class="abilities">
+        <tr>
+          <th>Command</th>
+          <th>Change</th>
+          <th>Illusion</th>
+          <% if font?(@final_character) %>
+            <th>Gutter Magic</th>
+          <% end %>
+        </tr>
+        <% row = 0 %>
+        <% command_adv = false %>
+        <% change_adv = false %>
+        <% illusion_adv = false %>
+        <% @ability_collection.each do |ability| %>
+          <% i = ability[1] %>
+          <% if row == 0 %>
+            <% row = 1 %>
+            <tr>
+          <% end %>
+          <% if row == 1 && i >=12 %>
+            <% row = 2 %>
+            </tr>
+            <tr>
+          <% end %>
+          <% if row == 2 && i >=20 %>
+            <% row = 3 %>
+            </tr>
+            <tr>
+          <% end %>
+          <% if i == 0 || i == 3 || i == 6 || i == 9 || i == 12 || i == 14 || i == 16 || i == 18 %>
+            <td><ul>
+          <% end %>
+          <% if i == 20 %>
+            <% command_adv = true %>
+            <td><ul>
+          <% elsif i == 21 %>
+            <% if command_adv != true %>
+              <td><ul></ul></td>
+            <% end %>
+            <% change_adv = true %>
+            <td><ul>
+          <% elsif i == 22 %>
+            <% if command_adv != true && change_adv !=true %>
+              <td><ul></ul></td>
+              <td><ul></ul></td>
+            <% elsif change_adv !=true %>
+              <td><ul></ul></td>
+            <% end %>
+            <% illusion_adv =true %>
+            <td><ul>
+          <% end %>
+          <li><label><%= check_box_tag "tool[abilities][]", ability[1], f.object.abilities.include?(ability[1].to_s) %> <%= ability[0] %></label></li>
+          <% if i == 2 || i == 5 || i == 8 || i == 11 || i == 13 || i == 15 || i == 17 || i == 19 || i == 20 || i == 21 || i == 22 %>
+            </ul></td>
+          <% end %>
+        <% end %>
+        <% if change_adv != true && illusion_adv !=true %>
+          <td><ul></ul></td>
+          <td><ul></ul></td>
+        <% elsif illusion_adv !=true %>
+          <td><ul></ul></td>
+        <% end %>
+        <td><ul></ul></td>
+        </tr>
+      </table>
+    </fieldset>
+    <%= f.input :final_character, :label => false, :as => :number, :input_html => { :class => "hidden", :value => @final_character.id } %>
+    <%= f.actions do %>
+      <%= f.action :submit, :label => "Save Tool" %>
+    <% end %>
+  <% end %>
+<% end %>
