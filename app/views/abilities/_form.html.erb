@@ -1,0 +1,32 @@
+<%= form_with(model: ability, local: true) do |form| %>
+  <% if ability.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(ability.errors.count, "error") %> prohibited this ability from being saved:</h2>
+
+      <ul>
+      <% ability.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :short_text %>
+    <%= form.text_field :short_text %>
+  </div>
+
+  <div class="field">
+    <%= form.label :long_text %>
+    <%= form.text_field :long_text %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
