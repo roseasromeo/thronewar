@@ -1,4 +1,4 @@
-class CreateRulesPages < ActiveRecord::Migration
+class CreateRulesPages < ActiveRecord::Migration[5.2]
   def change
     create_table :rules_pages do |t|
       t.string :name, unique: true

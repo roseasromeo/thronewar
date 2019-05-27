@@ -1,4 +1,4 @@
-class CreateRanks < ActiveRecord::Migration
+class CreateRanks < ActiveRecord::Migration[5.2]
   def change
     create_table :ranks do |t|
       t.belongs_to :final_character, index: true, foreign_key: true

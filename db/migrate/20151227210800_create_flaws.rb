@@ -1,4 +1,4 @@
-class CreateFlaws < ActiveRecord::Migration
+class CreateFlaws < ActiveRecord::Migration[5.2]
   def change
     create_table :flaws do |t|
       t.belongs_to :character_system, index: true, foreign_key: true

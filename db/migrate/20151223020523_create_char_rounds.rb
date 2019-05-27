@@ -1,4 +1,4 @@
-class CreateCharRounds < ActiveRecord::Migration
+class CreateCharRounds < ActiveRecord::Migration[5.2]
   def change
     create_table :char_rounds do |t|
       t.belongs_to :character, index: true, foreign_key: true, null: false

@@ -1,4 +1,4 @@
-class CreateCharacterSystems < ActiveRecord::Migration
+class CreateCharacterSystems < ActiveRecord::Migration[5.2]
   def change
     create_table :character_systems do |t|
       t.belongs_to :game, index: true, foreign_key: true, null: false

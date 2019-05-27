@@ -1,4 +1,4 @@
-class CreateFinalCharacters < ActiveRecord::Migration
+class CreateFinalCharacters < ActiveRecord::Migration[5.2]
   def change
     create_table :final_characters do |t|
       t.belongs_to :character_system, index: true, foreign_key: true, null:false

@@ -2,6 +2,7 @@ class RulesPage < ActiveRecord::Base
   has_paper_trail
   before_create :create_slug
   before_update :create_slug
+  before_save :create_slug
 
   has_many :subpages, -> { order(:order_number) }, dependent: :destroy
   has_many :comments, dependent: :destroy
@@ -18,7 +19,7 @@ class RulesPage < ActiveRecord::Base
 
   private
     def create_slug
-      self.slug = self.name.gsub(" ","").gsub("\'","")
+      self.slug = self.name.gsub(" ","").gsub("\'","").downcase
     end
 
     def subpage_invalid(attributes)
@@ -35,4 +36,9 @@ class RulesPage < ActiveRecord::Base
       end
       valid
     end
+
+    def find_by_slug(slug)
+      RulesPage.where("LOWER(slug) = ?", slug.downcase).first
+    end
+
 end
