@@ -1,11 +1,11 @@
-class FinalCharacter < ActiveRecord::Base
+class FinalCharacter < ApplicationRecord
   belongs_to :character_system
   belongs_to :user
   has_many :ranks, dependent: :destroy
   has_many :tools, dependent: :destroy
   has_many :regencies, dependent: :destroy
-  belongs_to :flaw1, :class_name => 'Flaw', foreign_key: 'flaw1'
-  belongs_to :flaw2, :class_name => 'Flaw', foreign_key: 'flaw2'
+  belongs_to :flaw1, :class_name => 'Flaw', foreign_key: 'flaw1', optional: true
+  belongs_to :flaw2, :class_name => 'Flaw', foreign_key: 'flaw2', optional: true
 
   after_save :calculate_points
 

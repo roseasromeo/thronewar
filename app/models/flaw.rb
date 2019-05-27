@@ -1,4 +1,4 @@
-class Flaw < ActiveRecord::Base
+class Flaw < ApplicationRecord
   belongs_to :character_system
   has_many :final_characters
 

@@ -1,4 +1,4 @@
-class CharacterSystem < ActiveRecord::Base
+class CharacterSystem < ApplicationRecord
   belongs_to :game
   has_many :final_characters, dependent: :destroy
   has_many :flaws, dependent: :destroy

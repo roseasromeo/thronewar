@@ -1,4 +1,4 @@
-class Rank < ActiveRecord::Base
+class Rank < ApplicationRecord
   belongs_to :final_character
   before_save :set_half, :set_private_points
 

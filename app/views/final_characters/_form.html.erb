@@ -1,7 +1,7 @@
 <%= semantic_form_for [@character_system, @final_character] do |f| %>
   <h1 class="title"><%= f.input :name %></h1>
   <% if gm_user? %>
-    <h2 class="player"><%= f.input :user, :as => :select, :collection => User.joins(:final_characters).merge(FinalCharacter.where.not(character_system: @character_system)) << @final_character.user, :label => "Player: ", :value => @final_character.user, :include_blank => false %></h2>
+    <h2 class="player"><%= f.input :user, :as => :select, :collection => @possible_users, :label => "Player: ", :value => @final_character.user, :include_blank => false %></h2>
   <% else %>
     <h2 class="player">Player: <%= @final_character.user.name %></h2>
     <%= f.input :user_id, :as => :hidden, :value => @final_character.user.id %>
@@ -23,8 +23,8 @@
       <% end %>
     </table>
   </div>
-  <%= f.input :flaw1, :label => "Flaw 1", :as => :select, :collection => options_for_select(Flaw.where(character_system: @character_system).map{ |u| [u.name, u.id] }, @flaw1_id), :input_html => { :autocomplete => "off"} %>
-  <%= f.input :flaw2, :label => "Flaw 2", :as => :select, :collection => options_for_select(Flaw.where(character_system: @character_system).map{ |u| [u.name, u.id] }, @flaw2_id), :input_html => { :autocomplete => "off"} %>
+  <%= f.input :flaw1, :label => "Flaw 1", :as => :select, :collection => options_for_select(Flaw.where(character_system: @character_system).map{ |u| [u.name, u.id] }, @flaw1_id), :input_html => { :autocomplete => "off"}, :required => false %>
+  <%= f.input :flaw2, :label => "Flaw 2", :as => :select, :collection => options_for_select(Flaw.where(character_system: @character_system).map{ |u| [u.name, u.id] }, @flaw2_id), :input_html => { :autocomplete => "off"}, :required => false %>
   <%= f.input :blurb, :input_html => { :class => "text_entry_small" } %>
   <%= f.input :background, :input_html => { :class => "text_entry" } %>
   <%= f.input :backstory_connections, :label => "Backstory Connections", :input_html => { :class => "text_entry" } %>
