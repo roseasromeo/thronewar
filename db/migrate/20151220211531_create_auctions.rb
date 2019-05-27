@@ -1,4 +1,4 @@
-class CreateAuctions < ActiveRecord::Migration
+class CreateAuctions < ActiveRecord::Migration[5.2]
   def change
     create_table :auctions do |t|
       t.belongs_to :game, index: true, foreign_key: true
