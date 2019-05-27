@@ -1,4 +1,4 @@
-class Character < ActiveRecord::Base
+class Character < ApplicationRecord
   belongs_to :user
   belongs_to :game
   has_many :char_rounds, dependent: :destroy

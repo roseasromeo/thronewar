@@ -47,6 +47,8 @@ class FinalCharactersController < ApplicationController
     @final_character = FinalCharacter.find(params[:id])
     @user = current_user
     @character_system = @final_character.character_system
+    available_users = User.joins(:final_characters).merge(FinalCharacter.where.not(character_system: @character_system))
+    @possible_users = available_users.or(User.where(id: @user.id).joins(:final_characters)).distinct
 
     @flaw1_id = @final_character.flaw1 == nil ? nil : @final_character.flaw1.id
     @flaw2_id = @final_character.flaw2 == nil ? nil : @final_character.flaw2.id
@@ -88,6 +90,7 @@ class FinalCharactersController < ApplicationController
       @user = User.find(final_character_params[:user_id])
       leftover_points = 0
       flaw1_id = final_character_params[:flaw1]
+      puts flaw1_id
       if flaw1_id != "" && flaw1_id != nil
         @flaw1 = Flaw.find(flaw1_id)
       else

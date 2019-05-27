@@ -1,4 +1,4 @@
-class Pledge < ActiveRecord::Base
+class Pledge < ApplicationRecord
   belongs_to :character
   belongs_to :char_round
   belongs_to :item

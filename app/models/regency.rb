@@ -1,4 +1,4 @@
-class Regency < ActiveRecord::Base
+class Regency < ApplicationRecord
   belongs_to :final_character
 
   before_validation :set_points

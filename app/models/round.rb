@@ -1,4 +1,4 @@
-class Round < ActiveRecord::Base
+class Round < ApplicationRecord
   belongs_to :auction
   has_many :char_rounds, dependent: :destroy
   has_many :pledges, through: :char_rounds
