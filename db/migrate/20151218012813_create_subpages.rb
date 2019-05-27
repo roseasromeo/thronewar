@@ -1,4 +1,4 @@
-class CreateSubpages < ActiveRecord::Migration
+class CreateSubpages < ActiveRecord::Migration[5.2]
   def change
     create_table :subpages do |t|
       t.string :subtitle

@@ -1,4 +1,4 @@
-class CreateTools < ActiveRecord::Migration
+class CreateTools < ActiveRecord::Migration[5.2]
   def change
     create_table :tools do |t|
       t.belongs_to :final_character, index: true, foreign_key: true, null: false

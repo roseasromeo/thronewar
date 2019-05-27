@@ -1,4 +1,4 @@
-class CreateRegencies < ActiveRecord::Migration
+class CreateRegencies < ActiveRecord::Migration[5.2]
   def change
     create_table :regencies do |t|
       t.belongs_to :final_character, index: true, foreign_key: true

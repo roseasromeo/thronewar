@@ -1,4 +1,4 @@
-class CreateContentLinks < ActiveRecord::Migration
+class CreateContentLinks < ActiveRecord::Migration[5.2]
   def change
     create_table :content_links do |t|
       t.string :name, null: false

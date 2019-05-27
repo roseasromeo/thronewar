@@ -1,4 +1,4 @@
-class CreatePledges < ActiveRecord::Migration
+class CreatePledges < ActiveRecord::Migration[5.2]
   def change
     create_table :pledges do |t|
       t.integer :rank, default: 0, null: false
