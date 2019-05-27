@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Parent:</strong>
+  <%= @ability_dependency.parent %>
+</p>
+
+<p>
+  <strong>Depends on:</strong>
+  <%= @ability_dependency.depends_on %>
+</p>
+
+<%= link_to 'Edit', edit_ability_dependency_path(@ability_dependency) %> |
+<%= link_to 'Back', ability_dependencies_path %>

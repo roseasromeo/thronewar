@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  resources :ability_char_trees
+  resources :ability_dependencies
+  resources :abilities
+  resources :char_trees
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   get 'welcome/index'
 

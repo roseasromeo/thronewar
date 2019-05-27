@@ -1,0 +1,22 @@
+<%= form_with(model: char_tree, local: true) do |form| %>
+  <% if char_tree.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(char_tree.errors.count, "error") %> prohibited this char_tree from being saved:</h2>
+
+      <ul>
+      <% char_tree.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :final_character_id %>
+    <%= form.text_field :final_character_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
