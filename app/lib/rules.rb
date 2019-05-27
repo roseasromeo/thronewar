@@ -23,7 +23,7 @@ module Rules
       end
     end
     if private_rank == 0
-      level = :none
+      level = :no
     elsif private_rank <= high_count
       level = :high
     elsif private_rank <= (high_count + med_count)
@@ -326,7 +326,7 @@ module Rules
     elsif basic_abilities(private_rank, lowest_rank) > 0
       level = :low
     else
-      level = :none
+      level = :no
     end
   end
 
