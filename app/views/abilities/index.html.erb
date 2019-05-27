@@ -6,6 +6,8 @@
   <thead>
     <tr>
       <th>Name</th>
+      <th>Gift</th>
+      <th>Level</th>
       <th>Short text</th>
       <th>Long text</th>
       <th colspan="3"></th>
@@ -16,6 +18,8 @@
     <% @abilities.each do |ability| %>
       <tr>
         <td><%= ability.name %></td>
+        <td><%= ability.gift %></td>
+        <td><%= ability.level %></td>
         <td><%= ability.short_text %></td>
         <td><%= ability.long_text %></td>
         <td><%= link_to 'Show', ability %></td>

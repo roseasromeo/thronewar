@@ -1,0 +1,7 @@
+<div class='nested-fields'>
+  <%= f.inputs do %>
+    <%= f.input :depends_on %>
+    <%= f.input :parent, :as => :hidden, :value => @ability %>
+    <%= link_to_remove_association "remove dependency", f %>
+  <% end %>
+</div>

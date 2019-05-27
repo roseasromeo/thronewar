@@ -6,6 +6,16 @@
 </p>
 
 <p>
+  <strong>Level:</strong>
+  <%= @ability.level %>
+</p>
+
+<p>
+  <strong>Level:</strong>
+  <%= @ability.gift %>
+</p>
+
+<p>
   <strong>Short text:</strong>
   <%= @ability.short_text %>
 </p>
@@ -14,6 +24,8 @@
   <strong>Long text:</strong>
   <%= @ability.long_text %>
 </p>
+
+
 
 <%= link_to 'Edit', edit_ability_path(@ability) %> |
 <%= link_to 'Back', abilities_path %>
