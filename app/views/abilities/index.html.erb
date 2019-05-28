@@ -8,8 +8,8 @@
       <th>Name</th>
       <th>Gift</th>
       <th>Level</th>
+      <th>Automatic?</th>
       <th>Short text</th>
-      <th>Long text</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -20,8 +20,8 @@
         <td><%= ability.name %></td>
         <td><%= ability.gift %></td>
         <td><%= ability.level %></td>
+        <td><%= ability.automatic %></td>
         <td><%= ability.short_text %></td>
-        <td><%= ability.long_text %></td>
         <td><%= link_to 'Show', ability %></td>
         <td><%= link_to 'Edit', edit_ability_path(ability) %></td>
         <td><%= link_to 'Destroy', ability, method: :delete, data: { confirm: 'Are you sure?' } %></td>

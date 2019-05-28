@@ -9,7 +9,7 @@
     <div id='ability_dependencies'>
       <% @dependency_links = @ability.dependency_links%>
       <%= f.semantic_fields_for :dependency_links, @dependency_links do |dependency_link| %>
-        <%= render 'dependency_link_fields', :f => dependency_link, :ability => @ability %>
+        <%= render 'dependency_link_fields', :f => dependency_link %>
       <% end %>
       <div class='links'>
         <%= link_to_add_association 'add dependency', f, :dependency_links %>

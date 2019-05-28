@@ -593,4 +593,31 @@ module Rules
 
     collection
   end
+
+  def gift_abilities_collection(final_character,all_abilities,abilities)
+    ranks = final_character.ranks
+    gifts = [ :command, :change, :illusion, :gutter_magic ]
+    collection = Ability.none
+    gifts.each do |gift|
+      private_rank = ranks.where(item: Rank.items[gift]).first.private_rank
+      lowest_rank = final_character.character_system.ranks.where(item: Rank.items[gift]).maximum(:public_rank)
+      if all_abilities
+        gift_level = :high
+      else
+        gift_level = gift_level(private_rank,lowest_rank)
+      end
+      if gift_level == :low
+        collection = abilities.where(gift: gift, level: :low).or(collection)
+      elsif gift_level == :med
+        collection = abilities.where(gift: gift, level: :low).or(collection)
+        collection = abilities.where(gift: gift, level: :med).or(collection)
+      elsif gift_level == :high
+        collection = abilities.where(gift: gift, level: :low).or(collection)
+        collection = abilities.where(gift: gift, level: :med).or(collection)
+        collection = abilities.where(gift: gift, level: :high).or(collection)
+      end
+    end
+    collection = collection.distinct
+    collection
+  end
 end

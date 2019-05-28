@@ -4,6 +4,7 @@ class FinalCharacter < ApplicationRecord
   has_many :ranks, dependent: :destroy
   has_many :tools, dependent: :destroy
   has_many :regencies, dependent: :destroy
+  has_one :char_tree, dependent: :destroy
   belongs_to :flaw1, :class_name => 'Flaw', foreign_key: 'flaw1', optional: true
   belongs_to :flaw2, :class_name => 'Flaw', foreign_key: 'flaw2', optional: true
 

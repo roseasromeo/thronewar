@@ -89,6 +89,28 @@
       <p class="links"><%= link_to "New Regency", new_character_system_regency_path(@character_system,final_character: @final_character) %></p>
     <% end %>
   </div>
+  <div id='abilities'>
+    <% @char_tree = @final_character.char_tree %>
+    <% if @char_tree != nil %>
+    <h3 class="links"><%= link_to "Ability Tree", edit_character_system_char_tree_path(@character_system, @char_tree, final_character: @final_character) %></h3>
+      <table class="abilities_table">
+        <tr>
+          <th>Name</th>
+          <th>Gift</th>
+          <th>Level</th>
+          <th>Short Text</th>
+        </tr>
+        <% @abilities = @char_tree.abilities %>
+        <% @abilities.each do |ability| %>
+          <%= render 'ability_display', :f => ability %>
+        <% end %>
+      </table>
+    <% else %>
+      <% if @final_character.not_submitted? && (gm_user? || @user == @final_character.user) %>
+        <p class="links"><%= link_to "New Ability Tree", new_character_system_char_tree_path(@character_system,final_character: @final_character) %></p>
+      <% end %>
+    <% end %>
+  </div>
   <p>Other: <%= html_safe_rescue(@final_character.other) %></p>
 <% end %>
 <% if @final_character.not_submitted? && (gm_user? || @user == @final_character.user) %>

@@ -1,63 +1,103 @@
 class CharTreesController < ApplicationController
+  include Rules
   before_action :set_char_tree, only: [:show, :edit, :update, :destroy]
 
-  # GET /char_trees
-  # GET /char_trees.json
-  def index
-    @char_trees = CharTree.all
-  end
+  # No Index
 
   # GET /char_trees/1
   # GET /char_trees/1.json
   def show
+    if logged_in?
+      @user = current_user
+      @character_system = CharacterSystem.find(params[:character_system_id])
+      @final_character = @char_tree.final_character
+    else
+      redirect_to login_path
+    end
   end
 
   # GET /char_trees/new
   def new
-    @char_tree = CharTree.new
+    @final_character = FinalCharacter.find(params[:final_character])
+    @character_system = CharacterSystem.find(params[:character_system_id])
+    if CharTree.where(final_character: @final_character).empty?
+      @user = current_user
+
+      if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
+        @char_tree = CharTree.new(final_character: @final_character)
+      else
+        redirect_to [@character_system, @final_character]
+      end
+    else
+      redirect_to [@character_system, @final_character]
+    end
   end
 
   # GET /char_trees/1/edit
   def edit
+    @user = current_user
+    @char_tree = CharTree.find(params[:id])
+    @final_character = @char_tree.final_character
+    @character_system = CharacterSystem.find(params[:character_system_id])
+
+    if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
+      # edit
+    else
+      redirect_to [@character_system, @final_character]
+    end
   end
 
   # POST /char_trees
   # POST /char_trees.json
   def create
-    @char_tree = CharTree.new(char_tree_params)
+    @final_character = FinalCharacter.find(char_tree_params[:final_character_id])
+    @character_system = CharacterSystem.find(params[:character_system_id])
+    if CharTree.where(final_character: @final_character).empty?
+      @char_tree = CharTree.new(char_tree_params)
 
-    respond_to do |format|
-      if @char_tree.save
-        format.html { redirect_to @char_tree, notice: 'Char tree was successfully created.' }
-        format.json { render :show, status: :created, location: @char_tree }
+      if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
+        if @char_tree.save
+          redirect_to [@character_system, @char_tree]
+        else
+          render 'new'
+        end
       else
-        format.html { render :new }
-        format.json { render json: @char_tree.errors, status: :unprocessable_entity }
+        redirect_to [@character_system, @final_character]
       end
+    else
+      redirect_to [@character_system, @final_character]
     end
   end
 
   # PATCH/PUT /char_trees/1
   # PATCH/PUT /char_trees/1.json
   def update
-    respond_to do |format|
-      if @char_tree.update(char_tree_params)
-        format.html { redirect_to @char_tree, notice: 'Char tree was successfully updated.' }
-        format.json { render :show, status: :ok, location: @char_tree }
+    @final_character = FinalCharacter.find(char_tree_params[:final_character_id])
+    @character_system = CharacterSystem.find(params[:character_system_id])
+    if !(CharTree.where(final_character: @final_character).empty?)
+      if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
+        if @char_tree.update(char_tree_params)
+          redirect_to [@character_system, @char_tree]
+        else
+          render 'new'
+        end
       else
-        format.html { render :edit }
-        format.json { render json: @char_tree.errors, status: :unprocessable_entity }
+        redirect_to [@character_system, @final_character]
       end
+    else
+      redirect_to [@character_system, @final_character]
     end
   end
 
   # DELETE /char_trees/1
   # DELETE /char_trees/1.json
   def destroy
-    @char_tree.destroy
-    respond_to do |format|
-      format.html { redirect_to char_trees_url, notice: 'Char tree was successfully destroyed.' }
-      format.json { head :no_content }
+    if logged_in?
+      @char_tree.destroy
+      respond_to do |format|
+        format.html { redirect_to char_trees_url, notice: 'Char tree was successfully destroyed.' }
+        format.json { head :no_content }
+      end
     end
   end
 
@@ -69,6 +109,6 @@ class CharTreesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def char_tree_params
-      params.require(:char_tree).permit(:final_character_id)
+      params.require(:char_tree).permit(:final_character_id, ability_char_trees_attributes: [:id, :char_tree_id, :ability_id, :_destroy])
     end
 end

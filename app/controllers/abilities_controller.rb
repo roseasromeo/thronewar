@@ -19,7 +19,6 @@ class AbilitiesController < ApplicationController
 
   # GET /abilities/new
   def new
-    @ability = Ability.new
     if admin_user?
       @ability = Ability.new
     else
