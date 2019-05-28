@@ -1,22 +1,15 @@
-<%= form_with(model: char_tree, local: true) do |form| %>
-  <% if char_tree.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(char_tree.errors.count, "error") %> prohibited this char_tree from being saved:</h2>
-
-      <ul>
-      <% char_tree.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
+<%= semantic_form_for [@character_system, @char_tree] do |f| %>
+  <%= f.inputs do %>
+    <%= f.input :final_character_id, :label => false, :as => :number, :input_html => { :class => "hidden", :value => @final_character.id } %>
+    <div id='abilities'>
+      <% @ability_char_trees = @char_tree.ability_char_trees%>
+      <%= f.semantic_fields_for :ability_char_trees, @ability_char_trees do |ability_char_tree| %>
+        <%= render 'ability_char_tree_fields', :f => ability_char_tree %>
       <% end %>
-      </ul>
+      <div class='links'>
+        <%= link_to_add_association 'add ability', f, :ability_char_trees %>
+      </div>
     </div>
+    <%= f.actions %>
   <% end %>
-
-  <div class="field">
-    <%= form.label :final_character_id %>
-    <%= form.text_field :final_character_id %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
 <% end %>

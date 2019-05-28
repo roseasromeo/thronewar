@@ -7,12 +7,17 @@
 
 <p>
   <strong>Level:</strong>
-  <%= @ability.level %>
+  <%= @ability.gift %>
 </p>
 
 <p>
   <strong>Level:</strong>
-  <%= @ability.gift %>
+  <%= @ability.level %>
+</p>
+
+<p>
+  <strong>Long text:</strong>
+  <%= @ability.automatic %>
 </p>
 
 <p>
@@ -24,6 +29,12 @@
   <strong>Long text:</strong>
   <%= @ability.long_text %>
 </p>
+
+<div id='dependencies'>
+  <% @ability.dependency_links.each do |dependency_link| %>
+    <%= render 'dependency_link_display', :f => dependency_link %>
+  <% end %>
+</div>
 
 
 

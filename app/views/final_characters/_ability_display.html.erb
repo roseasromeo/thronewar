@@ -1,0 +1,12 @@
+<div class='nested-ability'>
+    <tr>
+      <% if f.name == "" || f.name == nil %>
+        <td><%= link_to "Ability", ability_path(f) %></td>
+      <% else %>
+        <td><%= link_to f.name, ability_path(f) %></td>
+      <% end %>
+      <td><%= f.gift %></td>
+      <td><%= f.level %></td>
+      <td><%= f.short_text %></td>
+    </tr>
+</div>

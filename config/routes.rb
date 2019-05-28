@@ -46,6 +46,7 @@ Rails.application.routes.draw do
     get 'player' => 'char_rounds#new', as: :player
   end
 
+  # Character System Routes
   resources :character_systems, only: [:show, :index, :new, :create] do
     resources :final_characters, only: [:show, :edit, :update] do
       post 'submit'
@@ -54,13 +55,9 @@ Rails.application.routes.draw do
     resources :tools
     resources :regencies
     resources :flaws, only: [:index, :new, :create, :destroy]
+    resources :char_trees
   end
-
-  resources :ability_char_trees
-  resources :ability_dependencies
   resources :abilities
-  resources :char_trees
-
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -2,5 +2,5 @@
 
 <%= render 'form', char_tree: @char_tree %>
 
-<%= link_to 'Show', @char_tree %> |
-<%= link_to 'Back', char_trees_path %>
+<%= link_to 'Show', character_system_char_tree_path(@character_system, @char_tree) %> |
+<%= link_to 'Back', character_system_final_character_path(@character_system, @final_character) %>
