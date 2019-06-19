@@ -21,6 +21,7 @@ class AbilitiesController < ApplicationController
   def new
     if admin_user?
       @ability = Ability.new
+      @edit = false
     else
       redirect_to abilities_path
     end
@@ -31,7 +32,7 @@ class AbilitiesController < ApplicationController
     if logged_in?
       @user = current_user
       if admin_user?
-
+        @edit = true
       else
         redirect_to abilities_path
       end
@@ -53,6 +54,7 @@ class AbilitiesController < ApplicationController
             format.html { redirect_to @ability, notice: 'Ability was successfully created.' }
             format.json { render :show, status: :created, location: @ability }
           else
+            @edit = false
             format.html { render :new }
             format.json { render json: @ability.errors, status: :unprocessable_entity }
           end
@@ -77,6 +79,7 @@ class AbilitiesController < ApplicationController
             format.html { redirect_to @ability, notice: 'Ability was successfully updated.' }
             format.json { render :show, status: :ok, location: @ability }
           else
+            @edit = true
             format.html { render :edit }
             format.json { render json: @ability.errors, status: :unprocessable_entity }
           end

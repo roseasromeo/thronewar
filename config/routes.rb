@@ -10,8 +10,8 @@ Rails.application.routes.draw do
   post '/login' => 'auth#login'
   get '/logout' => 'auth#logout', as: :logout
 
-  # Only create and new routes for users implemented
-  resources :users, only: [:create, :new]
+  # Users Routes
+  resources :users
 
   # Rules Routes
   # Import routes

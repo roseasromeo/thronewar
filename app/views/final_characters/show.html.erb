@@ -92,7 +92,7 @@
   <div id='abilities'>
     <% @char_tree = @final_character.char_tree %>
     <% if @char_tree != nil %>
-    <h3 class="links"><%= link_to "Ability Tree", edit_character_system_char_tree_path(@character_system, @char_tree, final_character: @final_character) %></h3>
+    <h3 class="links"><%= link_to "Ability Tree", character_system_char_tree_path(@character_system, @char_tree, final_character: @final_character) %></h3>
       <table class="abilities_table">
         <tr>
           <th>Name</th>

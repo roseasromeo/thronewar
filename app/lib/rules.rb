@@ -330,6 +330,12 @@ module Rules
     end
   end
 
+  def gift_level_char(ranks,gift)
+    private_rank = ranks.where(item: Rank.items[gift]).first.private_rank
+    lowest_rank = final_character.character_system.ranks.where(item: Rank.items[gift]).maximum(:public_rank)
+    gift_level = gift_level(private_rank,lowest_rank)
+  end
+
   def approval(final_character)
     # Overspending
     notices = []
@@ -423,10 +429,12 @@ module Rules
 
   def font?(final_character)
     #This is not right--need to check for font ability
-    ranks = final_character.ranks
     font = false
-    if ranks.where(item: Rank.items[:gutter_magic]).first.private_rank > 0
-      font = true
+    if final_character.char_tree != nil
+      abilities_collection = final_character.char_tree.abilities_collection(false)
+      if !(abilities_collection.where(name: "Font of Magic").empty?)
+        font = true
+      end
     end
     font
   end
@@ -599,12 +607,10 @@ module Rules
     gifts = [ :command, :change, :illusion, :gutter_magic ]
     collection = Ability.none
     gifts.each do |gift|
-      private_rank = ranks.where(item: Rank.items[gift]).first.private_rank
-      lowest_rank = final_character.character_system.ranks.where(item: Rank.items[gift]).maximum(:public_rank)
       if all_abilities
         gift_level = :high
       else
-        gift_level = gift_level(private_rank,lowest_rank)
+        gift_level = gift_level_char(ranks,gift)
       end
       if gift_level == :low
         collection = abilities.where(gift: gift, level: :low).or(collection)

@@ -1,6 +1,6 @@
 <div class='nested-fields'>
   <%= f.inputs do %>
-    <%= f.input :ability, :as => :select, :collection => @char_tree.ability_collection(false) %>
+    <%= f.input :ability, :as => :select, :collection => @char_tree.abilities_collection(false), :include_blank => false %>
     <%= f.input :char_tree_id, :as => :hidden, :value => @char_tree %>
     <%= link_to_remove_association "remove ability", f %>
   <% end %>

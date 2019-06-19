@@ -1,3 +1,16 @@
+<% if @ability.errors.any? %>
+  <div id="error_explanation">
+    <h2>
+      <%= pluralize(@ability.errors.count, "error") %> prohibited
+      this Ability from being saved:
+    </h2>
+    <ul>
+      <% @ability.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
 <%= semantic_form_for [@ability] do |f| %>
   <%= f.inputs do %>
     <%= f.input :name %>
@@ -6,15 +19,17 @@
     <%= f.input :automatic, :required => false %>
     <%= f.input :short_text, :input_html => {:class => "text_entry"} %>
     <%= f.input :long_text, :input_html => {:class => "text_entry"} %>
-    <div id='ability_dependencies'>
-      <% @dependency_links = @ability.dependency_links%>
-      <%= f.semantic_fields_for :dependency_links, @dependency_links do |dependency_link| %>
-        <%= render 'dependency_link_fields', :f => dependency_link %>
-      <% end %>
-      <div class='links'>
-        <%= link_to_add_association 'add dependency', f, :dependency_links %>
+    <% if @edit %>
+      <div id='ability_dependencies'>
+        <% @dependency_links = @ability.dependency_links%>
+        <%= f.semantic_fields_for :dependency_links, @dependency_links do |dependency_link| %>
+          <%= render 'dependency_link_fields', :f => dependency_link %>
+        <% end %>
+        <div class='links'>
+          <%= link_to_add_association 'add dependency', f, :dependency_links %>
+        </div>
       </div>
-    </div>
+    <% end %>
     <%= f.actions %>
   <% end %>
 <% end %>
