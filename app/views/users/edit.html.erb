@@ -1,0 +1,8 @@
+<h1>Editing User</h1>
+
+<%= render 'form', user: @user %>
+
+<%= link_to 'Show', @user %> |
+<% if admin_user? %>
+  <%= link_to 'Index', users_path %>
+<% end %>

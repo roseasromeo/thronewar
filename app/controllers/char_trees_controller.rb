@@ -59,7 +59,11 @@ class CharTreesController < ApplicationController
         if @char_tree.save
           redirect_to [@character_system, @char_tree]
         else
-          render 'new'
+          if @char_tree.ability_char_tree_cleanup
+            redirect_to [@character_system, @final_character], notice: "The ability tree for this character included an ability they do not have access to and has now been deleted"
+          else
+            render 'new'
+          end
         end
       else
         redirect_to [@character_system, @final_character]
@@ -75,11 +79,23 @@ class CharTreesController < ApplicationController
     @final_character = FinalCharacter.find(char_tree_params[:final_character_id])
     @character_system = CharacterSystem.find(params[:character_system_id])
     if !(CharTree.where(final_character: @final_character).empty?)
+      cleaned_params = char_tree_params.to_h
+      cleaned_params["ability_char_trees_attributes"].each do |k,v|
+        if v["_destroy"] != "false"
+          destroy_id = v["id"].to_i
+          AbilityCharTree.find(destroy_id).destroy
+          cleaned_params["ability_char_trees_attributes"] = cleaned_params["ability_char_trees_attributes"].except(k)
+        end
+      end
       if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
-        if @char_tree.update(char_tree_params)
+        if @char_tree.update(cleaned_params)
           redirect_to [@character_system, @char_tree]
         else
-          render 'new'
+          if @char_tree.ability_char_tree_cleanup
+            redirect_to [@character_system, @final_character], notice: "The ability tree for this character included an ability they do not have access to and has now been deleted"
+          else
+            render 'new'
+          end
         end
       else
         redirect_to [@character_system, @final_character]

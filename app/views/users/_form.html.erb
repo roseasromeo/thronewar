@@ -13,12 +13,16 @@
     </div>
   <% end %>
   <%= f.inputs do %>
-    <%= f.input :user_type, :as => :hidden, :value => @user.user_type %>
     <%= f.input :email %>
     <%= f.input :name %>
     <%= f.input :password, :required => true %>
+    <% if admin_user? %>
+      <%= f.input :user_type, :required => true %>
+    <% else %>
+      <%= f.input :user_type, :as => :hidden, :value => @user.user_type %>
+    <% end %>
     <%= f.actions do %>
-      <%= f.action :submit, :label => "Create User" %>
+      <%= f.action :submit, :label => "Save User" %>
     <% end %>
   <% end %>
 <% end %>

@@ -1,0 +1,21 @@
+<h1> Index of Users </h1>
+<%= link_to 'Back to Home', '/' %>
+<% if logged_in? %>
+  <% if admin_user? %>
+    <%= link_to 'New user', new_user_path %>
+  <% end %>
+<% end %>
+
+<table>
+  <tr>
+    <th>User Name</th>
+    <th>User Email</th>
+  </tr>
+
+  <% @users.each do |user| %>
+    <tr>
+      <td><%=  link_to user.name, user_path(user) %></td>
+      <td><%=user.email%></td>
+    </tr>
+  <% end %>
+</table>
