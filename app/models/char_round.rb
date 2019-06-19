@@ -1,4 +1,4 @@
-class CharRound < ActiveRecord::Base
+class CharRound < ApplicationRecord
   belongs_to :character
   belongs_to :round
   has_many :pledges, dependent: :destroy

@@ -1,4 +1,4 @@
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   validates :email, :name, :password_digest, :user_type, presence: true
   validates :email, :name, uniqueness: { case_sensitive: false }
 

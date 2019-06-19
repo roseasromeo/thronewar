@@ -1,4 +1,4 @@
-class Tool < ActiveRecord::Base
+class Tool < ApplicationRecord
   include Rules
   belongs_to :final_character
 

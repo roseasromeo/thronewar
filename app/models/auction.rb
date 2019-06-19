@@ -1,4 +1,4 @@
-class Auction < ActiveRecord::Base
+class Auction < ApplicationRecord
   belongs_to :game
   has_many :items, dependent: :destroy
   has_many :rounds, dependent: :destroy

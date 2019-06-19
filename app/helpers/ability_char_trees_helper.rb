@@ -1,0 +1,2 @@
+module AbilityCharTreesHelper
+end
