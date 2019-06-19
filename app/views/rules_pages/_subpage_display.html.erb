@@ -1,6 +1,6 @@
 <% @subpage_id = f.subtitle.gsub(/\s+/, "").gsub("\'","").downcase %>
-<div class='nested-subpages' id=<%= @subpage_id %>>
-    <h2 class='subpage_title'><%= f.subtitle %></h2>
+<div class='nested-subpages'>
+    <h2 class='subpage_title' id="<%= @subpage_id %>"><%= f.subtitle %></h2>
     <table class='subpage'>
         <td class='sidebar'><%= sanitize f.sidebar.html_safe, :tags => %w(p strong b em i u table tr th td a ul ol li), :attributes => %w(href) %></td>
         <td class='body'><%= sanitize f.body.html_safe, :tags => %w(p strong b em i u table tr th td a ul ol li), :attributes => %w(href) %></td>
