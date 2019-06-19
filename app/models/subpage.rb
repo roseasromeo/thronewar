@@ -1,4 +1,4 @@
-class Subpage < ActiveRecord::Base
+class Subpage < ApplicationRecord
   has_paper_trail
 
   belongs_to :rules_page

@@ -23,7 +23,7 @@ module Rules
       end
     end
     if private_rank == 0
-      level = :none
+      level = :no
     elsif private_rank <= high_count
       level = :high
     elsif private_rank <= (high_count + med_count)
@@ -326,8 +326,14 @@ module Rules
     elsif basic_abilities(private_rank, lowest_rank) > 0
       level = :low
     else
-      level = :none
+      level = :no
     end
+  end
+
+  def gift_level_char(ranks,gift)
+    private_rank = ranks.where(item: Rank.items[gift]).first.private_rank
+    lowest_rank = final_character.character_system.ranks.where(item: Rank.items[gift]).maximum(:public_rank)
+    gift_level = gift_level(private_rank,lowest_rank)
   end
 
   def approval(final_character)
@@ -423,10 +429,12 @@ module Rules
 
   def font?(final_character)
     #This is not right--need to check for font ability
-    ranks = final_character.ranks
     font = false
-    if ranks.where(item: Rank.items[:gutter_magic]).first.private_rank > 0
-      font = true
+    if final_character.char_tree != nil
+      abilities_collection = final_character.char_tree.abilities_collection(false)
+      if !(abilities_collection.where(name: "Font of Magic").empty?)
+        font = true
+      end
     end
     font
   end
@@ -591,6 +599,31 @@ module Rules
     collection << ["Illusion Intermediate (2pt): Telepathic", i]
     i = i + 1
 
+    collection
+  end
+
+  def gift_abilities_collection(final_character,all_abilities,abilities)
+    ranks = final_character.ranks
+    gifts = [ :command, :change, :illusion, :gutter_magic ]
+    collection = Ability.none
+    gifts.each do |gift|
+      if all_abilities
+        gift_level = :high
+      else
+        gift_level = gift_level_char(ranks,gift)
+      end
+      if gift_level == :low
+        collection = abilities.where(gift: gift, level: :low).or(collection)
+      elsif gift_level == :med
+        collection = abilities.where(gift: gift, level: :low).or(collection)
+        collection = abilities.where(gift: gift, level: :med).or(collection)
+      elsif gift_level == :high
+        collection = abilities.where(gift: gift, level: :low).or(collection)
+        collection = abilities.where(gift: gift, level: :med).or(collection)
+        collection = abilities.where(gift: gift, level: :high).or(collection)
+      end
+    end
+    collection = collection.distinct
     collection
   end
 end

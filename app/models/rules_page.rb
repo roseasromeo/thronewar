@@ -1,4 +1,4 @@
-class RulesPage < ActiveRecord::Base
+class RulesPage < ApplicationRecord
   has_paper_trail
   before_create :create_slug
   before_update :create_slug

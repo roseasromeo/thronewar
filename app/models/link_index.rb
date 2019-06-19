@@ -1,4 +1,4 @@
-class LinkIndex < ActiveRecord::Base
+class LinkIndex < ApplicationRecord
   has_many :content_links
 
   validates_presence_of :title

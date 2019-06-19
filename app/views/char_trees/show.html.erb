@@ -1,0 +1,22 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Final character:</strong>
+  <%= @char_tree.final_character.name %>
+</p>
+
+<table class="abilities_table">
+  <tr>
+    <th>Name</th>
+    <th>Gift</th>
+    <th>Level</th>
+    <th>Short Text</th>
+  </tr>
+  <% @abilities = @char_tree.abilities %>
+  <% @abilities.each do |ability| %>
+    <%= render 'ability_display', :f => ability %>
+  <% end %>
+</table>
+
+<%= link_to 'Edit', edit_character_system_char_tree_path(@character_system, @char_tree) %> |
+<%= link_to 'Back', character_system_final_character_path(@character_system, @final_character) %>

@@ -13,11 +13,11 @@
   </tr>
   <% @rules_pages.each do |rules_page| %>
     <tr>
-      <td><%= link_to rules_page.title, rules_page_path(rules_page) %></td>
+      <td class='body'><%= link_to rules_page.title, rules_page_path(rules_page) %></td>
       <% if logged_in? %>
         <% if admin_user? %>
-          <td><%= link_to 'Edit', edit_rules_page_path(rules_page) %></td>
-          <td><%= link_to 'Delete', rules_page_path(rules_page), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <td class='sidebar'><%= link_to 'Edit', edit_rules_page_path(rules_page) %></td>
+          <td class='sidebar'><%= link_to 'Delete', rules_page_path(rules_page), method: :delete, data: { confirm: 'Are you sure?' } %></td>
         <% end %>
       <% end %>
     </tr>

@@ -1,4 +1,4 @@
-class Game < ActiveRecord::Base
+class Game < ApplicationRecord
   has_many :characters, dependent: :destroy
   has_many :auctions, dependent: :destroy
   has_one :character_system, dependent: :destroy
