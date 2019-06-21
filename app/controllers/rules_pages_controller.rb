@@ -145,6 +145,14 @@ class RulesPagesController < ApplicationController
     end
   end
 
+  def search
+      if params[:search].blank?
+        redirect_to(root_path, alert: "Empty field!") and return
+      else
+        @results = RulesPage.joins(:subpages).search(params[:search]).order("rules_pages.title DESC")
+      end
+  end
+
   private
     def rules_page_params
       params.require(:rules_page).permit(:slug, :name, :title, :text, subpages_attributes: [:id, :subtitle, :order_number, :sidebar, :body, :_destroy])

@@ -1,5 +1,5 @@
 class RulesPage < ApplicationRecord
-  has_paper_trail
+  #has_paper_trail
   before_create :create_slug
   before_update :create_slug
   before_save :create_slug
@@ -39,6 +39,10 @@ class RulesPage < ApplicationRecord
 
     def find_by_slug(slug)
       RulesPage.where("LOWER(slug) = ?", slug.downcase).first
+    end
+
+    def self.search(search)
+      RulesPage.all.where("lower(rules_pages.title) LIKE :search OR lower(rules_pages.text) LIKE :search OR lower(subpages.subtitle) LIKE :search OR lower(subpages.sidebar) LIKE :search OR lower(subpages.body) LIKE :search", search: "%#{search.downcase}%").distinct
     end
 
 end

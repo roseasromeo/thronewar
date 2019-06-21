@@ -17,6 +17,8 @@ Rails.application.routes.draw do
   # Import routes
   get 'rules_pages/import' => 'rules_pages#import', as: :import
   post 'rules_pages/import' => 'rules_pages#import'
+  # Search Rules route
+  get '/search' => 'rules_pages#search', as: :search
 
   # Table of Contents routes
   get '/edit' => 'welcome#edit', as: :homepage_edit
