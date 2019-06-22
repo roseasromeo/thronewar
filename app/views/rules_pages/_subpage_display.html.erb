@@ -1,4 +1,4 @@
-<% @subpage_id = f.subtitle.gsub(/\s+/, "").gsub("\'","").downcase %>
+<% @subpage_id = f.subtitle.gsub(/\s+/, "").gsub("\'","").gsub(/\P{ASCII}/, '').downcase %>
 <div class='nested-subpages'>
     <h2 class='subpage_title' id="<%= @subpage_id %>"><%= f.subtitle %></h2>
     <table class='subpage'>
