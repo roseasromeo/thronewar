@@ -6,4 +6,13 @@ module ApplicationHelper
     display_toggle = display_toggle == true ? true : false
     link_to title, {:sort => column, :direction => direction, :display_toggle => display_toggle}, {:class => css_class}
   end
+
+  def page_title(separator = " – ")
+    [content_for(:title), 'Throne War: The Fae Realms'].compact.join(separator)
+  end
+
+  def page_heading(title)
+    content_for(:title){ title }
+    content_tag(:h1, title, class: "page_title" )
+  end
 end
