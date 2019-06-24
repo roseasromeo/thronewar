@@ -1,5 +1,6 @@
 class RulesPagesController < ApplicationController
   include ActionView::Helpers::SanitizeHelper
+  include ApplicationHelper
 
   def index
     if logged_in?
