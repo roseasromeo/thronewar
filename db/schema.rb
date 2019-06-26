@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_27_175354) do
+ActiveRecord::Schema.define(version: 2019_06_26_002139) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,12 +18,12 @@ ActiveRecord::Schema.define(version: 2019_05_27_175354) do
   create_table "abilities", force: :cascade do |t|
     t.string "name"
     t.string "short_text"
-    t.string "long_text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "level", default: 0, null: false
     t.integer "gift", default: 0, null: false
     t.boolean "automatic", default: false, null: false
+    t.text "long_text"
   end
 
   create_table "ability_char_trees", force: :cascade do |t|

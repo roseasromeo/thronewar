@@ -26,17 +26,17 @@ class CharTreeValidator < ActiveModel::Validator
       int_num = int_abilities(private_rank, lowest_rank)
       adv_num = adv_abilities(private_rank, lowest_rank)
 
-      if abilities.where(gift: gift, level: :low, automatic: false).count > basic_num
+      if abilities.where(gift: gift, level: :basic, automatic: false).count > basic_num
         valid = false
         #tree.abilities.delete(ability_num)
         tree.errors[:abilities] << "The ability tree for this character includes too many basic abilities for #{gift}."
       end
-      if abilities.where(gift: gift, level: :med, automatic: false).count > int_num
+      if abilities.where(gift: gift, level: :intermediate, automatic: false).count > int_num
         valid = false
         #tree.abilities.delete(ability_num)
         tree.errors[:abilities] << "The ability tree for this character includes too many intermediate abilities for #{gift}."
       end
-      if abilities.where(gift: gift, level: :high, automatic: false).count > adv_num
+      if abilities.where(gift: gift, level: :advanced, automatic: false).count > adv_num
         valid = false
         #tree.abilities.delete(ability_num)
         tree.errors[:abilities] << "The ability tree for this character includes too many advanced abilities for #{gift}."

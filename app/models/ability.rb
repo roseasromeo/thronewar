@@ -8,7 +8,7 @@ class Ability < ApplicationRecord
   accepts_nested_attributes_for :dependency_links, allow_destroy: true
 
   enum gift: [ :command, :change, :illusion, :gutter_magic ]
-  enum level: [ :no, :low, :med, :high ]
+  enum level: [ :no, :basic, :intermediate, :advanced ]
 
   validates_presence_of :gift, :level, :name
 end
