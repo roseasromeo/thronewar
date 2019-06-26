@@ -613,14 +613,14 @@ module Rules
         gift_level = gift_level_char(ranks,gift)
       end
       if gift_level == :low
-        collection = abilities.where(gift: gift, level: :low).or(collection)
+        collection = abilities.where(gift: gift, level: :basic).or(collection)
       elsif gift_level == :med
-        collection = abilities.where(gift: gift, level: :low).or(collection)
-        collection = abilities.where(gift: gift, level: :med).or(collection)
+        collection = abilities.where(gift: gift, level: :basic).or(collection)
+        collection = abilities.where(gift: gift, level: :intermediate).or(collection)
       elsif gift_level == :high
-        collection = abilities.where(gift: gift, level: :low).or(collection)
-        collection = abilities.where(gift: gift, level: :med).or(collection)
-        collection = abilities.where(gift: gift, level: :high).or(collection)
+        collection = abilities.where(gift: gift, level: :basic).or(collection)
+        collection = abilities.where(gift: gift, level: :intermediate).or(collection)
+        collection = abilities.where(gift: gift, level: :advanced).or(collection)
       end
     end
     collection = collection.distinct
