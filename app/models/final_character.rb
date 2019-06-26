@@ -10,7 +10,7 @@ class FinalCharacter < ApplicationRecord
 
   after_save :calculate_points
 
-  enum approval: [:not_submitted, :submitted, :rejected, :approved]
+  enum approval: [:not_submitted, :submitting, :submitted, :rejected, :approved]
 
   validates_presence_of :character_system, :user, :approval
   validates_numericality_of :luck, :less_than_or_equal_to => 10, :greater_than_or_equal_to => -10, :only_integer => true

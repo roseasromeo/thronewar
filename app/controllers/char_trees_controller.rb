@@ -11,6 +11,7 @@ class CharTreesController < ApplicationController
       @user = current_user
       @character_system = CharacterSystem.find(params[:character_system_id])
       @final_character = @char_tree.final_character
+      @ability_count_messages = ability_count_messages(@final_character)
     else
       redirect_to login_path
     end
@@ -20,6 +21,7 @@ class CharTreesController < ApplicationController
   def new
     @final_character = FinalCharacter.find(params[:final_character])
     @character_system = CharacterSystem.find(params[:character_system_id])
+    @ability_count_messages = ability_count_messages(@final_character)
     if CharTree.where(final_character: @final_character).empty?
       @user = current_user
 
@@ -39,6 +41,7 @@ class CharTreesController < ApplicationController
     @char_tree = CharTree.find(params[:id])
     @final_character = @char_tree.final_character
     @character_system = CharacterSystem.find(params[:character_system_id])
+    @ability_count_messages = ability_count_messages(@final_character)
 
     if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
       # edit
@@ -52,6 +55,8 @@ class CharTreesController < ApplicationController
   def create
     @final_character = FinalCharacter.find(char_tree_params[:final_character_id])
     @character_system = CharacterSystem.find(params[:character_system_id])
+    @ability_count_messages = ability_count_messages(@final_character)
+
     if CharTree.where(final_character: @final_character).empty?
       @char_tree = CharTree.new(char_tree_params)
 
@@ -78,6 +83,8 @@ class CharTreesController < ApplicationController
   def update
     @final_character = FinalCharacter.find(char_tree_params[:final_character_id])
     @character_system = CharacterSystem.find(params[:character_system_id])
+    @ability_count_messages = ability_count_messages(@final_character)
+
     if !(CharTree.where(final_character: @final_character).empty?)
       cleaned_params = char_tree_params.to_h
       cleaned_params["ability_char_trees_attributes"].each do |k,v|
@@ -126,5 +133,36 @@ class CharTreesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def char_tree_params
       params.require(:char_tree).permit(:final_character_id, ability_char_trees_attributes: [:id, :char_tree_id, :ability_id, :_destroy])
+    end
+
+    def ability_count_hash(final_character)
+      count_hash = Hash.new
+      gifts = [ :command, :change, :illusion, :gutter_magic ]
+      ranks = final_character.ranks
+      gifts.each do |gift|
+        private_rank = ranks.where(item: Rank.items[gift]).first.private_rank
+        lowest_rank = final_character.character_system.ranks.where(item: Rank.items[gift]).maximum(:public_rank)
+        basic_num = basic_abilities(private_rank, lowest_rank)
+        int_num = int_abilities(private_rank, lowest_rank)
+        adv_num = adv_abilities(private_rank, lowest_rank)
+        count_hash[gift] = {:basic => basic_num, :intermediate => int_num, :advanced => adv_num}
+      end
+      count_hash
+    end
+
+    def ability_count_messages(final_character)
+      count_hash = ability_count_hash(final_character)
+      gifts = [ :command, :change, :illusion, :gutter_magic ]
+      levels = [ :basic, :intermediate, :advanced ]
+      messages = []
+      gifts.each do |gift|
+        levels.each do |level|
+          if count_hash[gift][level].to_i > 0
+            new_message = "This character may have #{count_hash[gift][level]} #{level} abilities for #{gift.to_s.titlecase} at their current #{gift.to_s.titlecase} Rank."
+            messages.push(new_message)
+          end
+        end
+      end
+      messages
     end
 end
