@@ -336,7 +336,7 @@ module Rules
     gift_level = gift_level(private_rank,lowest_rank)
   end
 
-  def approval(final_character)
+  def check_valid(final_character)
     # Overspending
     notices = []
     if final_character.leftover_points < 0
@@ -416,6 +416,13 @@ module Rules
     if final_character.flaw1 != nil && (final_character.flaw1 == final_character.flaw2)
       notices << "Both flaws must not be the same."
     end
+
+    #check if Ability Tree is valid
+    if !final_character.char_tree.valid?
+      notices << "Ability tree contains an invalid set of abilities."
+      notices << final_character.char_tree.errors
+    end
+
     notices
   end
 
