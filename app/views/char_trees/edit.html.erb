@@ -1,8 +1,8 @@
-<h1>Editing Char Tree</h1>
+<%= page_heading "Editing Ability Tree for " + @char_tree.final_character.name %>
 
 <%= render 'form', char_tree: @char_tree %>
 <%= render 'ability_requirements_display' %>
 
 
 <%= link_to 'Show', character_system_char_tree_path(@character_system, @char_tree) %> |
-<%= link_to 'Back', character_system_final_character_path(@character_system, @final_character) %>
+<%= link_to 'Back to Character', character_system_final_character_path(@character_system, @final_character) %>
