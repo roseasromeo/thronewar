@@ -1,7 +1,7 @@
 <%= link_to "Edit Character", edit_character_system_final_character_path(@character_system,@final_character) %>
 <%= link_to "Back to Character System Home", character_system_path(@character_system) %>
 <%= flash[:notice] %>
-<h1 class="title"><%= @final_character.name %></h1>
+<%= page_heading @final_character.name %>
 <h2 class="player">Player: <%= @final_character.user.name %></h2>
 <% if @show_all %>
   <p>Leftover Points: <%= @final_character.leftover_points %></p>

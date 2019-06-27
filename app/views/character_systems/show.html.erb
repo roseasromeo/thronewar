@@ -1,9 +1,8 @@
 <% if gm_user? %>
   <%= link_to 'Back to Games Index', games_path %>
 <% end %>
-<h1 class="title">
-  <%= @character_system.title %>
-</h1>
+
+<%= page_heading @character_system.title %>
 <p class="status">
   <%= @character_system.status %>
 </p>

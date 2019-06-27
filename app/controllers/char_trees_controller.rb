@@ -135,34 +135,4 @@ class CharTreesController < ApplicationController
       params.require(:char_tree).permit(:final_character_id, ability_char_trees_attributes: [:id, :char_tree_id, :ability_id, :_destroy])
     end
 
-    def ability_count_hash(final_character)
-      count_hash = Hash.new
-      gifts = [ :command, :change, :illusion, :gutter_magic ]
-      ranks = final_character.ranks
-      gifts.each do |gift|
-        private_rank = ranks.where(item: Rank.items[gift]).first.private_rank
-        lowest_rank = final_character.character_system.ranks.where(item: Rank.items[gift]).maximum(:public_rank)
-        basic_num = basic_abilities(private_rank, lowest_rank)
-        int_num = int_abilities(private_rank, lowest_rank)
-        adv_num = adv_abilities(private_rank, lowest_rank)
-        count_hash[gift] = {:basic => basic_num, :intermediate => int_num, :advanced => adv_num}
-      end
-      count_hash
-    end
-
-    def ability_count_messages(final_character)
-      count_hash = ability_count_hash(final_character)
-      gifts = [ :command, :change, :illusion, :gutter_magic ]
-      levels = [ :basic, :intermediate, :advanced ]
-      messages = []
-      gifts.each do |gift|
-        levels.each do |level|
-          if count_hash[gift][level].to_i > 0
-            new_message = "This character may have #{count_hash[gift][level]} #{level} abilities for #{gift.to_s.titlecase} at their current #{gift.to_s.titlecase} Rank."
-            messages.push(new_message)
-          end
-        end
-      end
-      messages
-    end
 end

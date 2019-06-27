@@ -1,6 +1,8 @@
 <p class="links"><%= link_to "Edit Regency", edit_character_system_regency_path(@character_system,@regency) %></p>
 <p class="links"><%= link_to "Back to Character", character_system_final_character_path(@character_system,@final_character) %></p>
-<h1>Name: <%= @regency.name %></h1>
+
+<%= page_heading @regency.name %>
+
 <%if @regency.final_character.name == "" || @regency.final_character.name == nil %>
   <p>Belongs to: Anonymous </p>
 <% else %>

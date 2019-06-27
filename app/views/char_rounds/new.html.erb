@@ -10,7 +10,8 @@ Total spent points
   <% end %>
 <% end %>
 
-<h1 class="auction_title">Auction</h1>
+<%= page_heading "Auction" %>
+
 <%= render 'games/character_list', :aspect_characters => @aspect_characters, :gift_characters => @gift_characters %>
 <h2 class="round_number">Round <%= @round_number %></h2>
 <% if @message != nil %>

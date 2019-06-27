@@ -21,27 +21,14 @@ class CharTreeValidator < ActiveModel::Validator
 
       # Second, check number of abilities
       gifts = [ :command, :change, :illusion, :gutter_magic ]
+      levels = [:basic, :intermediate, :advanced]
+      count_hash = ability_count_hash(final_character)
       gifts.each do |gift|
-        private_rank = ranks.where(item: Rank.items[gift]).first.private_rank
-        lowest_rank = final_character.character_system.ranks.where(item: Rank.items[gift]).maximum(:public_rank)
-        basic_num = basic_abilities(private_rank, lowest_rank)
-        int_num = int_abilities(private_rank, lowest_rank)
-        adv_num = adv_abilities(private_rank, lowest_rank)
-
-        if abilities.where(gift: gift, level: :basic, automatic: false).count > basic_num
-          valid = false
-          #tree.abilities.delete(ability_num)
-          tree.errors[:abilities] << "The ability tree for this character includes too many basic abilities for #{gift.to_s.titlecase}."
-        end
-        if abilities.where(gift: gift, level: :intermediate, automatic: false).count > int_num
-          valid = false
-          #tree.abilities.delete(ability_num)
-          tree.errors[:abilities] << "The ability tree for this character includes too many intermediate abilities for #{gift.to_s.titlecase}."
-        end
-        if abilities.where(gift: gift, level: :advanced, automatic: false).count > adv_num
-          valid = false
-          #tree.abilities.delete(ability_num)
-          tree.errors[:abilities] << "The ability tree for this character includes too many advanced abilities for #{gift.to_s.titlecase}."
+        levels.each do |level|
+          if abilities.where(gift: gift, level: level, automatic: false).count > count_hash[gift][level].to_i
+            valid = false
+            tree.errors[:abilities] << "The ability tree for this character includes too many #{level} abilities for #{gift.to_s.titlecase}."
+          end
         end
       end
 

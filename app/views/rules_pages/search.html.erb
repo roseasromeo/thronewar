@@ -1,4 +1,4 @@
-<h3>Rules Page Search Result</h3>
+<%= page_heading "Rules Page Search Results" %>
 
     <% @results.each do |result| %>
         <%= link_to result.name, rules_page_path(result) %><br>
