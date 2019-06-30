@@ -134,12 +134,11 @@ class FinalCharactersController < ApplicationController
     @final_character = FinalCharacter.find(params[:final_character_id])
     @final_character.submitting!
     @character_system = @final_character.character_system
-    notices = check_valid(@final_character)
-    if false && (notices.empty? || notices == nil)
+    error = check_valid(@final_character)
+    if error == false
       @final_character.submitted!
     else
       @final_character.not_submitted!
-      flash[:notice] = notices
     end
     redirect_to character_system_final_character_path(@character_system, @final_character)
   end

@@ -1,5 +1,5 @@
 module Rules
-
+include ApplicationHelper
 # UNIVERSAL
 #####
 
@@ -180,7 +180,6 @@ def dual_existence?(final_character)
   dual = false
   if final_character.char_tree != nil
     abilities_collection = final_character.char_tree.abilities_all(false)
-    puts abilities_collection
     if !(abilities_collection.where(name: "Dual Existence").empty?)
       dual = true
     end
@@ -194,7 +193,6 @@ end
     font = false
     if final_character.char_tree != nil
       abilities_collection = final_character.char_tree.abilities_all(false)
-      puts final_character.char_tree.abilities_collection(false).where(gift: :change)
       if !(abilities_collection.where(name: "Font of Magic").empty?)
         font = true
       end
@@ -698,12 +696,11 @@ end
 
   def check_valid(final_character)
     # Overspending
-    notices = []
     if final_character.leftover_points < 0
-      notices << "Purchases have exceeded maximum point expenditure. Please add Flaws, decrease Luck, decrease buy-ups, or remove other purchases."
+      flash_message :notice, "Purchases have exceeded maximum point expenditure. Please add Flaws, decrease Luck, decrease buy-ups, or remove other purchases."
     end
     if final_character.asset_points > 32
-      notices << "Tool and Regency purchases have exceeded the 32 point maximum allowed."
+      flash_message :notice, "Tool and Regency purchases have exceeded the 32 point maximum allowed."
     end
 
     # Buying up too much
@@ -713,39 +710,39 @@ end
       buy_up_total = buy_up_total + (rank.public_rank - rank.private_rank)
     end
     if buy_up_total > talent_num
-      notices << "Too many buy-ups for current Ego Talent. Please decrease number of ranks purchased."
+      flash_message :notice, "Too many buy-ups for current Ego Talent. Please decrease number of ranks purchased."
     end
 
     # Invalid Forms
     if !final_character.creature_forms.empty?
       final_character.creature_forms.each do |form|
         if !form.save
-          notices << "Form #{form.name} is invalid. Please check that the requirements for forms are met."
+        flash_message :notice, "Form #{form.name} is invalid. Please check that the requirements for forms are met."
         end
       end
     end
 
     # Check for one and only one Standard Form
     if final_character.creature_forms.where(standard_form: true).count == 0
-      notices << "Each final character must have one and only Standard Form. Create a New Creature Form and mark it as the Standard Form."
+      flash_message :notice, "Each final character must have one and only Standard Form. Create a New Creature Form and mark it as the Standard Form."
     end
     if final_character.creature_forms.where(standard_form: true).count > 1
-      notices << "Each final character must have one and only Standard Form. Too many Creature Forms are marked as Standard Forms."
+      flash_message :notice, "Each final character must have one and only Standard Form. Too many Creature Forms are marked as Standard Forms."
     end
 
     # Check for the right number of Creature Forms
     if final_character.creature_forms.where(standard_form: false).count < form_count(final_character)
-      notices << "This Final Character has too few Creature Forms. They should have #{form_count(final_character)} Creature Forms based on their current Flesh Rank."
+      flash_message :notice, "This Final Character has too few Creature Forms. They should have #{form_count(final_character)} Creature Forms based on their current Flesh Rank."
     end
     if final_character.creature_forms.where(standard_form: true).count > form_count(final_character)
-      notices << "This Final Character has too many Creature Forms. They should have #{form_count(final_character)} Creature Forms based on their current Flesh Rank."
+      flash_message :notice, "This Final Character has too many Creature Forms. They should have #{form_count(final_character)} Creature Forms based on their current Flesh Rank."
     end
 
     # Invalid Tools
     if !final_character.tools.empty?
       final_character.tools.each do |tool|
         if !tool.save
-          notices << "Tool #{tool.name} is invalid. Please check that the requirements for tools are met."
+          flash_message :notice, "Tool #{tool.name} is invalid. Please check that the requirements for tools are met."
         end
       end
     end
@@ -754,29 +751,29 @@ end
     if !final_character.regencies.empty?
       final_character.regencies.each do |regency|
         if !regency.save
-          notices << "Regency #{regency.name} is invalid. Please check that the requirements for all abilities are met."
+          flash_message :notice, "Regency #{regency.name} is invalid. Please check that the requirements for all abilities are met."
         end
       end
     end
 
     # check for blanks
     if check_blank(final_character.blurb)
-      notices << "Blurb must be completed before submission."
+      flash_message :notice, "Blurb must be completed before submission."
     end
     if check_blank(final_character.background)
-      notices << "Background must be completed before submission."
+      flash_message :notice, "Background must be completed before submission."
     end
     if check_blank(final_character.backstory_connections)
-      notices << "Backstory Connections must be completed before submission."
+      flash_message :notice, "Backstory Connections must be completed before submission."
     end
     if check_blank(final_character.name)
-      notices << "Name must be completed before submission."
+      flash_message :notice, "Name must be completed before submission."
     end
     if check_blank(final_character.goal)
-      notices << "Goal must be completed before submission."
+      flash_message :notice, "Goal must be completed before submission."
     end
     if check_blank(final_character.curses)
-      notices << "Curses must be completed before submission."
+      flash_message :notice, "Curses must be completed before submission."
     end
 
     # Check if need wishes
@@ -788,22 +785,28 @@ end
     end
     if gutter_magic
       if check_blank(final_character.wishes)
-        notices << "Wishes must be completed before submission."
+        flash_message :notice, "Wishes must be completed before submission."
       end
     end
 
     #check if flaws same
     if final_character.flaw1 != nil && (final_character.flaw1 == final_character.flaw2)
-      notices << "Both flaws must not be the same."
+      flash_message :notice, "Both flaws must not be the same."
     end
 
     #check if Ability Tree is valid
     if !final_character.char_tree.valid?
-      notices << "Ability tree contains an invalid set of abilities."
-      notices << final_character.char_tree.errors
+      flash_message :notice, "Ability tree contains an invalid set of abilities."
+      final_character.char_tree.errors[:abilities].each do |error|
+        flash_message :ability, error
+      end
+    end
+    error = true
+    if flash[:notice].empty? && flash[:ability].empty?
+      error = false
     end
 
-    notices
+    error
   end
 
   def check_blank(text)
