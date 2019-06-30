@@ -8,7 +8,7 @@ class CharTreeValidator < ActiveModel::Validator
 
     if final_character.submitting?
       ranks = final_character.ranks
-      abilities_collection = tree.abilities_collection(false)
+      abilities_collection = tree.abilities_all(false)
       abilities = tree.abilities
 
       # First, check for unavailable abilities added to character
@@ -27,7 +27,7 @@ class CharTreeValidator < ActiveModel::Validator
         levels.each do |level|
           if abilities.where(gift: gift, level: level, automatic: false).count > count_hash[gift][level].to_i
             valid = false
-            tree.errors[:abilities] << "The ability tree for this character includes too many #{level} abilities for #{gift.to_s.titlecase}."
+            tree.errors[:abilities] << "The ability tree for this character includes too many #{level} abilities for #{gift.to_s.humanize.titlecase}."
           end
         end
       end

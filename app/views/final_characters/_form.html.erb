@@ -37,7 +37,6 @@
     <%= f.input :extra_wishes, :as => :hidden, :value => 0 %>
     <%= f.input :wishes, :as => :hidden, :value => "" %>
   <% end %>
-  <%= f.input :standard_form, :label_method => :titleize, :input_html => { :class => "text_entry" } %>
   <%= f.input :other, :input_html => { :class => "text_entry_small" } %>
   <%= f.actions do %>
     <%= f.action :submit, :label => "Save Character Changes" %>

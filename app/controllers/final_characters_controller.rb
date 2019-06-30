@@ -14,12 +14,12 @@ class FinalCharactersController < ApplicationController
     @buy_up_total = 0
     @ranks.each do |rank|
       @buy_up_total = @buy_up_total + (rank.public_rank - rank.private_rank)
-      puts rank.item
-      if rank.item == "destiny"
-        @destiny_rank = rank.private_rank
-      end
-      if rank.item == "ego"
-        @ego_rank = rank.private_rank
+      if rank.item == "illusion"
+        if rank.private_rank > 0
+          @illusion = true
+        else
+          @illusion = false
+        end
       end
       if rank.item == "gutter_magic"
         if rank.private_rank > 0
@@ -29,8 +29,12 @@ class FinalCharactersController < ApplicationController
         end
       end
     end
-    @talent = talent(@ego_rank, @character_system.ranks.where(item: Rank.items[:ego]).maximum(:public_rank))
-    @fate = fate(@destiny_rank, @character_system.ranks.where(item: Rank.items[:destiny]).maximum(:public_rank),fate_flaw?(@final_character))
+    @talent = talent(@final_character)
+    @fate = fate_count(@final_character)
+    @wishes_count = wish_count(@final_character)
+    @wisps_count = wisp_count(@final_character)
+    @forms_count = form_count(@final_character)
+
     if @buy_up_total > @talent
       @talent_violation = true
     else
@@ -38,6 +42,10 @@ class FinalCharactersController < ApplicationController
     end
     if gm_user? || @final_character.user == @user || @character_system.complete?
       @show_all = true
+      if @final_character.submitting?
+        @final_character.not_submitted!
+        # fix issue if there is a Big error on submission
+      end
     else
       @show_all = false
     end

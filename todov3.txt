@@ -38,11 +38,6 @@ Refactor auction code
 Fix Losing single character on table import
 Add "Edit as plain text"
 
-in game app
---> Which Tools equipped and how much Edge granted
---> Power cool-down
---> Damage for self and Tools
-
 
 
 RULES NOTES
@@ -52,27 +47,10 @@ Target with a capital
 The World page
 
 Battle Ready: Celfiro bit, equipping Tools?
-CHECK Level links (Level not Levels)
 Charges?
 encounter versus combat
 Combine Resources and Fundamentals?
-Combat Example
---Stopped at Cunning
-
---Didn't finish Cunning but started Destiny
 Cooldown is not clarified--Resources??
 Clarify stuff in Destiny
 
 Should Improved Wisp let you exceed 3 ability cap?
-
-
-
-In a Combat, each round, Fae will declare actions and the Arbiter will resolve them. Actions form a stack--the last declared action of a round will be the first resolved.
-
-The order of declaration is determined by Cunning Initiative (which is equal to the Fae's Cunning Rank) with ties broken by Luck. The Fae with the lowest Initiative (largest number Rank) will declare first, and then the next lowest Initiative, and so forth until the Fae with highest Rank in Cunning (smallest number Rank) present declares. Then, the Arbiter will begin to resolve actions starting with the last action declared.
-
-If an action is about to be resolved and the Fae no longer wants to take that action based on what was already resolved, the Fae may decide to Abandon the action if they have not been Disrupted. In that case, they will receive a refund of 1 Fate token if they spent Fate tokens on the action that round.
-
-Because Fae may have bought up Ranks in Cunning after the Auction, a good Arbiter should count up using half-Ranks during declaration every round to allow people who are hiding their bought-up Ranks to pretend to be at any intermediate Rank between their original and their final Rank. Whenever two Fae would declare at the same time, the Fae who declares first is the person with lower Luck. The order of declaration is always mirrored to be the order of resolution, regardless of the Fae's final Cunning Initiative.
-
-Fae declaring later (i.e. those with better Cunning Initiative) may ask about contents of Fae of worse Initiative's Secret Actions. Answers from the Arbiter will depend on the action and on the Aspects and Gifts of the asking Fae.
