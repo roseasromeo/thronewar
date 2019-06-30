@@ -1,17 +1,6 @@
-Notes
-
-2. Push Home button in header
-3. Push italics in pages
-4. Push sortable bid tables
-5. Push round numbers
-6. Push last pledge showing
-7. Push route downcasing
-
-
 Navbar?
 
 Add other math to form/show
-Add flesh forms--new model with environment and perk selected, can have as many as want but check cap at submission, alert beforehand
 fix flash notices on submission
 Reorder character show and edit pages
 implement dryad regency stuff
