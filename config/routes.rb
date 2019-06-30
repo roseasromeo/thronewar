@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :creature_forms
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   get 'welcome/index'
 
@@ -54,10 +55,11 @@ Rails.application.routes.draw do
       post 'submit'
       post 'approve'
     end
-    resources :tools
+    resources :tools, only: [:show, :new, :edit, :create, :update, :destroy]
     resources :regencies
     resources :flaws, only: [:index, :new, :create, :destroy]
     resources :char_trees
+    resources :creature_forms, only: [:show, :new, :edit, :create, :update, :destroy]
   end
   resources :abilities
 

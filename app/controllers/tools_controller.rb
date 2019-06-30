@@ -2,15 +2,15 @@ class ToolsController < ApplicationController
   include Rules
   helper_method :font?, :ability_category, :ability_sort
 
-  def index
-    @character_system = CharacterSystem.find(params[:character_system_id])
-
-    if gm_user? || @character_system.complete?
-      @tools = @character_system.tools
-    else
-      redirect_to [@character_system]
-    end
-  end
+  # def index
+  #   @character_system = CharacterSystem.find(params[:character_system_id])
+  #
+  #   if gm_user? || @character_system.complete?
+  #     @tools = @character_system.tools
+  #   else
+  #     redirect_to [@character_system]
+  #   end
+  # end
 
   def show
     @user = current_user

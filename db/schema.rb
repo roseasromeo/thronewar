@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_26_002139) do
+ActiveRecord::Schema.define(version: 2019_06_30_163201) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -111,6 +111,19 @@ ActiveRecord::Schema.define(version: 2019_06_26_002139) do
     t.index ["link_index_id"], name: "index_content_links_on_link_index_id"
   end
 
+  create_table "creature_forms", force: :cascade do |t|
+    t.bigint "final_character_id"
+    t.string "name"
+    t.string "description"
+    t.integer "perk", default: 0
+    t.integer "environment", default: 0
+    t.integer "extra_environment", default: 0
+    t.boolean "standard_form", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["final_character_id"], name: "index_creature_forms_on_final_character_id"
+  end
+
   create_table "final_characters", id: :serial, force: :cascade do |t|
     t.integer "character_system_id", null: false
     t.integer "user_id", null: false
@@ -122,9 +135,7 @@ ActiveRecord::Schema.define(version: 2019_06_26_002139) do
     t.text "backstory_connections"
     t.text "goal"
     t.text "curses"
-    t.text "standard_form"
     t.text "wishes"
-    t.text "flesh_forms"
     t.text "other"
     t.integer "luck", default: 0
     t.integer "approval", default: 0, null: false
@@ -278,6 +289,7 @@ ActiveRecord::Schema.define(version: 2019_06_26_002139) do
   add_foreign_key "characters", "users"
   add_foreign_key "comments", "rules_pages"
   add_foreign_key "comments", "users"
+  add_foreign_key "creature_forms", "final_characters"
   add_foreign_key "final_characters", "character_systems"
   add_foreign_key "final_characters", "flaws", column: "flaw1"
   add_foreign_key "final_characters", "flaws", column: "flaw2"

@@ -15,9 +15,12 @@
   <%= f.inputs do %>
     <%= f.input :final_character_id, :label => false, :as => :number, :input_html => { :class => "hidden", :value => @final_character.id } %>
     <div id='abilities'>
-      <% @ability_char_trees = @char_tree.ability_char_trees%>
+      <% @ability_char_trees = @char_tree.ability_char_trees.includes(:ability).order('abilities.gift ASC, abilities.level ASC')%>
+      <% i = 0 %>
       <%= f.semantic_fields_for :ability_char_trees, @ability_char_trees do |ability_char_tree| %>
-        <%= render 'ability_char_tree_fields', :f => ability_char_tree %>
+        <% @current_ability = @ability_char_trees.offset(i).first.ability %>
+        <%= render 'ability_char_tree_fields', :f => ability_char_tree, :current_ability => @current_ability  %>
+        <% i = i + 1 %>
       <% end %>
       <div class='links'>
         <%= link_to_add_association 'add ability', f, :ability_char_trees %>

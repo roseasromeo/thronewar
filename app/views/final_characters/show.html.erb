@@ -4,13 +4,20 @@
 <%= page_heading @final_character.name %>
 <h2 class="player">Player: <%= @final_character.user.name %></h2>
 <% if @show_all %>
+  <h3>Calculations based on current Ranks and choices</h3>
   <p>Leftover Points: <%= @final_character.leftover_points %></p>
   <p>Asset Points Spent (Maximum 32): <%= @final_character.asset_points %></p>
-  <p>Status: <%= @final_character.approval %></p>
+  <p>Status: <%= @final_character.approval.humanize.to_s.titlecase %></p>
   <p>Luck: <%= @final_character.luck %></p>
   <p>Total Number of Buy-ups: <%= @buy_up_total %></p>
   <p>Ego Talent: <%= @talent %></p>
   <p>Destiny Fate: <%= @fate %></p>
+  <% if @illusion %>
+    <p>Maximum Number of Wisps: <%= @wisps_count %></p>
+  <% end %>
+  <% if @gutter_magic %>
+    <p>Wishes: <%= @wishes_count %></p>
+  <% end %>
   <% if @talent_violation %>
     <p class="error">Too many buy-ups have been selected given the character's Talent number.</p>
   <% end %>
@@ -35,8 +42,17 @@
   </table>
 </div>
 <% if @final_character.approved? || gm_user? || @show_all %>
+  <h3> Information that is public knowledge after character approval </h3>
   <p>Blurb: <%= html_safe_rescue(@final_character.blurb) %></p>
-  <p>Standard Form: <%= html_safe_rescue(@final_character.standard_form) %></p>
+  <p>Standard Form:
+  <% if @final_character.creature_forms.where(standard_form: true).first != nil %>
+    <%= link_to "Standard Form", [@character_system, @final_character.creature_forms.where(standard_form: true).first] %>
+  <% elsif gm_user? || @show_all %>
+    <%= link_to "Create a Standard Form", new_character_system_creature_form_path(@character_system,final_character: @final_character) %>
+  <% else %>
+    This character does not yet have a Standard Form.
+  <% end %>
+  </p>
   <% if @flaw1 != nil %>
     <p class="flaw">Flaw 1: <%= link_to @flaw1.name.titleize, '/' + @flaw1.link %> <%= @flaw1.description %></p>
   <% end %>
@@ -45,6 +61,7 @@
   <% end %>
 <% end %>
 <% if @show_all %>
+  <h3> Information that is private knowledge after character approval </h3>
   <p>Background: <%= html_safe_rescue(@final_character.background) %></p>
   <p>Backstory Connections: <%= html_safe_rescue(@final_character.backstory_connections) %></p>
   <p>Goal: <%= html_safe_rescue(@final_character.goal) %></p>
@@ -53,6 +70,24 @@
     <p>Extra Wishes: <%= @final_character.extra_wishes %></p>
     <p>Wishes: <%= html_safe_rescue(@final_character.wishes) %></p>
   <% end %>
+  <div id='forms'>
+    <% @forms = @final_character.creature_forms %>
+    <% if !@forms.empty? %>
+      <h3>Creature Forms</h3>
+      <table class="forms_table">
+        <tr>
+          <th>Name</th>
+          <th>Environment</th>
+        </tr>
+        <% @forms.each do |form| %>
+          <%= render 'form_display', :f => form %>
+        <% end %>
+      </table>
+    <% end %>
+    <% if @final_character.not_submitted? && (gm_user? || @user == @final_character.user) %>
+      <p class="links"><%= link_to "New Creature Form", new_character_system_creature_form_path(@character_system,final_character: @final_character) %></p>
+    <% end %>
+  </div>
   <div id='tools'>
     <% @tools = @final_character.tools %>
     <% if !@tools.empty? %>

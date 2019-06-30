@@ -1,0 +1,10 @@
+<div class='nested-forms'>
+    <tr>
+      <% if f.name == "" || f.name == nil %>
+        <td><%= link_to "Form", character_system_creature_form_path(@character_system,f) %></td>
+      <% else %>
+        <td><%= link_to f.name, character_system_creature_form_path(@character_system,f) %></td>
+      <% end %>
+      <td><%= f.environment %></td>
+    </tr>
+</div>
