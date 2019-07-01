@@ -21,7 +21,7 @@ class CharTree < ApplicationRecord
 
   def abilities_all(all_abilities)
     abilities_all = gift_abilities_collection(self.final_character,all_abilities,Ability.all)
-    abilities
+    abilities_all
   end
 
   def ability_char_tree_cleanup

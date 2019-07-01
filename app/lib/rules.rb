@@ -776,7 +776,7 @@ end
       flash_message :notice, "Curses must be completed before submission."
     end
 
-    # Check if need wishes
+    # Check if need wishes and check number of wishes (in progress)
     gutter_rank = final_character.ranks.where(item: Rank.items[:gutter_magic]).first
     if gutter_rank.private_rank > 0
       gutter_magic = true
@@ -795,14 +795,19 @@ end
     end
 
     #check if Ability Tree is valid
-    if !final_character.char_tree.valid?
-      flash_message :notice, "Ability tree contains an invalid set of abilities."
-      final_character.char_tree.errors[:abilities].each do |error|
-        flash_message :ability, error
+    if !(final_character.char_tree == nil)
+      if !final_character.char_tree.valid?
+        flash_message :notice, "Ability tree contains an invalid set of abilities."
+        final_character.char_tree.errors[:abilities].each do |error|
+          flash_message :ability, error
+        end
       end
+    else
+      flash_message :notice, "Every character must have an ability tree, even if they have no Gifts."
     end
+
     error = true
-    if flash[:notice].empty? && flash[:ability].empty?
+    if flash.empty?
       error = false
     end
 

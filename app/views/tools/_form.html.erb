@@ -79,7 +79,9 @@
         <% elsif illusion_adv !=true %>
           <td><ul></ul></td>
         <% end %>
-        <td><ul></ul></td>
+        <% if font?(@final_character) %>
+          <td><ul></ul></td>
+        <% end %>
         </tr>
       </table>
     </fieldset>

@@ -1,12 +1,9 @@
 Navbar?
 
 Add other math to form/show
-fix flash notices on submission
 Reorder character show and edit pages
 implement dryad regency stuff
 fix leftover points
-
-Tool and regency forms
 
 
 .sort_by{|ability| [ability_category(ability)[0],
