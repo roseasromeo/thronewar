@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_27_175354) do
+ActiveRecord::Schema.define(version: 2019_07_01_005853) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,12 +18,12 @@ ActiveRecord::Schema.define(version: 2019_05_27_175354) do
   create_table "abilities", force: :cascade do |t|
     t.string "name"
     t.string "short_text"
-    t.string "long_text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "level", default: 0, null: false
     t.integer "gift", default: 0, null: false
     t.boolean "automatic", default: false, null: false
+    t.text "long_text"
   end
 
   create_table "ability_char_trees", force: :cascade do |t|
@@ -111,6 +111,28 @@ ActiveRecord::Schema.define(version: 2019_05_27_175354) do
     t.index ["link_index_id"], name: "index_content_links_on_link_index_id"
   end
 
+  create_table "creature_forms", force: :cascade do |t|
+    t.bigint "final_character_id"
+    t.string "name"
+    t.string "description"
+    t.integer "perk", default: 0
+    t.integer "environment", default: 0
+    t.integer "extra_environment", default: 0
+    t.boolean "standard_form", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["final_character_id"], name: "index_creature_forms_on_final_character_id"
+  end
+
+  create_table "final_character_wishes", force: :cascade do |t|
+    t.bigint "final_character_id"
+    t.bigint "wish_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["final_character_id"], name: "index_final_character_wishes_on_final_character_id"
+    t.index ["wish_id"], name: "index_final_character_wishes_on_wish_id"
+  end
+
   create_table "final_characters", id: :serial, force: :cascade do |t|
     t.integer "character_system_id", null: false
     t.integer "user_id", null: false
@@ -122,9 +144,6 @@ ActiveRecord::Schema.define(version: 2019_05_27_175354) do
     t.text "backstory_connections"
     t.text "goal"
     t.text "curses"
-    t.text "standard_form"
-    t.text "wishes"
-    t.text "flesh_forms"
     t.text "other"
     t.integer "luck", default: 0
     t.integer "approval", default: 0, null: false
@@ -265,6 +284,16 @@ ActiveRecord::Schema.define(version: 2019_05_27_175354) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  create_table "wishes", force: :cascade do |t|
+    t.bigint "character_system_id"
+    t.string "name", null: false
+    t.text "description"
+    t.string "link"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["character_system_id"], name: "index_wishes_on_character_system_id"
+  end
+
   add_foreign_key "ability_char_trees", "abilities"
   add_foreign_key "ability_char_trees", "char_trees"
   add_foreign_key "ability_dependencies", "abilities", column: "depends_on_id"
@@ -278,6 +307,9 @@ ActiveRecord::Schema.define(version: 2019_05_27_175354) do
   add_foreign_key "characters", "users"
   add_foreign_key "comments", "rules_pages"
   add_foreign_key "comments", "users"
+  add_foreign_key "creature_forms", "final_characters"
+  add_foreign_key "final_character_wishes", "final_characters"
+  add_foreign_key "final_character_wishes", "wishes"
   add_foreign_key "final_characters", "character_systems"
   add_foreign_key "final_characters", "flaws", column: "flaw1"
   add_foreign_key "final_characters", "flaws", column: "flaw2"
@@ -292,4 +324,5 @@ ActiveRecord::Schema.define(version: 2019_05_27_175354) do
   add_foreign_key "rounds", "auctions"
   add_foreign_key "subpages", "rules_pages"
   add_foreign_key "tools", "final_characters"
+  add_foreign_key "wishes", "character_systems"
 end

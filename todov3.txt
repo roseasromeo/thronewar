@@ -1,0 +1,42 @@
+Navbar?
+
+Add other math to form/show
+Reorder character show and edit pages
+implement dryad regency stuff
+fix leftover points
+
+
+.sort_by{|ability| [ability_category(ability)[0],
+    ability_category(ability)[1], ability_category(ability)[2], ability_category(ability)[3],
+    (ability.empty? ? 0 : ability.to_i) ]} %>
+
+Math in auction
+
+send email on reject/approve
+
+printable sheets for tools, regencies, characters
+(Admin and player)
+
+Allow editing of character_system description only
+
+Refactor auction code
+
+Fix Losing single character on table import
+Add "Edit as plain text"
+
+
+
+RULES NOTES
+
+Overall:
+Target with a capital
+The World page
+
+Battle Ready: Celfiro bit, equipping Tools?
+Charges?
+encounter versus combat
+Combine Resources and Fundamentals?
+Cooldown is not clarified--Resources??
+Clarify stuff in Destiny
+
+Should Improved Wisp let you exceed 3 ability cap?

@@ -1,22 +1,16 @@
 <p id="notice"><%= notice %></p>
 
+<%= page_heading @user.name %>
+
 <p>
   <strong>Email:</strong>
   <%= @user.email %>
 </p>
 
 <p>
-  <strong>Name:</strong>
-  <%= @user.name %>
-</p>
-
-<p>
   <strong>Type:</strong>
   <%= @user.user_type %>
 </p>
-
-
-
 
 <%= link_to 'Edit', edit_user_path(@user) %>
 <% if admin_user? %>

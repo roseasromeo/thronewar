@@ -1,5 +1,5 @@
-<h1> Index of Rules Pages </h1>
-<%= link_to 'Back to Home', '/' %>
+<%= page_heading "Index of Rules Pages" %>
+
 <% if logged_in? %>
   <% if admin_user? %>
     <%= link_to 'New rules page', new_rules_page_path %>

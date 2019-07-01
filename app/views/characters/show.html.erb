@@ -2,13 +2,12 @@
   <%= link_to 'Back to Character Index', game_characters_path(@game) %>
   <td><%= link_to 'Delete', game_character_path(@game, @character), method: :delete, data: { confirm: 'Are you sure?' } %></td>
 <% end %>
-<%= link_to 'Back to Home', '/' %>
 <%= link_to 'Back to Game', game_path(@game) %>
 
 <!-- ADD LABELS! -->
-<h1 class="character_pseudonym">
-  Pseudonym: <%= @character.pseudonym %>
-</h1>
+
+<%= page_heading @character.pseudonym %>
+
 <p class="character_player">
   Player: <%= @character.user.name %>
 </p>

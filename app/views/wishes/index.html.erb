@@ -1,0 +1,24 @@
+<%= link_to "Back to Character System Home", character_system_path(@character_system) %>
+<%= page_heading "Wishes" %>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Short Description</th>
+    <% if admin_user? %>
+      <th>Delete?</th>
+    <% end %>
+  </tr>
+
+  <% @wishes.each do |wish| %>
+    <tr>
+      <td><%= link_to wish.name, '/' + wish.link %></td>
+      <td><%= wish.description %></td>
+      <% if admin_user? %>
+        <td><%= link_to 'Delete', character_system_wish_path(@character_system,wish), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
+<% if gm_user? %>
+  <%= link_to 'Add wish', new_character_system_wish_path(@character_system) %>
+<% end %>

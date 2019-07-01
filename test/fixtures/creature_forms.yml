@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  final_character: one
+  description: MyString
+  perk: MyText
+  environment: 1
+
+two:
+  final_character: two
+  description: MyString
+  perk: MyText
+  environment: 1

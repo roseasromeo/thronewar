@@ -1,0 +1,2 @@
+module CreatureFormsHelper
+end
