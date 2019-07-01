@@ -79,9 +79,10 @@ class ToolsController < ApplicationController
   end
 
   def destroy
-    if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
+    if @editable
       @tool.destroy
-      redirect_to [@character_system]
+      @final_character.save
+      redirect_to [@character_system, @final_character]
     else
       redirect_to [@character_system]
     end

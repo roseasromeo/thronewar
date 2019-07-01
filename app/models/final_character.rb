@@ -5,9 +5,11 @@ class FinalCharacter < ApplicationRecord
   has_many :tools, dependent: :destroy
   has_many :regencies, dependent: :destroy
   has_one :char_tree, dependent: :destroy
-  has_many :creature_forms
+  has_many :creature_forms, dependent: :destroy
   belongs_to :flaw1, :class_name => 'Flaw', foreign_key: 'flaw1', optional: true
   belongs_to :flaw2, :class_name => 'Flaw', foreign_key: 'flaw2', optional: true
+  has_many :final_character_wishes, dependent: :destroy
+  has_many :wishes, through: :final_character_wishes
 
   before_save :calculate_points
   after_save :calculate_points
@@ -19,6 +21,7 @@ class FinalCharacter < ApplicationRecord
   validates_numericality_of :extra_wishes, :greater_than_or_equal_to => 0, :only_integer => true
 
   accepts_nested_attributes_for :ranks, reject_if: :all_blank, allow_destroy: false
+  accepts_nested_attributes_for :final_character_wishes
 
   def asset_points
     #Tools

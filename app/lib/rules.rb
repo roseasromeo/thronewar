@@ -200,6 +200,17 @@ end
     font
   end
 
+  def need_wishes?(final_character)
+    wishes = false
+    if final_character.char_tree != nil
+      abilities_collection = final_character.char_tree.abilities_all(false)
+      if !(abilities_collection.where(name: "Make a Wish").empty?)
+        wishes = true
+      end
+    end
+    wishes
+  end
+
   def wish_count(final_character)
     gift = :gutter_magic
     talent = talent(final_character)
@@ -776,16 +787,13 @@ end
       flash_message :notice, "Curses must be completed before submission."
     end
 
-    # Check if need wishes and check number of wishes (in progress)
-    gutter_rank = final_character.ranks.where(item: Rank.items[:gutter_magic]).first
-    if gutter_rank.private_rank > 0
-      gutter_magic = true
-    else
-      gutter_magic = false
-    end
-    if gutter_magic
-      if check_blank(final_character.wishes)
-        flash_message :notice, "Wishes must be completed before submission."
+    # Check if need wishes and check number of wishes
+    if need_wishes?(final_character)
+      if final_character.wishes.count < wish_count(final_character)
+        flash_message :notice, "This Final Character has too few Wishes. They should have #{wish_count(final_character)} Wishes based on their current Gutter Magic Level and Extra Wishes purchased."
+      end
+      if final_character.wishes.count > wish_count(final_character)
+        flash_message :notice, "This Final Character has too many Wishes. They should have #{wish_count(final_character)} Wishes based on their current Gutter Magic Level and Extra Wishes purchased."
       end
     end
 

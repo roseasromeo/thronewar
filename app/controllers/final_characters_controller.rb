@@ -1,12 +1,13 @@
 class FinalCharactersController < ApplicationController
   include Rules
 
+  before_action :set_final_character, only: [:show, :edit, :update, :wishes]
+  before_action :setup
+  before_action :editable
+
   helper_method :html_safe_rescue, :ranks_collection, :aspect_level, :gift_level
 
   def show
-    @final_character = FinalCharacter.find(params[:id])
-    @user = current_user
-    @character_system = @final_character.character_system
     @flaw1 = (@final_character.flaw1 != nil ? Flaw.find(@final_character.flaw1.id) : nil)
     @flaw2 = (@final_character.flaw2 != nil ? Flaw.find(@final_character.flaw2.id) : nil)
     @ranks = @final_character.ranks.order(:item)
@@ -21,26 +22,20 @@ class FinalCharactersController < ApplicationController
           @illusion = false
         end
       end
-      if rank.item == "gutter_magic"
-        if rank.private_rank > 0
-          @gutter_magic = true
-        else
-          @gutter_magic = false
-        end
-      end
     end
     @talent = talent(@final_character)
     @fate = fate_count(@final_character)
     @wishes_count = wish_count(@final_character)
     @wisps_count = wisp_count(@final_character)
     @forms_count = form_count(@final_character)
+    @need_wishes = need_wishes?(@final_character)
 
     if @buy_up_total > @talent
       @talent_violation = true
     else
       @talent_violation = false
     end
-    if gm_user? || @final_character.user == @user || @character_system.complete?
+    if @editable || @character_system.complete?
       @show_all = true
       if @final_character.submitting?
         @final_character.not_submitted!
@@ -52,9 +47,6 @@ class FinalCharactersController < ApplicationController
   end
 
   def edit
-    @final_character = FinalCharacter.find(params[:id])
-    @user = current_user
-    @character_system = @final_character.character_system
     available_users = User.joins(:final_characters).merge(FinalCharacter.where.not(character_system: @character_system)) #fix this
     @possible_users = available_users.or(User.where(id: @user.id).joins(:final_characters)).distinct
 
@@ -62,13 +54,9 @@ class FinalCharactersController < ApplicationController
     @flaw2_id = @final_character.flaw2 == nil ? nil : @final_character.flaw2.id
 
     gutter_rank = @final_character.ranks.where(item: Rank.items[:gutter_magic]).first
-    if gutter_rank.private_rank > 0
-      @gutter_magic = true
-    else
-      @gutter_magic = false
-    end
+    @need_wishes = need_wishes?(@final_character)
 
-    if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
+    if @editable
       @ranks = @final_character.ranks.order(:item)
       @ranks.each do |rank|
         puts rank.item
@@ -79,54 +67,44 @@ class FinalCharactersController < ApplicationController
   end
 
   def update
-    @user = current_user
-    @final_character = FinalCharacter.find(params[:id])
-    @character_system = @final_character.character_system
-
-    @flaw1_id = @final_character.flaw1 == nil ? nil : @final_character.flaw1.id
-    @flaw2_id = @final_character.flaw2 == nil ? nil : @final_character.flaw2.id
-
-    gutter_rank = @final_character.ranks.where(item: Rank.items[:gutter_magic]).first
-    if gutter_rank.private_rank > 0
-      @gutter_magic = true
+    if params[:commit] == 'Save Wishes'
+      save_wishes
     else
-      @gutter_magic = false
-    end
+      @flaw1_id = @final_character.flaw1 == nil ? nil : @final_character.flaw1.id
+      @flaw2_id = @final_character.flaw2 == nil ? nil : @final_character.flaw2.id
+      @need_wishes = need_wishes?(@final_character)
 
-    if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
-      @character_system = CharacterSystem.find(params[:character_system_id])
-      @user = User.find(final_character_params[:user_id])
-      leftover_points = 0
-      flaw1_id = final_character_params[:flaw1]
-      puts flaw1_id
-      if flaw1_id != "" && flaw1_id != nil
-        @flaw1 = Flaw.find(flaw1_id)
-      else
-        @flaw1 = nil
-      end
-      flaw2_id = final_character_params[:flaw2]
-      if flaw2_id != "" && flaw2_id != nil
-        @flaw2 = Flaw.find(flaw2_id)
-        puts @flaw2
-      else
-        @flaw2 = nil
-      end
-
-      if @final_character.update(character_system: @character_system, user: @user, name: final_character_params[:name], blurb: final_character_params[:blurb], background: final_character_params[:background], backstory_connections: final_character_params[:backstory_connections], goal: final_character_params[:goal], curses: final_character_params[:curses], wishes: final_character_params[:wishes], extra_wishes: final_character_params[:extra_wishes], other: final_character_params[:other], luck: final_character_params[:luck], flaw1: @flaw1, flaw2: @flaw2) #
-        @final_character.ranks.each do |rank|
-          item_number = Rank.items[rank.item]
-          if final_character_params[:ranks_attributes][item_number.to_s].has_key?("private_rank")
-            rank.private_rank = final_character_params[:ranks_attributes][item_number.to_s]["private_rank"]
-            rank.save
-          end
+      if @editable
+        @user = User.find(final_character_params[:user_id])
+        flaw1_id = final_character_params[:flaw1]
+        if flaw1_id != "" && flaw1_id != nil
+          @flaw1 = Flaw.find(flaw1_id)
+        else
+          @flaw1 = nil
         end
-        @final_character.save
-        redirect_to [@character_system, @final_character]
+        flaw2_id = final_character_params[:flaw2]
+        if flaw2_id != "" && flaw2_id != nil
+          @flaw2 = Flaw.find(flaw2_id)
+        else
+          @flaw2 = nil
+        end
+
+        if @final_character.update(character_system: @character_system, user: @user, name: final_character_params[:name], blurb: final_character_params[:blurb], background: final_character_params[:background], backstory_connections: final_character_params[:backstory_connections], goal: final_character_params[:goal], curses: final_character_params[:curses], wishes: final_character_params[:wishes], extra_wishes: final_character_params[:extra_wishes], other: final_character_params[:other], luck: final_character_params[:luck], flaw1: @flaw1, flaw2: @flaw2) #
+          @final_character.ranks.each do |rank|
+            item_number = Rank.items[rank.item]
+            if final_character_params[:ranks_attributes][item_number.to_s].has_key?("private_rank")
+              rank.private_rank = final_character_params[:ranks_attributes][item_number.to_s]["private_rank"]
+              rank.save
+            end
+          end
+          @final_character.save
+          redirect_to [@character_system, @final_character]
+        else
+          render 'edit'
+        end
       else
-        render 'edit'
+        redirect_to character_system_final_character_path(@character_system, @final_character)
       end
-    else
-      redirect_to character_system_final_character_path(@character_system, @final_character)
     end
   end
 
@@ -161,9 +139,42 @@ class FinalCharactersController < ApplicationController
     redirect_to character_system_final_character_path(@character_system, @final_character)
   end
 
+  def wishes
+    if @editable
+      @wishes = @final_character.wishes
+      @final_character_wishes = @final_character.final_character_wishes
+      @all_wishes = @character_system.wishes
+    else
+      redirect_to character_system_final_character_path(@character_system, @final_character)
+    end
+  end
+
+  def save_wishes
+    if @editable
+      wishes_params[:final_character_wishes_attributes].each do |k,v|
+        if v["_destroy"] == "false"
+          if @final_character.final_character_wishes.where(wish: Wish.find(v[:wish_id])).empty?
+            wish = @final_character.final_character_wishes.new(final_character: @final_character, wish: Wish.find(v[:wish_id]))
+            wish.save
+          end
+        else
+          destroy_id = v["id"].to_i
+          wish = FinalCharacterWish.find(destroy_id).destroy
+        end
+      end
+      redirect_to character_system_final_character_path(@character_system, @final_character)
+    else
+      redirect_to character_system_final_character_path(@character_system, @final_character)
+    end
+  end
+
   private
     def final_character_params
       params.require(:final_character).permit(:user_id, :flaw1, :flaw2, :name, :blurb, :background, :backstory_connections, :goal, :curses, :wishes, :extra_wishes, :other, :luck, :leftover_points, ranks_attributes: [:id, :private_rank])
+    end
+
+    def wishes_params
+      params.require(:final_character).permit(final_character_wishes_attributes: [:wish_id, :final_character_id, :_destroy, :id])
     end
 
     def html_safe_rescue(text)
@@ -188,6 +199,31 @@ class FinalCharactersController < ApplicationController
         end
       end
       collection
+    end
+
+    def setup
+      set_character_system
+      set_user
+    end
+
+    def set_final_character
+      if params[:final_character_id] != nil
+        @final_character = FinalCharacter.find(params[:final_character_id])
+      else
+        @final_character = FinalCharacter.find(params[:id])
+      end
+    end
+
+    def set_character_system
+      @character_system = @final_character.character_system
+    end
+
+    def set_user
+      @user = current_user
+    end
+
+    def editable
+      @editable = (@final_character.user == @user && @final_character.not_submitted?) || gm_user?
     end
 
 end
