@@ -1,7 +1,11 @@
 <div class='nested-fields'>
   <%= f.inputs do %>
     <% if @current_ability == nil %>
-      <% abil_id = @char_tree.abilities_all(false).first.id %>
+      <% if @char_tree.abilities_all(false).first == nil %>
+        <% abil_id = 0 %>
+      <% else %>
+        <% abil_id = @char_tree.abilities_all(false).first.id %>
+      <% end %>
     <% else %>
       <% abil_id = @current_ability.id %>
     <% end %>
