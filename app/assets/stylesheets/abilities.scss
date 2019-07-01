@@ -1,3 +1,83 @@
 // Place all the styles related to the Abilities controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+table.gift_type {
+  word-wrap: break-word;
+  margin-left: auto;
+  margin-right: auto;
+  body {text-align:center;}
+
+  border: 1px solid;
+  border-collapse: collapse;
+  padding: 5px;
+  margin-bottom: 15px;
+  td, th {
+    border: 1px solid;
+    padding: 5px;
+  }
+  th {
+    background-color: #C1E1A6;
+  }
+  td {
+    background-color: #ADD8E6;
+  }
+}
+
+table.ability {
+  word-wrap: break-word;
+  border: 1px solid;
+  border-collapse: collapse;
+  padding: 5px;
+  margin-bottom: 15px;
+  td, th {
+    border: 1px solid;
+    padding: 5px;
+  }
+  th {
+    background-color: #81bab9
+  }
+}
+
+
+td.type, th.type {
+  width: 20%;
+  background-color: #C1E1A6;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+td.gift, th.gift {
+  width: 10%;
+  background-color: #bddbd3;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+td.ability_name, th.ability_name {
+  width: 20%;
+  background-color: #ADD8E6;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+td.summary, th.summary {
+  width: 50%;
+  background-color: #ADD8E6;
+  font-family: inherit;
+  font-size: inherit;
+  table {
+    font-family: inherit;
+    font-size: inherit;
+    width: 100%;
+    word-wrap: break-word;
+    border: 1px solid;
+    border-collapse: collapse;
+    padding: 5px;
+    margin-bottom: 15px;
+    td, th {
+      border: 1px solid;
+      padding: 5px;
+    }
+  }
+}

@@ -1,42 +1,49 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @ability.name %>
-</p>
+<%= page_heading @ability.name %>
+<table class="gift_type">
+  <thead>
+    <tr>
+      <th>Gift</th>
+      <th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <td><%= @ability.gift.titlecase %></td>
+    <td><%= @ability.level.titlecase %> <% if @ability.automatic %> Automatic <% end%></td>
+  </tbody>
+</table>
 
-<p>
-  <strong>Level:</strong>
-  <%= @ability.gift %>
-</p>
+<h2 class='ability_title' >Summary: <%= @ability.short_text %></h2>
+<table class="subpage">
+  <tr>
+    <td class ="body">
+      <%= sanitize @ability.long_text, :tags => %w(p strong b i em u table tr th td a ul ol li), :attributes => %w(href) %>
+    </td>
+  </tr>
+</table>
 
-<p>
-  <strong>Level:</strong>
-  <%= @ability.level %>
-</p>
-
-<p>
-  <strong>Long text:</strong>
-  <%= @ability.automatic %>
-</p>
-
-<p>
-  <strong>Short text:</strong>
-  <%= @ability.short_text %>
-</p>
-
-<p>
-  <strong>Long text:</strong>
-  <%= @ability.long_text %>
-</p>
 
 <div id='dependencies'>
-  <% @ability.dependency_links.each do |dependency_link| %>
-    <%= render 'dependency_link_display', :f => dependency_link %>
+  <% if @ability.dependency_links.count > 0 %>
+    <h1>Dependencies</h1>
+  <div class='nested-dependencies'%>
+    <table class='ability'>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Summary</th>
+      </tr>
+      <% @ability.dependency_links.each do |dependency_link| %>
+        <%= render 'dependency_link_display', :f => dependency_link %>
+      <% end %>
+    </table>
+  </div>
   <% end %>
 </div>
 
 
-
-<%= link_to 'Edit', edit_ability_path(@ability) %> |
-<%= link_to 'Back', abilities_path %>
+<% if admin_user? %>
+  <%= link_to 'Edit', edit_ability_path(@ability) %> |
+<% end %>
+<%= link_to 'Index of Abilities', abilities_path %>

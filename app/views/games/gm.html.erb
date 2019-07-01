@@ -17,7 +17,7 @@ Total spent points for each character
   <% end %>
 </div>
 
-<h1 class="auction_title">Auction</h1>
+<%= page_heading "Auction" %>
 <%= render 'character_list', :aspect_characters => @aspect_characters, :gift_characters => @gift_characters %>
 <% if !@aspect_exists %>
   <%= link_to "Start Aspect Auction", aspect_game_path(@game), :method => :post %>

@@ -50,6 +50,7 @@ class CharacterSystemsController < ApplicationController
       @gift_auction = @game.auctions.gift.first
       @errors = ActiveModel::Errors.new(@character_system)
       default_flaws
+      default_wishes
       @characters.each do |character|
         user = character.user
 
@@ -104,6 +105,21 @@ class CharacterSystemsController < ApplicationController
         else
           flaw.errors.full_messages.each do |msg|
             @errors[:base] << ("Flaw error: #{msg}")
+          end
+        end
+      end
+    end
+
+    def default_wishes
+      filename = Rails.root + 'app/assets/files/wishes.utf8.csv'
+      CSV.foreach(filename, :headers => true) do |row|
+        row_hash = row.to_hash
+        wish = Wish.new(character_system: @character_system, name: row_hash['name'], description: row_hash['description'], link: row_hash['link'])
+        if wish.save
+          # do nothing
+        else
+          wish.errors.full_messages.each do |msg|
+            @errors[:base] << ("Wish error: #{msg}")
           end
         end
       end

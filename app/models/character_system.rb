@@ -2,6 +2,7 @@ class CharacterSystem < ApplicationRecord
   belongs_to :game
   has_many :final_characters, dependent: :destroy
   has_many :flaws, dependent: :destroy
+  has_many :wishes, dependent: :destroy
   has_many :ranks, through: :final_characters
   has_many :tools, through: :final_characters
   has_many :regencies, through: :final_characters

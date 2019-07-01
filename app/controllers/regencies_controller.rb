@@ -1,23 +1,20 @@
 class RegenciesController < ApplicationController
   include Rules
+  before_action :set_regency, only: [:show, :edit, :update, :destroy]
+  before_action :setup
+  before_action :editable
 
-  def index
-    @character_system = CharacterSystem.find(params[:character_system_id])
-
-    if gm_user? || @character_system.complete?
-      @regencies = @character_system.regencies
-    else
-      redirect_to [@character_system]
-    end
-  end
+  # def index
+  #   @character_system = CharacterSystem.find(params[:character_system_id])
+  #
+  #   if gm_user? || @character_system.complete?
+  #     @regencies = @character_system.regencies
+  #   else
+  #     redirect_to [@character_system]
+  #   end
+  # end
 
   def show
-    @user = current_user
-    @regency = Regency.find(params[:id])
-    @final_character = @regency.final_character
-    @character_system = @final_character.character_system
-    @ability_collection = regency_abilities_collection
-    @keeper_collection = keeper_abilities_collection
     @show_all = false
 
     if gm_user? || @final_character.user == @user || @character_system.complete?
@@ -28,12 +25,6 @@ class RegenciesController < ApplicationController
   end
 
   def new
-    @user = current_user
-    @final_character = FinalCharacter.find(params[:final_character])
-    @character_system = CharacterSystem.find(params[:character_system_id])
-    @ability_collection = regency_abilities_collection
-    @keeper_collection = keeper_abilities_collection
-
     if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
       @regency = Regency.new
     else
@@ -42,13 +33,6 @@ class RegenciesController < ApplicationController
   end
 
   def edit
-    @user = current_user
-    @regency = Regency.find(params[:id])
-    @final_character = @regency.final_character
-    @character_system = CharacterSystem.find(params[:character_system_id])
-    @ability_collection = regency_abilities_collection
-    @keeper_collection = keeper_abilities_collection
-
     if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
       # edit
     else
@@ -57,12 +41,6 @@ class RegenciesController < ApplicationController
   end
 
   def create
-    @user = current_user
-    @final_character = FinalCharacter.find(regency_params[:final_character])
-    @character_system = CharacterSystem.find(params[:character_system_id])
-    @ability_collection = regency_abilities_collection
-    @keeper_collection = keeper_abilities_collection
-
     if regency_params[:abilities] == nil
       abilities = []
     else
@@ -77,6 +55,7 @@ class RegenciesController < ApplicationController
     if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
       @regency = Regency.new(name: regency_params[:name], description: regency_params[:description], final_character: @final_character, abilities: abilities, keeper_abilities: keeper_abilities)
       if @regency.save
+        @final_character.save
         redirect_to [@character_system, @regency]
       else
         render 'new'
@@ -87,13 +66,6 @@ class RegenciesController < ApplicationController
   end
 
   def update
-    @user = current_user
-    @regency = Regency.find(params[:id])
-    @final_character = FinalCharacter.find(regency_params[:final_character])
-    @character_system = CharacterSystem.find(params[:character_system_id])
-    @ability_collection = regency_abilities_collection
-    @keeper_collection = keeper_abilities_collection
-
     if regency_params[:abilities] == nil
       abilities = []
     else
@@ -118,14 +90,10 @@ class RegenciesController < ApplicationController
   end
 
   def destroy
-    @user = current_user
-    @regency = Regency.find(params[:id])
-    @final_character = FinalCharacter.find(regency_params[:final_character])
-    @character_system = CharacterSystem.find(params[:character_system_id])
-
-    if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
+    if @editable
       @regency.destroy
-      redirect_to [@character_system]
+      @final_character.save
+      redirect_to [@character_system, @final_character]
     else
       redirect_to [@character_system]
     end
@@ -134,5 +102,39 @@ class RegenciesController < ApplicationController
   private
     def regency_params
       params.require(:regency).permit(:final_character, :name, :description, :abilities => [], :keeper_abilities => [])
+    end
+
+    def setup
+      set_final_character
+      set_character_system
+      set_user
+      @ability_collection = regency_abilities_collection
+      @keeper_collection = keeper_abilities_collection
+    end
+
+    def set_regency
+      @regency = Regency.find(params[:id])
+    end
+
+    def set_final_character
+      if @regency != nil
+        @final_character = @regency.final_character
+      elsif params[:final_character] != nil
+        @final_character = FinalCharacter.find(params[:final_character])
+      else
+        @final_character = FinalCharacter.find(regency_params[:final_character])
+      end
+    end
+
+    def set_user
+      @user = current_user
+    end
+
+    def set_character_system
+      @character_system = CharacterSystem.find(params[:character_system_id])
+    end
+
+    def editable
+      @editable = !(@final_character.approved? || @final_character.submitted?) || gm_user?
     end
 end

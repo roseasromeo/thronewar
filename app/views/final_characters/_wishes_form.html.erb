@@ -1,0 +1,14 @@
+<%= semantic_form_for [@character_system, @final_character] do |f| %>
+  <%= f.inputs do %>
+      <%= f.semantic_fields_for :final_character_wishes, @final_character_wishes do |final_character_wish| %>
+        <%= render 'final_character_wish_fields', :f => final_character_wish  %>
+      <% end %>
+      <div class='links'>
+        <%= link_to_add_association 'add Wish', f, :final_character_wishes %>
+      </div>
+    </div>
+    <%= f.actions do %>
+      <%= f.action :submit, :label => "Save Wishes", :url => character_system_final_character_save_wishes_path(@character_system, @final_character) %>
+    <% end %>
+  <% end %>
+<% end %>

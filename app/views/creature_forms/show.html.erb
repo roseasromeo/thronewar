@@ -1,0 +1,29 @@
+<% if @editable %>
+  <p class="links"><%= link_to "Edit Form", edit_character_system_creature_form_path(@character_system,@form) %></p>
+  <p class="links"><%= link_to "Delete Form", character_system_creature_form_path(@character_system,@form), method: :delete, data: { confirm: 'Are you sure?' } %></p>
+<% end %>
+<p class="links"><%= link_to "Back to Character", character_system_final_character_path(@character_system,@final_character) %></p>
+
+<%= page_heading @form.name %>
+
+<% if @show_all || @show_standard %>
+  <%if @form.final_character.name == "" || @form.final_character.name == nil %>
+    <p>Belongs to: Anonymous </p>
+  <% else %>
+    <p>Belongs to: <%= @form.final_character.name %></p>
+  <% end %>
+  <p> User: <%= @form.final_character.user.name %></p>
+  <% if @form.standard_form?%>
+    <p> Standard Form</p>
+  <% end %>
+<% end %>
+<% if @show_all %>
+  <% if !(@form.standard_form?) %>
+    <p> Perk: <%= @form.perk_name %></p>
+  <% end %>
+  <p> Description: <%= @form.description %></p>
+  <p> Environment: <%= @form.environment.humanize %></p>
+  <% if @form.standard_form? && @dual_existence%>
+    <p> Extra Environment: <%= @form.extra_environment.humanize %></p>
+  <% end %>
+<% end %>

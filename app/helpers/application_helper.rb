@@ -6,4 +6,28 @@ module ApplicationHelper
     display_toggle = display_toggle == true ? true : false
     link_to title, {:sort => column, :direction => direction, :display_toggle => display_toggle}, {:class => css_class}
   end
+
+  def page_title(separator = " – ")
+    [content_for(:title), 'Throne War: The Fae Realms'].compact.join(separator)
+  end
+
+  def page_heading(title)
+    content_for(:title){ title }
+    content_tag(:h1, title, class: "page_title" )
+  end
+
+  def flash_message(type, text)
+    flash[type] ||= []
+    flash[type] << text
+  end
+
+  def render_flash
+    rendered = []
+    flash.each do |type, messages|
+      messages.each do |m|
+        rendered << render(:partial => 'partials/flash', :locals => {:type => type, :message => m}) unless m.blank?
+      end
+    end
+    safe_join(rendered, "<br>".html_safe)
+  end
 end

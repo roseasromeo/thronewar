@@ -30,14 +30,11 @@
   <%= f.input :backstory_connections, :label => "Backstory Connections", :input_html => { :class => "text_entry" } %>
   <%= f.input :goal, :input_html => { :class => "text_entry" } %>
   <%= f.input :curses, :input_html => { :class => "text_entry" } %>
-  <% if @gutter_magic %>
+  <% if @need_wishes %>
     <%= f.input :extra_wishes %>
-    <%= f.input :wishes, :input_html => { :class => "text_entry" } %>
   <% else %>
     <%= f.input :extra_wishes, :as => :hidden, :value => 0 %>
-    <%= f.input :wishes, :as => :hidden, :value => "" %>
   <% end %>
-  <%= f.input :standard_form, :label_method => :titleize, :input_html => { :class => "text_entry" } %>
   <%= f.input :other, :input_html => { :class => "text_entry_small" } %>
   <%= f.actions do %>
     <%= f.action :submit, :label => "Save Character Changes" %>

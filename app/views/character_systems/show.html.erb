@@ -1,9 +1,8 @@
 <% if gm_user? %>
   <%= link_to 'Back to Games Index', games_path %>
 <% end %>
-<h1 class="title">
-  <%= @character_system.title %>
-</h1>
+
+<%= page_heading @character_system.title %>
 <p class="status">
   <%= @character_system.status %>
 </p>
@@ -12,4 +11,6 @@
 </p>
 <%= render 'final_character_list', :final_characters => @final_characters %>
 
-<%= link_to "Flaw Index", character_system_flaws_path(@character_system) %>
+<%= link_to "Flaw Index", character_system_flaws_path(@character_system) %> |
+<%= link_to "Abilities Index", abilities_path %> |
+<%= link_to "Wish Index", character_system_wishes_path(@character_system) %>

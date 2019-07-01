@@ -1,16 +1,28 @@
-<%= link_to "Edit Character", edit_character_system_final_character_path(@character_system,@final_character) %>
+<% if @editable %>
+  <%= link_to "Edit Character", edit_character_system_final_character_path(@character_system,@final_character) %>
+<% end %>
 <%= link_to "Back to Character System Home", character_system_path(@character_system) %>
-<%= flash[:notice] %>
-<h1 class="title"><%= @final_character.name %></h1>
+<p></p>
+<%= render_flash %>
+
+<%= page_heading @final_character.name %>
 <h2 class="player">Player: <%= @final_character.user.name %></h2>
 <% if @show_all %>
+  <h3>Calculations based on current Ranks and choices</h3>
   <p>Leftover Points: <%= @final_character.leftover_points %></p>
   <p>Asset Points Spent (Maximum 32): <%= @final_character.asset_points %></p>
-  <p>Status: <%= @final_character.approval %></p>
+  <p>Status: <%= @final_character.approval.humanize.to_s.titlecase %></p>
   <p>Luck: <%= @final_character.luck %></p>
   <p>Total Number of Buy-ups: <%= @buy_up_total %></p>
   <p>Ego Talent: <%= @talent %></p>
   <p>Destiny Fate: <%= @fate %></p>
+  <p>Number of Creature Forms Possible: <%= @forms_count %></p>
+  <% if @illusion %>
+    <p>Maximum Number of Wisps: <%= @wisps_count %></p>
+  <% end %>
+  <% if @need_wishes %>
+    <p>Wishes (includes Extra Wishes): <%= @wishes_count %></p>
+  <% end %>
   <% if @talent_violation %>
     <p class="error">Too many buy-ups have been selected given the character's Talent number.</p>
   <% end %>
@@ -35,8 +47,17 @@
   </table>
 </div>
 <% if @final_character.approved? || gm_user? || @show_all %>
+  <h3> Information that is public knowledge after character approval </h3>
   <p>Blurb: <%= html_safe_rescue(@final_character.blurb) %></p>
-  <p>Standard Form: <%= html_safe_rescue(@final_character.standard_form) %></p>
+  <p>Standard Form:
+  <% if @final_character.creature_forms.where(standard_form: true).first != nil %>
+    <%= link_to "Standard Form", [@character_system, @final_character.creature_forms.where(standard_form: true).first] %>
+  <% elsif gm_user? || @show_all %>
+    <%= link_to "Create a Standard Form", new_character_system_creature_form_path(@character_system,final_character: @final_character) %>
+  <% else %>
+    This character does not yet have a Standard Form.
+  <% end %>
+  </p>
   <% if @flaw1 != nil %>
     <p class="flaw">Flaw 1: <%= link_to @flaw1.name.titleize, '/' + @flaw1.link %> <%= @flaw1.description %></p>
   <% end %>
@@ -45,18 +66,57 @@
   <% end %>
 <% end %>
 <% if @show_all %>
+  <h3> Information that is private knowledge after character approval </h3>
   <p>Background: <%= html_safe_rescue(@final_character.background) %></p>
   <p>Backstory Connections: <%= html_safe_rescue(@final_character.backstory_connections) %></p>
   <p>Goal: <%= html_safe_rescue(@final_character.goal) %></p>
   <p>Curses: <%= html_safe_rescue(@final_character.curses) %></p>
-  <% if @gutter_magic %>
+  <% if @need_wishes %>
     <p>Extra Wishes: <%= @final_character.extra_wishes %></p>
-    <p>Wishes: <%= html_safe_rescue(@final_character.wishes) %></p>
+    <div id='wishes'>
+      <% @wishes = @final_character.wishes %>
+      <h3>Wishes</h3>
+      <% if !@wishes.empty? %>
+        <p><%= pluralize(@final_character.wishes.count, 'Wish') %> </p>
+        <table class="wishes_table">
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+          </tr>
+          <% @wishes.each do |wish| %>
+            <%= render 'wish_display', :f => wish %>
+          <% end %>
+        </table>
+      <% end %>
+      <% if @editable %>
+        <p class="links"><%= link_to "Edit Wishes", character_system_final_character_wishes_path(@character_system,@final_character) %></p>
+      <% end %>
+    </div>
   <% end %>
+  <div id='forms'>
+    <% @forms = @final_character.creature_forms %>
+    <h3>Creature Forms and Standard Forms</h3>
+    <% if !@forms.empty? %>
+      <p><%= pluralize(@final_character.creature_forms.where(standard_form: false).count, 'Creature Form') %> </p>
+      <p><%= pluralize(@final_character.creature_forms.where(standard_form: true).count, 'Standard Form') %> </p>
+      <table class="forms_table">
+        <tr>
+          <th>Name</th>
+          <th>Environment</th>
+        </tr>
+        <% @forms.each do |form| %>
+          <%= render 'form_display', :f => form %>
+        <% end %>
+      </table>
+    <% end %>
+    <% if @editable %>
+      <p class="links"><%= link_to "New Creature Form", new_character_system_creature_form_path(@character_system,final_character: @final_character) %></p>
+    <% end %>
+  </div>
   <div id='tools'>
     <% @tools = @final_character.tools %>
+    <h3>Tools</h3>
     <% if !@tools.empty? %>
-      <h3>Tools</h3>
       <table class="tools_table">
         <tr>
           <th>Name</th>
@@ -67,14 +127,14 @@
         <% end %>
       </table>
     <% end %>
-    <% if @final_character.not_submitted? && (gm_user? || @user == @final_character.user) %>
+    <% if @editable %>
       <p class="links"><%= link_to "New Tool", new_character_system_tool_path(@character_system,final_character: @final_character) %></p>
     <% end %>
   </div>
   <div id='regencies'>
     <% @regencies = @final_character.regencies %>
-    <% if !@regencies.empty? %>
     <h3>Regencies</h3>
+    <% if !@regencies.empty? %>
       <table class="regencies_table">
         <tr>
           <th>Name</th>
@@ -85,20 +145,20 @@
         <% end %>
       </table>
     <% end %>
-    <% if @final_character.not_submitted? && (gm_user? || @user == @final_character.user) %>
+    <% if @editable %>
       <p class="links"><%= link_to "New Regency", new_character_system_regency_path(@character_system,final_character: @final_character) %></p>
     <% end %>
   </div>
   <div id='abilities'>
     <% @char_tree = @final_character.char_tree %>
     <% if @char_tree != nil %>
-    <h3 class="links"><%= link_to "Ability Tree", character_system_char_tree_path(@character_system, @char_tree, final_character: @final_character) %></h3>
-      <table class="abilities_table">
+      <h3 class="links"><%= link_to "Ability Tree", character_system_char_tree_path(@character_system, @char_tree, final_character: @final_character) %></h3>
+      <table class="ability">
         <tr>
           <th>Name</th>
           <th>Gift</th>
-          <th>Level</th>
-          <th>Short Text</th>
+          <th>Type</th>
+          <th>Summary</th>
         </tr>
         <% @abilities = @char_tree.abilities %>
         <% @abilities.each do |ability| %>
@@ -106,8 +166,8 @@
         <% end %>
       </table>
     <% else %>
-      <% if @final_character.not_submitted? && (gm_user? || @user == @final_character.user) %>
-        <p class="links"><%= link_to "New Ability Tree", new_character_system_char_tree_path(@character_system,final_character: @final_character) %></p>
+      <% if @editable %>
+        <h3 class="links"><%= link_to "New Ability Tree", new_character_system_char_tree_path(@character_system,final_character: @final_character) %></h3>
       <% end %>
     <% end %>
   </div>
@@ -115,4 +175,13 @@
 <% end %>
 <% if @final_character.not_submitted? && (gm_user? || @user == @final_character.user) %>
   <p class="links"><%= link_to "Submit Character for Approval", character_system_final_character_submit_path(@character_system,@final_character), :method => :post %></p>
+<% end %>
+<% if (@final_character.submitting? || @final_character.submitted?) && gm_user? %>
+  <p class="links"><%= link_to "Send Character back to Player for Changes", character_system_final_character_reject_path(@character_system,@final_character), :method => :post %></p>
+<% end %>
+<% if (@final_character.submitting? || @final_character.submitted?) && gm_user? %>
+  <p class="links"><%= link_to "Approve Character", character_system_final_character_approve_path(@character_system,@final_character), :method => :post %></p>
+<% end %>
+<% if @final_character.approved? && gm_user? %>
+  <p class="links"><%= link_to "Send Character back to Player for Changes", character_system_final_character_reject_path(@character_system,@final_character), :method => :post %></p>
 <% end %>

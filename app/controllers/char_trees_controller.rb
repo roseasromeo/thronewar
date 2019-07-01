@@ -1,6 +1,8 @@
 class CharTreesController < ApplicationController
   include Rules
   before_action :set_char_tree, only: [:show, :edit, :update, :destroy]
+  before_action :setup
+  before_action :editable
 
   # No Index
 
@@ -8,9 +10,7 @@ class CharTreesController < ApplicationController
   # GET /char_trees/1.json
   def show
     if logged_in?
-      @user = current_user
-      @character_system = CharacterSystem.find(params[:character_system_id])
-      @final_character = @char_tree.final_character
+
     else
       redirect_to login_path
     end
@@ -18,29 +18,23 @@ class CharTreesController < ApplicationController
 
   # GET /char_trees/new
   def new
-    @final_character = FinalCharacter.find(params[:final_character])
-    @character_system = CharacterSystem.find(params[:character_system_id])
     if CharTree.where(final_character: @final_character).empty?
       @user = current_user
 
-      if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
+      if @editable
         @char_tree = CharTree.new(final_character: @final_character)
       else
         redirect_to [@character_system, @final_character]
       end
     else
-      redirect_to [@character_system, @final_character]
+      @char_tree = CharTree.where(final_character: @final_character).first
+      redirect_to [@character_system, @char_tree]
     end
   end
 
   # GET /char_trees/1/edit
   def edit
-    @user = current_user
-    @char_tree = CharTree.find(params[:id])
-    @final_character = @char_tree.final_character
-    @character_system = CharacterSystem.find(params[:character_system_id])
-
-    if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
+    if @editable
       # edit
     else
       redirect_to [@character_system, @final_character]
@@ -50,17 +44,16 @@ class CharTreesController < ApplicationController
   # POST /char_trees
   # POST /char_trees.json
   def create
-    @final_character = FinalCharacter.find(char_tree_params[:final_character_id])
-    @character_system = CharacterSystem.find(params[:character_system_id])
     if CharTree.where(final_character: @final_character).empty?
       @char_tree = CharTree.new(char_tree_params)
 
-      if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
+      if @editable
         if @char_tree.save
           redirect_to [@character_system, @char_tree]
         else
           if @char_tree.ability_char_tree_cleanup
-            redirect_to [@character_system, @final_character], notice: "The ability tree for this character included an ability they do not have access to and has now been deleted"
+            flash_message :notice, "The ability tree for this character included an ability they do not have access to and has now been deleted"
+            redirect_to [@character_system, @final_character]
           else
             render 'new'
           end
@@ -76,9 +69,7 @@ class CharTreesController < ApplicationController
   # PATCH/PUT /char_trees/1
   # PATCH/PUT /char_trees/1.json
   def update
-    @final_character = FinalCharacter.find(char_tree_params[:final_character_id])
-    @character_system = CharacterSystem.find(params[:character_system_id])
-    if !(CharTree.where(final_character: @final_character).empty?)
+    if @editable && !(CharTree.where(final_character: @final_character).empty?)
       cleaned_params = char_tree_params.to_h
       cleaned_params["ability_char_trees_attributes"].each do |k,v|
         if v["_destroy"] != "false"
@@ -87,12 +78,13 @@ class CharTreesController < ApplicationController
           cleaned_params["ability_char_trees_attributes"] = cleaned_params["ability_char_trees_attributes"].except(k)
         end
       end
-      if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
+      if @editable
         if @char_tree.update(cleaned_params)
           redirect_to [@character_system, @char_tree]
         else
           if @char_tree.ability_char_tree_cleanup
-            redirect_to [@character_system, @final_character], notice: "The ability tree for this character included an ability they do not have access to and has now been deleted"
+            flash_message :notice, "The ability tree for this character included an ability they do not have access to and has now been deleted"
+            redirect_to [@character_system, @final_character]
           else
             render 'new'
           end
@@ -108,12 +100,11 @@ class CharTreesController < ApplicationController
   # DELETE /char_trees/1
   # DELETE /char_trees/1.json
   def destroy
-    if logged_in?
+    if @editable
       @char_tree.destroy
-      respond_to do |format|
-        format.html { redirect_to char_trees_url, notice: 'Char tree was successfully destroyed.' }
-        format.json { head :no_content }
-      end
+      redirect_to [@character_system]
+    else
+      redirect_to [@character_system]
     end
   end
 
@@ -123,8 +114,38 @@ class CharTreesController < ApplicationController
       @char_tree = CharTree.find(params[:id])
     end
 
+    def setup
+      set_final_character
+      set_character_system
+      set_user
+      @ability_count_messages = ability_count_messages(@final_character)
+    end
+
+    def set_final_character
+      if @char_tree != nil
+        @final_character = @char_tree.final_character
+      elsif params[:final_character] != nil
+        @final_character = FinalCharacter.find(params[:final_character])
+      else
+        @final_character = FinalCharacter.find(char_tree_params[:final_character_id])
+      end
+    end
+
+    def editable
+      @editable = (@final_character.user == @user && @final_character.not_submitted?) || gm_user?
+    end
+
+    def set_user
+      @user = current_user
+    end
+
+    def set_character_system
+      @character_system = CharacterSystem.find(params[:character_system_id])
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def char_tree_params
       params.require(:char_tree).permit(:final_character_id, ability_char_trees_attributes: [:id, :char_tree_id, :ability_id, :_destroy])
     end
+
 end

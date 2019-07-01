@@ -1,3 +1,14 @@
+<script type="text/javascript">
+  tinyMCE.init({
+    plugins: 'link table',
+    link_title: false,
+    target_list: false,
+    selector: 'textarea.tiny_mce',
+    toolbar: 'bold italic underline | link | table',
+    menubar: false,
+    statusbar: false,
+    });
+</script>
 <% if @ability.errors.any? %>
   <div id="error_explanation">
     <h2>
@@ -18,7 +29,7 @@
     <%= f.input :level, :include_blank => false %>
     <%= f.input :automatic, :required => false %>
     <%= f.input :short_text, :input_html => {:class => "text_entry"} %>
-    <%= f.input :long_text, :input_html => {:class => "text_entry"} %>
+    <%= f.input :long_text, :input_html => { :class => 'tiny_mce', :rows => 10 } %>
     <% if @edit %>
       <div id='ability_dependencies'>
         <% @dependency_links = @ability.dependency_links%>

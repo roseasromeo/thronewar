@@ -1,0 +1,50 @@
+<% if @form.errors.any? %>
+  <div id="error_explanation">
+    <h2>
+      <%= pluralize(@form.errors.count, "error") %> prohibited
+      this Tool from being saved:
+    </h2>
+    <ul>
+      <% @form.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+<%= semantic_form_for [@character_system, @form] do |f| %>
+  <%= f.inputs do %>
+    <%= f.input :name %>
+    <%= f.input :description %>
+    <%= f.input :standard_form %>
+    <fieldset class="radio">
+      <p>Perks</p>
+      <table class="perks">
+        <tr>
+          <th>Standard</th>
+          <th>Aquatic</th>
+        </tr>
+        <tr>
+        <% @perk_collection.each do |perk| %>
+          <% i = perk[1] %>
+          <% if i == 0 || i == 9 %>
+            <td><ul>
+          <% end %>
+          <li><label><%= radio_button_tag "creature_form[perk]", perk[1], f.object.perk == perk[1].to_i %> <%= perk[0] %></label></li>
+          <% if i == 8 || i == 15 %>
+            </ul></td>
+          <% end %>
+        <% end %>
+        </tr>
+      </table>
+    </fieldset>
+    <% if @dual_existence %>
+      <%= f.input :extra_environment, :include_blank => false %>
+    <% else %>
+      <%= f.input :extra_environment, :label => false, :input_html => { :class => :hidden, :value => :standard_extra } %>
+    <% end %>
+    <%= f.input :final_character, :label => false, :as => :number, :input_html => { :class => "hidden", :value => @final_character.id } %>
+    <%= f.actions do %>
+      <%= f.action :submit, :label => "Save Form" %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,5 +1,4 @@
-<h1> Index of Games </h1>
-<%= link_to 'Back to Home', '/' %>
+<%= page_heading "Index of Games" %>
 <% if logged_in? %>
   <% if gm_user? %>
     <%= link_to 'New game', new_game_path %>
