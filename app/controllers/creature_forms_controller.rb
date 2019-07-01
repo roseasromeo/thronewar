@@ -76,7 +76,7 @@ class CreatureFormsController < ApplicationController
   def destroy
     if @editable
       @form.destroy
-      redirect_to [@character_system]
+      redirect_to [@character_system, @final_character]
     else
       redirect_to [@character_system]
     end

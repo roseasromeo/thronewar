@@ -1,0 +1,10 @@
+<div class='nested-wishes'>
+    <tr>
+      <% if f.name == "" || f.name == nil %>
+        <td><%= link_to "Wish", character_system_wish_path(@character_system,f) %></td>
+      <% else %>
+        <td><%= link_to f.name, character_system_wish_path(@character_system,f) %></td>
+      <% end %>
+      <td><%= f.description %></td>
+    </tr>
+</div>

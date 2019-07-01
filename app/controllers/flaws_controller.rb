@@ -1,12 +1,13 @@
 class FlawsController < ApplicationController
 
+  before_action :set_flaw, only: [:destroy]
+  before_action :set_character_system
+
   def index
-    @character_system = CharacterSystem.find(params[:character_system_id])
     @flaws = Flaw.where(character_system: @character_system)
   end
 
   def new
-    @character_system = CharacterSystem.find(params[:character_system_id])
     if gm_user?
       @flaw = @character_system.flaws.new
     else
@@ -15,7 +16,6 @@ class FlawsController < ApplicationController
   end
 
   def create
-    @character_system = CharacterSystem.find(params[:character_system_id])
     if gm_user?
       @flaw = @character_system.flaws.new(flaw_params)
       if @flaw.save
@@ -29,8 +29,6 @@ class FlawsController < ApplicationController
   end
 
   def destroy
-    @character_system = CharacterSystem.find(params[:character_system_id])
-    @flaw = Flaw.find(params[:id])
     if gm_user?
       @flaw.destroy
       redirect_to character_system_flaws_path(@character_system)
@@ -42,6 +40,14 @@ class FlawsController < ApplicationController
   private
     def flaw_params
       params.require(:flaw).permit(:name, :description, :link)
+    end
+
+    def set_flaw
+      @flaw = Flaw.find(params[:id])
+    end
+
+    def set_character_system
+      @character_system = CharacterSystem.find(params[:character_system_id])
     end
 
 end

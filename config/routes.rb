@@ -55,6 +55,8 @@ Rails.application.routes.draw do
       post 'submit'
       post 'reject'
       post 'approve'
+      get 'wishes'
+      post 'save_wishes'
     end
     resources :tools, only: [:show, :new, :edit, :create, :update, :destroy]
     resources :regencies, only: [:show, :new, :edit, :create, :update, :destroy]
