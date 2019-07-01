@@ -17,20 +17,33 @@
     <%= f.input :description %>
     <fieldset class="checkboxes">
       <p>Abilities</p>
-      <ul>
+      <table class="abilities">
+        <tr>
+          <th>Basic</th>
+          <th>Intermediate</th>
+          <th>Advanced</th>
+          <th>Keeper Abilities*</th>
+        </tr>
+        <tr>
         <% @ability_collection.each do |ability| %>
+          <% i = ability[1] %>
+          <% if i == 0 || i == 3 || i == 5 %>
+            <td><ul>
+          <% end %>
           <li><label><%= check_box_tag "regency[abilities][]", ability[1], f.object.abilities.include?(ability[1].to_s) %> <%= ability[0] %></label></li>
+          <% if i == 2 || i == 4 || i == 7 %>
+            </ul></td>
+          <% end %>
         <% end %>
-      </ul>
+        <td><ul>
+          <% @keeper_collection.each do |ability| %>
+            <li><label><%= check_box_tag "regency[keeper_abilities][]", ability[1], f.object.keeper_abilities.include?(ability[1].to_s) %> <%= ability[0] %></label></li>
+          <% end %>
+        </ul></td>
+      </tr>
+      </table>
     </fieldset>
-    <fieldset class="checkboxes">
-      <p>Keeper Abilities (Choose only if Advanced Ability Keeper is Selected, Max 2 points)</p>
-      <ul>
-        <% @keeper_collection.each do |ability| %>
-          <li><label><%= check_box_tag "regency[keeper_abilities][]", ability[1], f.object.keeper_abilities.include?(ability[1].to_s) %> <%= ability[0] %></label></li>
-        <% end %>
-      </ul>
-    </fieldset>
+    <p>*Choose only if Advanced Ability Keeper is Selected, Max 2 points</p>
     <%= f.input :final_character, :label => false, :as => :number, :input_html => { :class => "hidden", :value => @final_character.id } %>
     <%= f.actions do %>
       <%= f.action :submit, :label => "Save Regency" %>

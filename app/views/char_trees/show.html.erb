@@ -1,4 +1,8 @@
 <p id="notice"><%= notice %></p>
+<% if @editable %>
+  <%= link_to 'Edit', edit_character_system_char_tree_path(@character_system, @char_tree) %> |
+<% end %>
+<%= link_to 'Back to Character', character_system_final_character_path(@character_system, @final_character) %>
 
 <%= page_heading "Ability Tree for " + @char_tree.final_character.name %>
 
@@ -15,7 +19,3 @@
   <% end %>
 </table>
 <%= render 'ability_requirements_display' %>
-
-
-<%= link_to 'Edit', edit_character_system_char_tree_path(@character_system, @char_tree) %> |
-<%= link_to 'Back to Character', character_system_final_character_path(@character_system, @final_character) %>

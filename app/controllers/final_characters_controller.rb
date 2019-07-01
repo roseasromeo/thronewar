@@ -55,7 +55,7 @@ class FinalCharactersController < ApplicationController
     @final_character = FinalCharacter.find(params[:id])
     @user = current_user
     @character_system = @final_character.character_system
-    available_users = User.joins(:final_characters).merge(FinalCharacter.where.not(character_system: @character_system))
+    available_users = User.joins(:final_characters).merge(FinalCharacter.where.not(character_system: @character_system)) #fix this
     @possible_users = available_users.or(User.where(id: @user.id).joins(:final_characters)).distinct
 
     @flaw1_id = @final_character.flaw1 == nil ? nil : @final_character.flaw1.id
@@ -112,7 +112,7 @@ class FinalCharactersController < ApplicationController
         @flaw2 = nil
       end
 
-      if @final_character.update(character_system: @character_system, user: @user, name: final_character_params[:name], blurb: final_character_params[:blurb], background: final_character_params[:background], backstory_connections: final_character_params[:backstory_connections], goal: final_character_params[:goal], curses: final_character_params[:curses], wishes: final_character_params[:wishes], extra_wishes: final_character_params[:extra_wishes], standard_form: final_character_params[:standard_form], other: final_character_params[:other], luck: final_character_params[:luck], flaw1: @flaw1, flaw2: @flaw2) #
+      if @final_character.update(character_system: @character_system, user: @user, name: final_character_params[:name], blurb: final_character_params[:blurb], background: final_character_params[:background], backstory_connections: final_character_params[:backstory_connections], goal: final_character_params[:goal], curses: final_character_params[:curses], wishes: final_character_params[:wishes], extra_wishes: final_character_params[:extra_wishes], other: final_character_params[:other], luck: final_character_params[:luck], flaw1: @flaw1, flaw2: @flaw2) #
         @final_character.ranks.each do |rank|
           item_number = Rank.items[rank.item]
           if final_character_params[:ranks_attributes][item_number.to_s].has_key?("private_rank")
@@ -144,16 +144,26 @@ class FinalCharactersController < ApplicationController
   end
 
   def approve
+    if gm_user?
+      @final_character = FinalCharacter.find(params[:final_character_id])
+      @character_system = @final_character.character_system
+      @final_character.approved!
+    end
     redirect_to character_system_final_character_path(@character_system, @final_character)
   end
 
   def reject
+    if gm_user?
+      @final_character = FinalCharacter.find(params[:final_character_id])
+      @character_system = @final_character.character_system
+      @final_character.not_submitted!
+    end
     redirect_to character_system_final_character_path(@character_system, @final_character)
   end
 
   private
     def final_character_params
-      params.require(:final_character).permit(:user_id, :flaw1, :flaw2, :name, :blurb, :background, :backstory_connections, :goal, :curses, :wishes, :extra_wishes, :standard_form, :other, :luck, :leftover_points, ranks_attributes: [:id, :private_rank])
+      params.require(:final_character).permit(:user_id, :flaw1, :flaw2, :name, :blurb, :background, :backstory_connections, :goal, :curses, :wishes, :extra_wishes, :other, :luck, :leftover_points, ranks_attributes: [:id, :private_rank])
     end
 
     def html_safe_rescue(text)

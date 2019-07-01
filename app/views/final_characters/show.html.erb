@@ -14,6 +14,7 @@
   <p>Total Number of Buy-ups: <%= @buy_up_total %></p>
   <p>Ego Talent: <%= @talent %></p>
   <p>Destiny Fate: <%= @fate %></p>
+  <p>Number of Creature Forms Possible: <%= @forms_count %></p>
   <% if @illusion %>
     <p>Maximum Number of Wisps: <%= @wisps_count %></p>
   <% end %>
@@ -152,4 +153,13 @@
 <% end %>
 <% if @final_character.not_submitted? && (gm_user? || @user == @final_character.user) %>
   <p class="links"><%= link_to "Submit Character for Approval", character_system_final_character_submit_path(@character_system,@final_character), :method => :post %></p>
+<% end %>
+<% if (@final_character.submitting? || @final_character.submitted?) && gm_user? %>
+  <p class="links"><%= link_to "Send Character back to Player for Changes", character_system_final_character_reject_path(@character_system,@final_character), :method => :post %></p>
+<% end %>
+<% if (@final_character.submitting? || @final_character.submitted?) && gm_user? %>
+  <p class="links"><%= link_to "Approve Character", character_system_final_character_approve_path(@character_system,@final_character), :method => :post %></p>
+<% end %>
+<% if @final_character.approved? && gm_user? %>
+  <p class="links"><%= link_to "Send Character back to Player for Changes", character_system_final_character_reject_path(@character_system,@final_character), :method => :post %></p>
 <% end %>

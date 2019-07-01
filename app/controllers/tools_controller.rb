@@ -1,6 +1,9 @@
 class ToolsController < ApplicationController
   include Rules
   helper_method :font?, :ability_category, :ability_sort
+  before_action :set_tool, only: [:show, :edit, :update, :destroy]
+  before_action :setup
+  before_action :editable
 
   # def index
   #   @character_system = CharacterSystem.find(params[:character_system_id])
@@ -13,10 +16,6 @@ class ToolsController < ApplicationController
   # end
 
   def show
-    @user = current_user
-    @tool = Tool.find(params[:id])
-    @final_character = @tool.final_character
-    @character_system = @final_character.character_system
     @ability_collection = tool_abilities_collection(@final_character, true)
     @show_all = false
 
@@ -29,9 +28,6 @@ class ToolsController < ApplicationController
   end
 
   def new
-    @user = current_user
-    @final_character = FinalCharacter.find(params[:final_character])
-    @character_system = CharacterSystem.find(params[:character_system_id])
     @ability_collection = tool_abilities_collection(@final_character, false)
 
     if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
@@ -42,10 +38,6 @@ class ToolsController < ApplicationController
   end
 
   def edit
-    @user = current_user
-    @tool = Tool.find(params[:id])
-    @final_character = @tool.final_character
-    @character_system = CharacterSystem.find(params[:character_system_id])
     @ability_collection = tool_abilities_collection(@final_character, false)
 
     if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
@@ -56,9 +48,6 @@ class ToolsController < ApplicationController
   end
 
   def create
-    @user = current_user
-    @final_character = FinalCharacter.find(tool_params[:final_character])
-    @character_system = CharacterSystem.find(params[:character_system_id])
     @ability_collection = tool_abilities_collection(@final_character, false)
 
     if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
@@ -75,10 +64,6 @@ class ToolsController < ApplicationController
   end
 
   def update
-    @user = current_user
-    @tool = Tool.find(params[:id])
-    @final_character = FinalCharacter.find(tool_params[:final_character])
-    @character_system = CharacterSystem.find(params[:character_system_id])
     @ability_collection = tool_abilities_collection(@final_character, false)
 
     if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
@@ -94,11 +79,6 @@ class ToolsController < ApplicationController
   end
 
   def destroy
-    @user = current_user
-    @tool = Tool.find(params[:id])
-    @final_character = FinalCharacter.find(tool_params[:final_character])
-    @character_system = CharacterSystem.find(params[:character_system_id])
-
     if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
       @tool.destroy
       redirect_to [@character_system]
@@ -110,6 +90,38 @@ class ToolsController < ApplicationController
   private
     def tool_params
       params.require(:tool).permit(:final_character, :name, :description, :abilities => [])
+    end
+
+    def setup
+      set_final_character
+      set_character_system
+      set_user
+    end
+
+    def set_tool
+      @tool = Tool.find(params[:id])
+    end
+
+    def set_final_character
+      if @tool != nil
+        @final_character = @tool.final_character
+      elsif params[:final_character] != nil
+        @final_character = FinalCharacter.find(params[:final_character])
+      else
+        @final_character = FinalCharacter.find(tool_params[:final_character])
+      end
+    end
+
+    def set_character_system
+      @character_system = CharacterSystem.find(params[:character_system_id])
+    end
+
+    def set_user
+      @user = current_user
+    end
+
+    def editable
+      @editable = !(@final_character.approved? || @final_character.submitted?) || gm_user?
     end
 
     def ability_categories(abilities)

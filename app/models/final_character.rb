@@ -9,6 +9,7 @@ class FinalCharacter < ApplicationRecord
   belongs_to :flaw1, :class_name => 'Flaw', foreign_key: 'flaw1', optional: true
   belongs_to :flaw2, :class_name => 'Flaw', foreign_key: 'flaw2', optional: true
 
+  before_save :calculate_points
   after_save :calculate_points
 
   enum approval: [:not_submitted, :submitting, :submitted, :rejected, :approved]
@@ -60,7 +61,7 @@ class FinalCharacter < ApplicationRecord
       if no_primal_magic
         if asset_total >= 10
           asset_total = asset_total - 10
-        else # will need flaw condition
+        else
           asset_total = 0
         end
       end

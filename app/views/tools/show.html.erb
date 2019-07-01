@@ -1,4 +1,6 @@
-<p class="links"><%= link_to "Edit Tool", edit_character_system_tool_path(@character_system,@tool) %></p>
+<% if @editable %>
+  <p class="links"><%= link_to "Edit Tool", edit_character_system_tool_path(@character_system,@tool) %></p>
+<% end %>
 <p class="links"><%= link_to "Back to Character", character_system_final_character_path(@character_system,@final_character) %></p>
 
 <%= page_heading @tool.name %>
