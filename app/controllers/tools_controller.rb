@@ -66,7 +66,7 @@ class ToolsController < ApplicationController
   def update
     @ability_collection = tool_abilities_collection(@final_character, false)
 
-    if gm_user? || (@final_character.user == @user && @final_character.not_submitted?)
+    if @editable
       if @tool.update(name: tool_params[:name], final_character: @final_character, description: tool_params[:description], abilities: tool_params[:abilities])
         @final_character.save
         redirect_to [@character_system, @tool]

@@ -1,4 +1,8 @@
 <%= link_to 'Back to Games Index', games_path %>
+<% if gm_user? %>
+  <%= link_to 'Delete Game', game_path(@game), method: :delete, data: { confirm: 'Are you sure?' } %>
+<% end %>
+
 <%= page_heading @game.title %>
 
 <p class="status">
