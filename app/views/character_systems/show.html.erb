@@ -1,5 +1,7 @@
 <% if gm_user? %>
-  <%= link_to 'Back to Games Index', games_path %>
+  <%= link_to 'Back to Character System Index', character_systems_path %>
+  <%= link_to 'Edit Character System', edit_character_system_path(@character_system) %>
+  <%= link_to 'Delete Character System', character_system_path(@character_system), method: :delete, data: { confirm: 'Are you sure?' } %>
 <% end %>
 
 <%= page_heading @character_system.title %>
@@ -14,3 +16,10 @@
 <%= link_to "Flaw Index", character_system_flaws_path(@character_system) %> |
 <%= link_to "Abilities Index", abilities_path %> |
 <%= link_to "Wish Index", character_system_wishes_path(@character_system) %>
+
+<% if @character_system.preparing? && gm_user? %>
+  <p class="links"><%= link_to "Start In-Game App", character_system_start_path(@character_system), :method => :post %></p>
+<% end %>
+<% if @character_system.started? && gm_user? %>
+  <p class="links"><%= link_to "Throne War Completed", character_system_complete_path(@character_system), :method => :post %></p>
+<% end %>

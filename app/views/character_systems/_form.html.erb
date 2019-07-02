@@ -14,9 +14,17 @@
   <%= f.inputs do %>
     <h1 class="character_system_title"><%= f.input :title, label: "Title of Throne War" %></h1>
     <p class="character_system_description"><%= f.input :description %></p>
-    <%= f.input :game, :as => :select, :collection => Game.includes(:character_system).where(:character_systems => { :id => nil }) %>
+    <% if @edit %>
+      <%= f.input :game, :label => false, :as => :number, :input_html => { :class => "hidden", :value => @character_system.game.id } %>
+    <% else %>
+      <%= f.input :game, :as => :select, :collection => Game.includes(:character_system).where(:character_systems => { :id => nil }) %>
+    <% end %>
     <%= f.actions do %>
-      <%= f.action :submit, :label => "Create Character System" %>
+      <% if @edit %>
+        <%= f.action :submit, :label => "Update Character System" %>
+      <% else %>
+        <%= f.action :submit, :label => "Create Character System" %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>
