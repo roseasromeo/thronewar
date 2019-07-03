@@ -1,6 +1,7 @@
 class CreatureForm < ApplicationRecord
   belongs_to :final_character
   include Rules
+  include AspectsActions
 
   before_validation :set_environment
   validates_presence_of :name, :final_character

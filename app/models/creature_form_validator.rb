@@ -1,5 +1,6 @@
 class CreatureFormValidator < ActiveModel::Validator
   include Rules
+  include AspectsActions
 
   def validate(form)
     final_character = form.final_character

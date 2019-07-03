@@ -1,5 +1,7 @@
 class FinalCharactersController < ApplicationController
   include Rules
+  include Characteristics
+  include AspectsActions
 
   before_action :set_final_character, only: [:show, :edit, :update, :wishes]
   before_action :setup

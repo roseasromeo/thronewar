@@ -1,5 +1,6 @@
 class CreatureFormsController < ApplicationController
   include Rules
+  include AspectsActions
 
   before_action :set_creature_form, only: [:show, :edit, :update, :destroy]
   before_action :setup

@@ -17,8 +17,6 @@ send email on reject/approve
 printable sheets for tools, regencies, characters
 (Admin and player)
 
-Allow editing of character_system description only
-
 Refactor auction code
 
 Fix Losing single character on table import

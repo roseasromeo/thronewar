@@ -1,5 +1,8 @@
 module Rules
 include ApplicationHelper
+include Characteristics
+include AspectsActions
+
 # UNIVERSAL
 #####
 
@@ -11,6 +14,8 @@ include ApplicationHelper
       num = 2
     elsif level == :high
       num = 3
+    elsif level == :max
+      num = 4
     end
     num
   end
@@ -176,16 +181,16 @@ include ApplicationHelper
 
 # CHANGE SPECFIC
 
-def dual_existence?(final_character)
-  dual = false
-  if final_character.char_tree != nil
-    abilities_collection = final_character.char_tree.abilities_all(false)
-    if !(abilities_collection.where(name: "Dual Existence").empty?)
-      dual = true
+  def dual_existence?(final_character)
+    dual = false
+    if final_character.char_tree != nil
+      abilities_collection = final_character.char_tree.abilities_all(false)
+      if !(abilities_collection.where(name: "Dual Existence").empty?)
+        dual = true
+      end
     end
+    dual
   end
-  dual
-end
 
 # GUTTER MAGIC SPECIFIC
 
@@ -226,6 +231,13 @@ end
     count
   end
 
+#Gifts end
+###########
+
+
+#Aspects begin
+##############
+#Most Aspect Rules are in aspects_actions and characteristics
 
   def aspect_level(private_rank,lowest_rank)
     low_count = 0
@@ -287,190 +299,10 @@ end
     wounds
   end
 
-  def shifting_time(level)
-    if level == :high
-      rounds = 1
-    elsif level == :med
-      rounds = 2
-    elsif level == :low
-      rounds = 3
-    else
-      rounds = 5
-    end
-    rounds
-  end
 
-  def ready_tool(level)
-    if level == :high
-      tools = 3
-    elsif level == :med
-      tools = 2
-    elsif level == :low
-      tools = 1
-    else
-      tools = 0
-    end
-    tools
-  end
 
-# FIX THESE
-  def ready_eff_range(level)
-    if level == :high
-      eff_range = 30
-    elsif level == :med
-      eff_range = 20
-    elsif level == :low
-      eff_range = 12
-    else
-      eff_range = 6
-    end
-    eff_range
-  end
 
-  def ready_max_range(level)
-    if level == :high
-      max_range = :region
-    elsif level == :med
-      max_range = 30
-    elsif level == :low
-      max_range = 20
-    else
-      max_range = 12
-    end
-    max_range
-  end
 
-#FIX THE ABOVE
-
-  def planning_targets(level)
-    if level == :high
-      targets = 3
-    elsif level == :med
-      targets = 2
-    elsif level == :low
-      targets = 1
-    else
-      targets = 0
-    end
-    targets
-  end
-
-  def fate(private_rank, lowest_rank, fate_flaw)
-    fate_tokens = 5
-    if private_rank > 0
-      fate_tokens = fate_tokens + 1 + lowest_rank - private_rank
-    end
-    if fate_flaw
-      fate_tokens = fate_tokens - 2
-    end
-    fate_tokens
-  end
-
-  def fate_count(final_character)
-    item = :destiny
-    private_rank = final_character.ranks.where(item: Rank.items[item]).first.private_rank
-    lowest_rank = final_character.character_system.ranks.where(item: Rank.items[item]).maximum(:public_rank)
-    flaw = fate_flaw?(final_character)
-    count = fate(private_rank,lowest_rank,flaw)
-    count
-  end
-
-  def fate_flaw?(final_character)
-    flaw = false
-    if final_character.flaw1 != nil && final_character.flaw1.name == "All the World's a Stage"
-      flaw = true
-    end
-    if final_character.flaw2 != nil && final_character.flaw2.name == "All the World's a Stage"
-      flaw = true
-    end
-    flaw
-  end
-
-  # FLESH
-
-  def form_flaw?(final_character)
-    flaw = false
-    if final_character.flaw1 != nil && final_character.flaw1.name == "Static"
-      flaw = true
-    end
-    if final_character.flaw2 != nil && final_character.flaw2.name == "Static"
-      flaw = true
-    end
-    flaw
-  end
-
-  def flesh_forms(private_rank, lowest_rank, form_flaw)
-    forms = 1
-    if private_rank > 0
-      forms = forms + 1 + lowest_rank - private_rank
-    end
-    if form_flaw
-      forms = forms - 1
-    end
-    forms
-  end
-
-  def form_count(final_character)
-    item = :flesh
-    private_rank = final_character.ranks.where(item: Rank.items[item]).first.private_rank
-    lowest_rank = final_character.character_system.ranks.where(item: Rank.items[item]).maximum(:public_rank)
-    flaw = form_flaw?(final_character)
-    count = flesh_forms(private_rank,lowest_rank,flaw)
-    count
-  end
-
-  def perks
-    collection = []
-    i = 0
-    # Standard
-    collection << ["None", i]
-    i = i + 1
-    collection << ["Amphibian", i]
-    i = i + 1
-    collection << ["Extra Eyes", i]
-    i = i + 1
-    collection << ["Extra Sense", i]
-    i = i + 1
-    collection << ["Four Legged", i]
-    i = i + 1
-    collection << ["Wings", i]
-    i = i + 1
-    collection << ["Cold", i]
-    i = i + 1
-    collection << ["Hands", i]
-    i = i + 1
-    # Aquatic
-    collection << ["Amphibian", i]
-    i = i + 1
-    collection << ["Luminescent", i]
-    i = i + 1
-    collection << ["Extra Sense", i]
-    i = i + 1
-    collection << ["Big Fins", i]
-    i = i + 1
-    collection << ["Camouflage", i]
-    i = i + 1
-    collection << ["Shell", i]
-    i = i + 1
-    collection << ["Hands", i]
-    i = i + 1
-
-    collection
-  end
-
-  def standard_perk?(perk)
-    standard_environment_perk = false
-    if perk <= 7
-      standard_environment_perk = true
-    end
-  end
-
-  def aquatic_perk?(perk)
-    aquatic_environment_perk = false
-    if perk >= 8
-      aquatic_environment_perk = true
-    end
-  end
 
   # EGO
 
