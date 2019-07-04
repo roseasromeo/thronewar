@@ -1,0 +1,2 @@
+class AbilityFunction < ApplicationRecord
+end

@@ -273,103 +273,12 @@ include AspectsActions
     level
   end
 
-  def healing_rest(level)
-    if level == :high
-      wounds = 9
-    elsif level == :med
-      wounds = 7
-    elsif level == :low
-      wounds = 5
-    else
-      wounds = 3
-    end
-    wounds
-  end
-
-  def combined_rest(level)
-    if level == :high
-      wounds = 7
-    elsif level == :med
-      wounds = 5
-    elsif level == :low
-      wounds = 3
-    else
-      wounds = 0
-    end
-    wounds
-  end
-
-
-
-
-
-
-  # EGO
-
-  def talent(final_character)
-    item = :ego
-    private_rank = final_character.ranks.where(item: Rank.items[item]).first.private_rank
-    lowest_rank = final_character.character_system.ranks.where(item: Rank.items[item]).maximum(:public_rank)
-    count = talent_math(private_rank,lowest_rank)
-    count
-  end
-
-  def talent_math(private_rank, lowest_rank)
-    one_count = 0
-    two_count = 0
-    three_count = 0
-    four_count = 0
-    five_count = 0
-    if lowest_rank == 1
-      three_count = 1
-    elsif lowest_rank == 2
-      three_count = 1
-      two_count = 1
-    elsif lowest_rank == 3
-      four_count = 1
-      three_count = 1
-      two_count = 1
-    else
-      counter = lowest_rank
-      while counter > 0
-        if counter % 5 == 1
-          one_count = one_count + 1
-        elsif counter % 5 == 2
-          two_count = two_count + 1
-        elsif counter % 5 == 3
-          three_count = three_count + 1
-        elsif counter % 5 == 4
-          four_count = four_count + 1
-        else
-          five_count = five_count + 1
-        end
-        counter = counter - 1
-      end
-    end
-    if private_rank == 0
-      talent = 0
-    elsif private_rank <= five_count
-      talent = 5
-    elsif private_rank <= (five_count + four_count)
-      talent = 4
-    elsif private_rank <= (five_count + four_count + three_count)
-      talent = 3
-    elsif private_rank <= (five_count + four_count + three_count + two_count)
-      talent = 2
-    else
-      talent = 1
-    end
-    talent
-  end
-
-
-
-
-
-
 
 # TOOLS AND REGENCIES
 ######################
+
+# Tools
+########
   def tool_abilities_collection(final_character,all_abilities)
     ranks = final_character.ranks
     collection = []
@@ -452,7 +361,7 @@ include AspectsActions
     collection
   end
 
-  # Ability Numbers
+  # Tool Ability Numbers
   def improved_wisp_num
     23
   end
@@ -462,6 +371,11 @@ include AspectsActions
   def wisp_num
     7
   end
+
+#######
+
+  # Regencies
+  #########
 
   def regency_abilities_collection
     collection = []
@@ -696,7 +610,5 @@ include AspectsActions
     end
     messages
   end
-
-
 
 end

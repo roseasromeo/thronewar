@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_01_005853) do
+ActiveRecord::Schema.define(version: 2019_07_03_232046) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -163,6 +163,39 @@ ActiveRecord::Schema.define(version: 2019_07_01_005853) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["character_system_id"], name: "index_flaws_on_character_system_id"
+  end
+
+  create_table "game_abilities", force: :cascade do |t|
+    t.string "name"
+    t.text "long_text"
+    t.integer "item"
+    t.string "ability"
+    t.boolean "targets_another"
+    t.integer "time_base"
+    t.string "time_function"
+    t.integer "rounds_base"
+    t.string "rounds_function"
+    t.integer "fate_cost_base"
+    t.string "fate_cost_function"
+    t.integer "damage_base"
+    t.string "damage_function"
+    t.boolean "secret_action"
+    t.boolean "cooldown"
+    t.integer "cooldown_base"
+    t.string "cooldown_function"
+    t.boolean "disruptable"
+    t.integer "disruption_cost_self"
+    t.integer "disruption_cost_effect"
+    t.integer "duration_time_base"
+    t.string "duration_time_function"
+    t.integer "duration_rounds_base"
+    t.string "duration_rounds_function"
+    t.integer "upkeep_cost"
+    t.string "other_requirements"
+    t.string "contests"
+    t.string "edge_function"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "games", id: :serial, force: :cascade do |t|

@@ -1,0 +1,33 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  long_text: MyText
+  item: 1
+  targets_another: false
+  time_base: 1
+  time_function: MyString
+  rounds_base: 1
+  rounds_function: MyString
+  secret_action: false
+  disruptable: false
+  fate_cost_base: 1
+  fate_cost_function: MyString
+  cooldown: false
+  ability: MyString
+
+two:
+  name: MyString
+  long_text: MyText
+  item: 1
+  targets_another: false
+  time_base: 1
+  time_function: MyString
+  rounds_base: 1
+  rounds_function: MyString
+  secret_action: false
+  disruptable: false
+  fate_cost_base: 1
+  fate_cost_function: MyString
+  cooldown: false
+  ability: MyString

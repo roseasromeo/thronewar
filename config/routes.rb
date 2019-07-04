@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :ability_functions
+  resources :game_abilities
   resources :creature_forms
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   get 'welcome/index'
@@ -67,6 +69,7 @@ Rails.application.routes.draw do
     resources :creature_forms, only: [:show, :new, :edit, :create, :update, :destroy]
   end
   resources :abilities
+  resources :game_abilities
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

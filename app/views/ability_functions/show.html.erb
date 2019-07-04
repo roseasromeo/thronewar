@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @ability_function.name %>
+</p>
+
+<p>
+  <strong>Operation:</strong>
+  <%= @ability_function.operation %>
+</p>
+
+<%= link_to 'Edit', edit_ability_function_path(@ability_function) %> |
+<%= link_to 'Back', ability_functions_path %>

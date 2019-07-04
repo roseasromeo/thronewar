@@ -1,0 +1,45 @@
+<%= semantic_form_for [@game_ability] do |f| %>
+  <% if game_ability.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(game_ability.errors.count, "error") %> prohibited this game_ability from being saved:</h2>
+
+      <ul>
+      <% game_ability.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <%= f.inputs do %>
+    <%= f.input :name %>
+    <%= f.input :long_text, :input_html => { :class => 'tiny_mce', :rows => 10 } %>
+    <%= f.input :item, include_blank: false %>
+    <%= f.input :ability %>
+    <%= f.input :targets_another %>
+    <%= f.input :time_base %>
+    <%= f.input :time_function %>
+    <%= f.input :rounds_base %>
+    <%= f.input :rounds_function %>
+    <%= f.input :fate_cost_base %>
+    <%= f.input :fate_cost_function %>
+    <%= f.input :damage_base %>
+    <%= f.input :damage_function %>
+    <%= f.input :secret_action %>
+    <%= f.input :cooldown %>
+    <%= f.input :cooldown_base %>
+    <%= f.input :cooldown_function %>
+    <%= f.input :disruptable %>
+    <%= f.input :disruption_cost_self %>
+    <%= f.input :disruption_cost_effect %>
+    <%= f.input :duration_time_base %>
+    <%= f.input :duration_time_function %>
+    <%= f.input :duration_rounds_base %>
+    <%= f.input :duration_rounds_function %>
+    <%= f.input :upkeep_cost %>
+    <%= f.input :other_requirements %>
+    <%= f.input :contests %>
+    <%= f.input :edge_function %>
+
+    <%= f.actions %>
+  <% end %>
+<% end %>

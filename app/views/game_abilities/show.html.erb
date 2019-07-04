@@ -1,0 +1,80 @@
+<p id="notice"><%= notice %></p>
+
+<%= page_heading @game_ability.name %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Long text</th>
+      <th>Item</th>
+      <th>Ability</th>
+      <th>Targets another</th>
+      <th>Time base</th>
+      <th>Time function</th>
+      <th>Rounds base</th>
+      <th>Rounds function</th>
+      <th>Fate cost base</th>
+      <th>Fate cost function</th>
+      <th>Damage base</th>
+      <th>Damage function</th>
+      <th>Secret action</th>
+      <th>Cooldown</th>
+      <th>Cooldown base</th>
+      <th>Cooldown function</th>
+      <th>Disruptable</th>
+      <th>Disruption cost self</th>
+      <th>Disruption cost effect</th>
+      <th>Duration time base</th>
+      <th>Duration time function</th>
+      <th>Duration rounds base</th>
+      <th>Duration rounds function</th>
+      <th>Upkeep cost</th>
+      <th>Other Requirements</th>
+      <th>Contests</th>
+      <th>Edge Function</th>
+      <% if admin_user? %>
+        <th colspan="2"></th>
+      <% end %>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td><%= link_to @game_ability.name,@game_ability %></td>
+      <td><%= @game_ability.long_text %></td>
+      <td><%= @game_ability.item %></td>
+      <td><%= @game_ability.ability %></td>
+      <td><%= @game_ability.targets_another %></td>
+      <td><%= @game_ability.time_base %></td>
+      <td><%= @game_ability.time_function %></td>
+      <td><%= @game_ability.rounds_base %></td>
+      <td><%= @game_ability.rounds_function %></td>
+      <td><%= @game_ability.fate_cost_base %></td>
+      <td><%= @game_ability.fate_cost_function %></td>
+      <td><%= @game_ability.damage_base %></td>
+      <td><%= @game_ability.damage_function %></td>
+      <td><%= @game_ability.secret_action %></td>
+      <td><%= @game_ability.cooldown %></td>
+      <td><%= @game_ability.cooldown_base %></td>
+      <td><%= @game_ability.cooldown_function %></td>
+      <td><%= @game_ability.disruptable %></td>
+      <td><%= @game_ability.disruption_cost_self %></td>
+      <td><%= @game_ability.disruption_cost_effect %></td>
+      <td><%= @game_ability.duration_time_base %></td>
+      <td><%= @game_ability.duration_time_function %></td>
+      <td><%= @game_ability.duration_rounds_base %></td>
+      <td><%= @game_ability.duration_rounds_function %></td>
+      <td><%= @game_ability.upkeep_cost %></td>
+      <td><%= @game_ability.other_requirements %></td>
+      <td><%= @game_ability.edge_function %></td>
+
+
+      <% if admin_user? %>
+        <td><%= link_to 'Edit', edit_game_ability_path(@game_ability) %></td>
+        <td><%= link_to 'Destroy', @game_ability, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <% end %>
+    </tr>
+  </tbody>
+</table>
+<%= link_to 'Back', game_abilities_path %>
