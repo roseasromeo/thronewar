@@ -1,1 +1,14 @@
-name,description,linkThe Wish of Sliding,Grant or remove Edge in Battle Movement due to lack of friction,rules_pages/Wishes#thewishofslidingThe Wish of Mud,Grant or remove Edge in Battle Movement due to extra sticky, rules_pages/Wishes#thewishofmudThe Wish of Pain,1 wound if Gutter Magic equal to or higher than Flesh Brawn, rules_pages/Wishes#thewishofpainThe Wish of Worry,1 wound if Gutter Magic equal to or higher than Ego Push, rules_pages/Wishes#thewishofworryThe Wish of Force,"Move target 1 stage of space per Level of Gutter Magic, contest against Battle Movement", rules_pages/Wishes#thewishofforceThe Wish of Shade,Remove Edge from Cunning Perceive, rules_pages/Wishes#thewishofshadeThe Wish of Light,Grant Edge to Cunning Perceive, rules_pages/Wishes#thewishoflightThe Wish of Fae,Produce a spark that makes a fire with Natural Level equal to Gutter Magic Level, rules_pages/Wishes#thewishofsoundThe Wish of Sound,Break Total Concentration if Gutter Magic is greater than target Level, rules_pages/Wishes#thewishofdecayThe Wish of Decay,Remove Edge from structure or plant with Natural Level, rules_pages/Wishes#thewishofgrowthThe Wish of Growth,Grant Edge to structure or plant with Natural Level, rules_pages/Wishes#thewishofpowerThe Wish of Power,Burst of magical energy. Remove Edge from Cunning Anticipation or other effects., rules_pages/Wishes#thewishofcloudsThe Wish of Clouds,Grant Edge to Cunning Deception to hide,
+name,description,link
+The Wish of Sliding,Grant or remove Edge in Battle Movement due to lack of friction,rules_pages/Wishes#thewishofsliding
+The Wish of Mud,Grant or remove Edge in Battle Movement due to extra sticky,rules_pages/Wishes#thewishofmud
+The Wish of Pain,1 wound if Gutter Magic equal to or higher than Flesh Brawn,rules_pages/Wishes#thewishofpain
+The Wish of Worry,1 wound if Gutter Magic equal to or higher than Ego Push,rules_pages/Wishes#thewishofworry
+The Wish of Force,"Move target 1 stage of space per Level of Gutter Magic, contest against Battle Movement",rules_pages/Wishes#thewishofforce
+The Wish of Shade,Remove Edge from Cunning Perceive,rules_pages/Wishes#thewishofshade
+The Wish of Light,Grant Edge to Cunning Perceive,rules_pages/Wishes#thewishoflight
+The Wish of Fire,Produce a spark that makes a fire with Natural Level equal to Gutter Magic Level,rules_pages/Wishes#thewishofire
+The Wish of Sound,Break Total Concentration if Gutter Magic is greater than target Level,rules_pages/Wishes#thewishofsound
+The Wish of Decay,Remove Edge from structure or plant with Natural Level,rules_pages/Wishes#thewishofdecay
+The Wish of Growth,Grant Edge to structure or plant with Natural Level,rules_pages/Wishes#thewishofgrowth
+The Wish of Power,Burst of magical energy. Remove Edge from Cunning Anticipation or other effects.,rules_pages/Wishes#thewishofpower
+The Wish of Clouds,Grant Edge to Cunning Deception to hide,rules_pages/Wishes#thewishofclouds

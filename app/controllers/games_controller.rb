@@ -1,5 +1,6 @@
 class GamesController < ApplicationController
   helper_method :sort_column, :sort_direction
+  before_action :set_game, only: [:show, :destroy, :start, :gm, :aspect, :gift, :close, :close_auction, :display]
 
   def index
     if logged_in?
@@ -12,7 +13,6 @@ class GamesController < ApplicationController
   def show
     if logged_in?
       @user = current_user
-      @game = Game.find(params[:id])
       @new_character = @game.characters.where(user: @user).empty?
       @characters = @game.characters
       if !@new_character
@@ -54,7 +54,6 @@ class GamesController < ApplicationController
     end
   end
 
-
   def create
     if logged_in?
       if gm_user?
@@ -73,8 +72,16 @@ class GamesController < ApplicationController
     end
   end
 
+  def destroy
+    if gm_user?
+      @game.destroy
+      redirect_to '/'
+    else
+      redirect_to [@game]
+    end
+  end
+
   def start
-    @game = Game.find(params[:id])
     if gm_user? && @game.preparing?
       @game.started!
       redirect_to gm_game_path(@game)
@@ -86,7 +93,6 @@ class GamesController < ApplicationController
   def gm
     if gm_user?
       @user = current_user
-      @game = Game.find(params[:id])
       @player = false
       if params[:display_toggle] != nil
         @display_toggle = (params[:display_toggle] == "true")
@@ -124,7 +130,6 @@ class GamesController < ApplicationController
   end
 
   def aspect
-    @game = Game.find(params[:id])
     @auction = Auction.new(game: @game, phase: :aspect)
     @player = false
     if @auction.save
@@ -171,7 +176,6 @@ class GamesController < ApplicationController
   end
 
   def gift
-    @game = Game.find(params[:id])
     @auction = Auction.new(game: @game, phase: :gift)
     @player = false
     if @auction.save
@@ -213,7 +217,6 @@ class GamesController < ApplicationController
 
   def close
     if gm_user?
-      @game = Game.find(params[:id])
       @current_round = Round.find(params[:current_round])
       @player = false
       assign_ranks
@@ -245,7 +248,6 @@ class GamesController < ApplicationController
 
   def close_auction
     if gm_user?
-      @game = Game.find(params[:id])
       get_auction
       get_current_round
       if !@current_round.pledges.empty?
@@ -271,7 +273,6 @@ class GamesController < ApplicationController
   end
 
   def display
-    @game = Game.find(params[:id])
     if params[:display_toggle] == "true"
       @display_toggle = false
     else
@@ -295,6 +296,10 @@ class GamesController < ApplicationController
   private
     def game_params
       params.require(:game).permit(:title)
+    end
+
+    def set_game
+      @game = Game.find(params[:id])
     end
 
     def all_pledges_in?
