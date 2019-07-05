@@ -4,7 +4,7 @@
 <% if @new_character %>
   <%= link_to 'New character', new_game_character_path(@game) %>
 <% end %>
-<% if gm_user? || @game.completed? %>
+<% if gm_user? || @game.complete? %>
   <table>
     <tr>
       <th>Pseudonym</th>
