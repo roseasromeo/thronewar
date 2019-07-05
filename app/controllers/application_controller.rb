@@ -53,7 +53,7 @@ class ApplicationController < ActionController::Base
           @last_aspect_round = nil
           @last_aspect_pledges = nil
         end
-        @aspect_items = @aspect_auction.items
+        @aspect_items = @aspect_auction.items.sort_by(:name)
         @aspect_closed = @aspect_auction.closed?
       else
         @last_aspect_round = nil
@@ -75,7 +75,7 @@ class ApplicationController < ActionController::Base
           @last_gift_round = nil
           @last_gift_pledges = nil
         end
-        @gift_items = @gift_auction.items
+        @gift_items = @gift_auction.items.sort_by(:name)
         @gift_closed = @gift_auction.closed?
       else
         @last_gift_round = nil
