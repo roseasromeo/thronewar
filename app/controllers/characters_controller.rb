@@ -1,6 +1,7 @@
 class CharactersController < ApplicationController
   def index
     @game = Game.find(params[:game_id])
+    @user = current_user
     if gm_user? || @game.complete?
       @new_character = @game.characters.where(user: @user).empty?
       @characters = @game.characters
