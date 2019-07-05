@@ -6,7 +6,7 @@ class WelcomeController < ApplicationController
     if @link_index == nil
       @link_index = LinkIndex.new(title: 'welcome')
     end
-    @active_games = (Game.preparing.includes(:characters).where.not(characters: {user: current_user}).all + Game.preparing.where.not(:id => Character.select(:game_id).uniq)).distinct
+    @active_games = (Game.preparing.includes(:characters).where.not(characters: {user: current_user}).all.or(Game.preparing.includes(:characters).where.not(:id => Character.select(:game_id).uniq))).distinct
     @active_characters = Character.where(user: current_user).joins(:game).where.not(games: {status: Game.statuses[:complete]}).all
     @active_final_characters = FinalCharacter.where(user: current_user).joins(:character_system).where.not(character_systems: {status: CharacterSystem.statuses[:complete]}).all
     @past_final_characters = FinalCharacter.where(user: current_user).joins(:character_system).where(character_systems: {status: CharacterSystem.statuses[:complete]}).all
