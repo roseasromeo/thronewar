@@ -86,14 +86,14 @@ class ApplicationController < ActionController::Base
 
     def get_current_round
       if @aspect_exists && !@aspect_closed
-        @items = @aspect_items
+        @items = @aspect_items.sort_by(:name)
         @current_round = @current_aspect_round
         @last_round = @last_aspect_round
         @auction = @aspect_auction
         @aspect_pledges_to_display = @last_aspect_pledges
         @gift_pledges_to_display = nil
       elsif @gift_exists && !@gift_closed
-        @items = @gift_items
+        @items = @gift_items.sort_by(:name)
         @current_round = @current_gift_round
         @last_round = @last_gift_round
         @auction = @gift_auction
