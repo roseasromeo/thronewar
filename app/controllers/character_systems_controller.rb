@@ -1,5 +1,6 @@
 class CharacterSystemsController < ApplicationController
   require 'csv'
+  before_action :set_character_system, only: [:show, :edit, :update, :destroy, :complete]
 
   def index
     if gm_user?
@@ -12,8 +13,7 @@ class CharacterSystemsController < ApplicationController
   def show
     if logged_in?
       @user = current_user
-      @character_system = CharacterSystem.find(params[:id])
-      if !gm_user? && @character_system.final_characters.where(user: @user).empty?
+      if !gm_user? && @character_system.final_characters.where(user: @user).empty? && !character_system.completed?
         redirect_to '/'
       else
         @final_characters = @character_system.final_characters
@@ -27,6 +27,7 @@ class CharacterSystemsController < ApplicationController
   def new
     if logged_in?
       if gm_user?
+        @edit = false
         @character_system = CharacterSystem.new
         @game = Game.find(params[:game_id])
         @character_system.game = @game
@@ -41,9 +42,18 @@ class CharacterSystemsController < ApplicationController
     end
   end
 
+  def edit
+    if gm_user?
+      @edit = true
+    else
+      redirect_to [@character_system]
+    end
+  end
+
   def create
-    @game = Game.find(params[:character_system][:game_id])
-    @character_system = CharacterSystem.new(game: @game, title: params[:character_system][:title], description: params[:character_system][:description], status: :preparing)
+    @game = Game.find(character_system_params[:game_id])
+    @character_system = CharacterSystem.new(game: @game, title: character_system_params[:title], description: character_system_params[:description], status: :preparing)
+    @edit = false
     if @character_system.save
       @characters = @game.characters
       @aspect_auction = @game.auctions.aspect.first
@@ -94,7 +104,54 @@ class CharacterSystemsController < ApplicationController
     end
   end
 
+  def update
+    if gm_user?
+      if @character_system.update(title: character_system_params[:title], description: character_system_params[:description])
+        redirect_to character_system_path(@character_system)
+      else
+        @errors = @character_system.errors
+        flash[:error] = @errors
+        render 'new'
+      end
+    end
+  end
+
+  def destroy
+    if gm_user?
+      @character_system.destroy
+      redirect_to '/'
+    else
+      redirect_to [@character_system]
+    end
+  end
+
+  def start
+    if gm_user?
+      @character_system.started!
+      redirect_to [@character_system]
+    else
+      redirect_to [@character_system]
+    end
+  end
+
+  def complete
+    if gm_user?
+      @character_system.completed!
+      redirect_to [@character_system]
+    else
+      redirect_to [@character_system]
+    end
+  end
+
   private
+    def character_system_params
+      params.require(:character_system).permit(:game_id, :title, :description)
+    end
+
+    def set_character_system
+      @character_system = CharacterSystem.find(params[:id])
+    end
+
     def default_flaws
       filename = Rails.root + 'app/assets/files/flaws.utf8.csv'
       CSV.foreach(filename, :headers => true) do |row|

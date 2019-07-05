@@ -33,7 +33,7 @@ Rails.application.routes.draw do
   end
 
   # Auction System Routes
-  resources :games, only: [:show, :index, :new, :create] do
+  resources :games, only: [:show, :index, :new, :create, :destroy] do
     resources :characters, only: [:show, :index, :new, :create, :destroy]
     resources :char_rounds, only: [:new, :create, :destroy]
     member do
@@ -50,13 +50,14 @@ Rails.application.routes.draw do
   end
 
   # Character System Routes
-  resources :character_systems, only: [:show, :index, :new, :create] do
+  resources :character_systems, only: [:show, :index, :new, :edit, :create, :update, :destroy] do
+    post 'complete'
+    post 'start'
     resources :final_characters, only: [:show, :edit, :update] do
       post 'submit'
       post 'reject'
       post 'approve'
       get 'wishes'
-      post 'save_wishes'
     end
     resources :tools, only: [:show, :new, :edit, :create, :update, :destroy]
     resources :regencies, only: [:show, :new, :edit, :create, :update, :destroy]
