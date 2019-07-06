@@ -47,9 +47,8 @@ class FinalCharactersController < ApplicationController
   end
 
   def edit
-    @character_user = @final_character.user
-    available_users = User.includes(:final_characters).where(:final_characters => {:user_id => nil}).or(User.includes(:final_characters).merge(FinalCharacter.where.not(character_system: @character_system))) #fix this
-    @possible_users = available_users.or(User.where(id: @character_user.id).includes(:final_characters)).distinct
+    available_users = User.joins(:final_characters).merge(FinalCharacter.where.not(character_system: @character_system)) #fix this
+    @possible_users = available_users.or(User.where(id: @user.id).joins(:final_characters)).distinct
 
     @flaw1_id = @final_character.flaw1 == nil ? nil : @final_character.flaw1.id
     @flaw2_id = @final_character.flaw2 == nil ? nil : @final_character.flaw2.id
@@ -90,7 +89,7 @@ class FinalCharactersController < ApplicationController
           @flaw2 = nil
         end
 
-        if @final_character.update(character_system: @character_system, user: @user, name: final_character_params[:name], blurb: final_character_params[:blurb], background: final_character_params[:background], backstory_connections: final_character_params[:backstory_connections], goal: final_character_params[:goal], curses: final_character_params[:curses], extra_wishes: final_character_params[:extra_wishes], other: final_character_params[:other], luck: final_character_params[:luck], flaw1: @flaw1, flaw2: @flaw2) #
+        if @final_character.update(character_system: @character_system, user: @user, name: final_character_params[:name], blurb: final_character_params[:blurb], background: final_character_params[:background], backstory_connections: final_character_params[:backstory_connections], goal: final_character_params[:goal], curses: final_character_params[:curses], wishes: final_character_params[:wishes], extra_wishes: final_character_params[:extra_wishes], other: final_character_params[:other], luck: final_character_params[:luck], flaw1: @flaw1, flaw2: @flaw2) #
           @final_character.ranks.each do |rank|
             item_number = Rank.items[rank.item]
             if final_character_params[:ranks_attributes][item_number.to_s].has_key?("private_rank")
