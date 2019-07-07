@@ -2,18 +2,18 @@
   <td><%= f.item.gsub("_"," ").titleize %></td>
   <td><%= f.public_rank %></td>
   <% if f.aspect? %>
-    <td><%= aspect_level(f.public_rank, @character_system.ranks.maximum(:public_rank)).to_s.titleize %></td>
+    <td><%= aspect_level(f.public_rank, @character_system.ranks.where(item: Rank.items[f.item]).maximum(:public_rank)).to_s.titleize %></td>
   <% else %>
-    <td><%= gift_level(f.public_rank, @character_system.ranks.maximum(:public_rank)).to_s.titleize %></td>
+    <td><%= gift_level(f.public_rank, @character_system.ranks.where(item: Rank.items[f.item]).maximum(:public_rank)).to_s.titleize %></td>
   <% end %>
   <td><%= f.public_points %></td>
   <% if @show_all %>
     <% final_rank = f.private_rank + 0.5*(f.half ? 1 : 0) %>
     <td><%= final_rank.to_i == final_rank ? final_rank.to_i : final_rank %></td>
     <% if f.aspect? %>
-      <td><%= aspect_level(f.private_rank, @character_system.ranks.maximum(:public_rank)).to_s.titleize %></td>
+      <td><%= aspect_level(f.private_rank, @character_system.ranks.where(item: Rank.items[f.item]).maximum(:public_rank)).to_s.titleize %></td>
     <% else %>
-      <td><%= gift_level(f.private_rank, @character_system.ranks.maximum(:public_rank)).to_s.titleize %></td>
+      <td><%= gift_level(f.private_rank, @character_system.ranks.where(item: Rank.items[f.item]).maximum(:public_rank)).to_s.titleize %></td>
     <% end %>
     <td><%= f.private_points %></td>
   <% end %>
