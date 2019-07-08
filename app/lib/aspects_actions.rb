@@ -1,5 +1,4 @@
 module AspectsActions
-  include Rules
 
   #Battle start
   #########

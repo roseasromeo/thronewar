@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Prompt Values</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Prompt</th>
+      <th>Active ability</th>
+      <th>Value</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @prompt_values.each do |prompt_value| %>
+      <tr>
+        <td><%= prompt_value.prompt %></td>
+        <td><%= prompt_value.active_ability %></td>
+        <td><%= prompt_value.value %></td>
+        <td><%= link_to 'Show', prompt_value %></td>
+        <td><%= link_to 'Edit', edit_prompt_value_path(prompt_value) %></td>
+        <td><%= link_to 'Destroy', prompt_value, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Prompt Value', new_prompt_value_path %>

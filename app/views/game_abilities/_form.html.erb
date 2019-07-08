@@ -1,10 +1,10 @@
 <%= semantic_form_for [@game_ability] do |f| %>
-  <% if game_ability.errors.any? %>
+  <% if f.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(game_ability.errors.count, "error") %> prohibited this game_ability from being saved:</h2>
+      <h2><%= pluralize(f.errors.count, "error") %> prohibited this game_ability from being saved:</h2>
 
       <ul>
-      <% game_ability.errors.full_messages.each do |message| %>
+      <% f.errors.full_messages.each do |message| %>
         <li><%= message %></li>
       <% end %>
       </ul>

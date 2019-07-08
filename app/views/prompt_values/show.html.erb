@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Prompt:</strong>
+  <%= @prompt_value.prompt %>
+</p>
+
+<p>
+  <strong>Active ability:</strong>
+  <%= @prompt_value.active_ability %>
+</p>
+
+<p>
+  <strong>Value:</strong>
+  <%= @prompt_value.value %>
+</p>
+
+<%= link_to 'Edit', edit_prompt_value_path(@prompt_value) %> |
+<%= link_to 'Back', prompt_values_path %>

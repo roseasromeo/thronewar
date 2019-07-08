@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @active_ability.name %>
+</p>
+
+<p>
+  <strong>Game ability:</strong>
+  <%= @active_ability.game_ability %>
+</p>
+
+<p>
+  <strong>Rounds total:</strong>
+  <%= @active_ability.rounds_total %>
+</p>
+
+<%= link_to 'Edit', edit_active_ability_path(@active_ability) %> |
+<%= link_to 'Back', active_abilities_path %>

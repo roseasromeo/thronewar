@@ -1,0 +1,27 @@
+<%= semantic_form_for [@active_ability] do |f| %>
+  <% if f.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(f.errors.count, "error") %> prohibited this game_ability from being saved:</h2>
+
+      <ul>
+      <% f.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <%= f.inputs do %>
+    <div id='prompts'>
+      <table class="prompts_table">
+        <tr>
+          <th>Name</th>
+          <th>Value</th>
+        </tr>
+        <%= f.semantic_fields_for :prompt_values, @prompts do |prompt| %>
+          <%= render 'prompt_fields', :f => prompt%>
+        <% end %>
+      </table>
+    </div>
+  <%= f.actions %>
+<% end %>
+<% end %>

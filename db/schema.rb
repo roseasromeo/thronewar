@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_03_232046) do
+ActiveRecord::Schema.define(version: 2019_07_07_193848) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,6 +42,21 @@ ActiveRecord::Schema.define(version: 2019_07_03_232046) do
     t.bigint "depends_on_id"
     t.index ["depends_on_id"], name: "index_ability_dependencies_on_depends_on_id"
     t.index ["parent_id"], name: "index_ability_dependencies_on_parent_id"
+  end
+
+  create_table "ability_functions", force: :cascade do |t|
+    t.string "name"
+    t.string "operation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "active_abilities", force: :cascade do |t|
+    t.bigint "game_ability_id"
+    t.integer "rounds_total"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["game_ability_id"], name: "index_active_abilities_on_game_ability_id"
   end
 
   create_table "auctions", id: :serial, force: :cascade do |t|
@@ -196,6 +211,7 @@ ActiveRecord::Schema.define(version: 2019_07_03_232046) do
     t.string "edge_function"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "other_costs"
   end
 
   create_table "games", id: :serial, force: :cascade do |t|
@@ -232,6 +248,24 @@ ActiveRecord::Schema.define(version: 2019_07_03_232046) do
     t.index ["char_round_id"], name: "index_pledges_on_char_round_id"
     t.index ["character_id"], name: "index_pledges_on_character_id"
     t.index ["item_id"], name: "index_pledges_on_item_id"
+  end
+
+  create_table "prompt_values", force: :cascade do |t|
+    t.bigint "prompt_id"
+    t.bigint "active_ability_id"
+    t.integer "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["active_ability_id"], name: "index_prompt_values_on_active_ability_id"
+    t.index ["prompt_id"], name: "index_prompt_values_on_prompt_id"
+  end
+
+  create_table "prompts", force: :cascade do |t|
+    t.string "name"
+    t.bigint "ability_function_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ability_function_id"], name: "index_prompts_on_ability_function_id"
   end
 
   create_table "ranks", id: :serial, force: :cascade do |t|
@@ -331,6 +365,7 @@ ActiveRecord::Schema.define(version: 2019_07_03_232046) do
   add_foreign_key "ability_char_trees", "char_trees"
   add_foreign_key "ability_dependencies", "abilities", column: "depends_on_id"
   add_foreign_key "ability_dependencies", "abilities", column: "parent_id"
+  add_foreign_key "active_abilities", "game_abilities"
   add_foreign_key "auctions", "games"
   add_foreign_key "char_rounds", "characters"
   add_foreign_key "char_rounds", "rounds"
@@ -352,6 +387,9 @@ ActiveRecord::Schema.define(version: 2019_07_03_232046) do
   add_foreign_key "pledges", "char_rounds"
   add_foreign_key "pledges", "characters"
   add_foreign_key "pledges", "items"
+  add_foreign_key "prompt_values", "active_abilities"
+  add_foreign_key "prompt_values", "prompts"
+  add_foreign_key "prompts", "ability_functions"
   add_foreign_key "ranks", "final_characters"
   add_foreign_key "regencies", "final_characters"
   add_foreign_key "rounds", "auctions"

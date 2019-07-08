@@ -1,0 +1,19 @@
+<%= semantic_form_for [@active_ability] do |f| %>
+  <% if f.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(f.errors.count, "error") %> prohibited this game_ability from being saved:</h2>
+
+      <ul>
+      <% f.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <%= f.inputs do %>
+    <%= f.input :game_ability %>
+    <%= f.input :active_ability %>
+
+    <%= f.actions %>
+  <% end %>
+<% end %>
